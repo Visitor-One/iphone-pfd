@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport"
       content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
 
-<title>iPhone PFD</title>
+<title>iPhone PFD V3</title>
 
 <style>
+
 * {
     box-sizing: border-box;
     -webkit-user-select: none;
@@ -33,7 +35,9 @@ html, body {
     background: #000;
 }
 
-/* ================= HORIZON ================= */
+/* ==========================================
+   HORIZON
+   ========================================== */
 
 #attitudeViewport {
     position: absolute;
@@ -43,129 +47,211 @@ html, body {
 
 #horizon {
     position: absolute;
+
     width: 300vw;
     height: 300vh;
+
     left: 50%;
     top: 50%;
+
     margin-left: -150vw;
     margin-top: -150vh;
-    transform-origin: center;
+
+    transform-origin: center center;
 
     background:
         linear-gradient(
             to bottom,
-            #1589bd 0%,
-            #1589bd 49.85%,
-            #fff 49.85%,
-            #fff 50.15%,
-            #754126 50.15%,
-            #754126 100%
+            #168bc0 0%,
+            #168bc0 49.8%,
+            #ffffff 49.8%,
+            #ffffff 50.2%,
+            #814326 50.2%,
+            #814326 100%
         );
 }
 
+/* ==========================================
+   PITCH LADDER
+   ========================================== */
+
 #pitchLadder {
     position: absolute;
+
     left: 50%;
     top: 50%;
+
     width: 500px;
     height: 900px;
+
     transform: translate(-50%, -50%);
 }
 
 .pitchLine {
     position: absolute;
+
     left: 50%;
+
     height: 2px;
+
     background: white;
+
     transform: translateX(-50%);
-    box-shadow: 0 0 2px #000;
+
+    box-shadow:
+        0 0 2px black;
 }
 
-.pitchLine.major { width: 120px; }
-.pitchLine.minor { width: 65px; }
+.pitchLine.major {
+    width: 120px;
+}
+
+.pitchLine.minor {
+    width: 65px;
+}
 
 .pitchLabel {
     position: absolute;
+
     color: white;
+
     font-size: 17px;
     font-weight: 600;
-    text-shadow: 1px 1px 2px #000;
+
+    text-shadow:
+        1px 1px 2px black;
 }
 
-/* ================= AIRCRAFT ================= */
+/* ==========================================
+   AIRCRAFT
+   ========================================== */
 
 #aircraft {
     position: absolute;
+
     left: 50%;
     top: 50%;
+
     width: 270px;
     height: 60px;
-    transform: translate(-50%, -50%);
+
+    transform:
+        translate(-50%, -50%);
+
     z-index: 20;
 }
 
 .wing {
     position: absolute;
+
     top: 28px;
+
     width: 100px;
     height: 5px;
+
     background: #ffd900;
-    border: 1px solid #000;
+
+    border: 1px solid black;
 }
 
-.wing.left { left: 0; }
-.wing.right { right: 0; }
+.wing.left {
+    left: 0;
+}
+
+.wing.right {
+    right: 0;
+}
 
 .wing.left::after,
 .wing.right::after {
+
     content: "";
+
     position: absolute;
+
     width: 5px;
     height: 20px;
+
     background: #ffd900;
+
     top: -15px;
 }
 
-.wing.left::after { right: 0; }
-.wing.right::after { left: 0; }
-
-#aircraftCenter {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 3px solid #ffd900;
-    border-radius: 50%;
-    left: 50%;
-    top: 21px;
-    transform: translateX(-50%);
+.wing.left::after {
+    right: 0;
 }
 
-/* ================= HEADING ================= */
+.wing.right::after {
+    left: 0;
+}
+
+#aircraftCenter {
+
+    position: absolute;
+
+    width: 18px;
+    height: 18px;
+
+    border:
+        3px solid #ffd900;
+
+    border-radius: 50%;
+
+    left: 50%;
+    top: 21px;
+
+    transform:
+        translateX(-50%);
+}
+
+/* ==========================================
+   HEADING
+   ========================================== */
 
 #headingBox {
+
     position: absolute;
-    top: env(safe-area-inset-top);
+
+    top:
+        env(safe-area-inset-top);
+
     left: 50%;
-    transform: translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     width: 72%;
     height: 70px;
+
     overflow: hidden;
-    background: rgba(0,0,0,.58);
-    border-bottom: 1px solid #aaa;
+
+    background:
+        rgba(0,0,0,.58);
+
+    border-bottom:
+        1px solid #aaa;
+
     z-index: 50;
 }
 
 #headingTape {
+
     position: absolute;
+
     top: 0;
+
     height: 100%;
 }
 
 .headingMark {
+
     position: absolute;
+
     top: 34px;
+
     width: 2px;
     height: 12px;
+
     background: white;
 }
 
@@ -174,108 +260,231 @@ html, body {
 }
 
 .headingLabel {
+
     position: absolute;
+
     top: 5px;
-    transform: translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     font-size: 17px;
     font-weight: 600;
 }
 
 #headingPointer {
+
     position: absolute;
+
     left: 50%;
     bottom: 0;
-    transform: translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     width: 0;
     height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 12px solid #ffd900;
+
+    border-left:
+        8px solid transparent;
+
+    border-right:
+        8px solid transparent;
+
+    border-bottom:
+        12px solid #ffd900;
+
     z-index: 60;
 }
 
 #headingValue {
+
     position: absolute;
+
     left: 50%;
-    top: calc(73px + env(safe-area-inset-top));
-    transform: translateX(-50%);
+
+    top:
+        calc(
+            73px +
+            env(safe-area-inset-top)
+        );
+
+    transform:
+        translateX(-50%);
+
     background: #000;
-    border: 2px solid #00ff65;
+
+    border:
+        2px solid #00ff65;
+
     color: #00ff65;
-    padding: 3px 10px;
+
+    padding:
+        3px 10px;
+
     font-size: 21px;
     font-weight: bold;
+
     z-index: 60;
 }
 
-/* ================= DATA ================= */
+/* ==========================================
+   DATA BOXES
+   ========================================== */
 
 .dataBox {
+
     position: absolute;
-    bottom: calc(12px + env(safe-area-inset-bottom));
-    background: rgba(0,0,0,.7);
-    border: 1px solid #777;
-    padding: 7px 10px;
-    font-family: Menlo, monospace;
+
+    bottom:
+        calc(
+            12px +
+            env(safe-area-inset-bottom)
+        );
+
+    background:
+        rgba(0,0,0,.72);
+
+    border:
+        1px solid #777;
+
+    padding:
+        7px 10px;
+
+    font-family:
+        Menlo, monospace;
+
     font-size: 13px;
+
     z-index: 60;
 }
 
-#pitchBox { left: 10px; }
-#rollBox { left: 125px; }
-#compassBox { right: 10px; }
+#pitchBox {
+    left: 10px;
+}
 
-/* ================= CONTROLS ================= */
+#rollBox {
+    left: 125px;
+}
+
+#compassBox {
+    right: 10px;
+}
+
+/* ==========================================
+   CONTROLS
+   ========================================== */
 
 #controls {
+
     position: absolute;
+
     right: 10px;
-    top: calc(88px + env(safe-area-inset-top));
+
+    top:
+        calc(
+            88px +
+            env(safe-area-inset-top)
+        );
+
     z-index: 100;
+
     display: flex;
+
     flex-direction: column;
+
     gap: 7px;
 }
 
 button {
+
     appearance: none;
-    border: 1px solid #aaa;
+
+    border:
+        1px solid #aaa;
+
     border-radius: 7px;
-    background: rgba(0,0,0,.75);
+
+    background:
+        rgba(0,0,0,.78);
+
     color: white;
-    padding: 9px 12px;
+
+    padding:
+        9px 12px;
+
     font-size: 13px;
+
     font-weight: 600;
 }
 
 #startButton {
+
     color: #00ff65;
+
     border-color: #00ff65;
 }
 
+/* ==========================================
+   STATUS
+   ========================================== */
+
 #status {
+
     position: absolute;
+
     left: 50%;
-    bottom: calc(50px + env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.72);
-    padding: 5px 9px;
+
+    bottom:
+        calc(
+            50px +
+            env(safe-area-inset-bottom)
+        );
+
+    transform:
+        translateX(-50%);
+
+    background:
+        rgba(0,0,0,.72);
+
+    padding:
+        5px 9px;
+
     border-radius: 5px;
+
     font-size: 11px;
+
     z-index: 100;
 }
 
-#shade {
-    pointer-events: none;
+/* ==========================================
+   DEBUG
+   ========================================== */
+
+#debug {
+
     position: absolute;
-    inset: 0;
-    z-index: 40;
-    background: radial-gradient(
-        ellipse at center,
-        transparent 48%,
-        rgba(0,0,0,.25) 100%
-    );
+
+    left: 10px;
+    top: 100px;
+
+    background:
+        rgba(0,0,0,.60);
+
+    color: #00ff65;
+
+    font-family:
+        Menlo, monospace;
+
+    font-size: 10px;
+
+    padding: 5px;
+
+    z-index: 100;
+
+    display: none;
 }
+
 </style>
 </head>
 
@@ -284,475 +493,727 @@ button {
 <div id="pfd">
 
     <div id="attitudeViewport">
+
         <div id="horizon">
+
             <div id="pitchLadder"></div>
+
         </div>
+
     </div>
+
 
     <div id="aircraft">
+
         <div class="wing left"></div>
+
         <div id="aircraftCenter"></div>
+
         <div class="wing right"></div>
+
     </div>
+
 
     <div id="headingBox">
+
         <div id="headingTape"></div>
+
         <div id="headingPointer"></div>
+
     </div>
 
-    <div id="headingValue">---</div>
+
+    <div id="headingValue">
+        ---
+    </div>
+
 
     <div id="controls">
-        <button id="startButton">SENSOREN STARTEN</button>
-        <button id="zeroButton">ZERO</button>
-        <button id="fullscreenButton">VOLLBILD</button>
+
+        <button id="startButton">
+            SENSOREN STARTEN
+        </button>
+
+        <button id="zeroButton">
+            ZERO
+        </button>
+
+        <button id="debugButton">
+            DEBUG
+        </button>
+
+        <button id="fullscreenButton">
+            VOLLBILD
+        </button>
+
     </div>
 
-    <div id="pitchBox" class="dataBox">
-        PITCH <span id="pitchValue">0.0°</span>
+
+    <div
+        id="pitchBox"
+        class="dataBox">
+
+        PITCH
+        <span id="pitchValue">
+            0.0°
+        </span>
+
     </div>
 
-    <div id="rollBox" class="dataBox">
-        ROLL <span id="rollValue">0.0°</span>
+
+    <div
+        id="rollBox"
+        class="dataBox">
+
+        ROLL
+        <span id="rollValue">
+            0.0°
+        </span>
+
     </div>
 
-    <div id="compassBox" class="dataBox">
-        HDG <span id="compassValue">---</span>
+
+    <div
+        id="compassBox"
+        class="dataBox">
+
+        HDG
+        <span id="compassValue">
+            ---
+        </span>
+
     </div>
 
-    <div id="status">Sensoren nicht gestartet</div>
 
-    <div id="shade"></div>
+    <div id="status">
+        Sensoren nicht gestartet
+    </div>
+
+
+    <div id="debug">
+        DEBUG
+    </div>
 
 </div>
 
+
 <script>
 
-/* =========================================================
+/* ==========================================================
    CONFIG
-   ========================================================= */
+   ========================================================== */
 
-const PX_PER_DEG = 7;
-const ATTITUDE_SMOOTHING = 0.18;
-const HEADING_SMOOTHING = 0.10;
+const DEG =
+    180 / Math.PI;
+
+const RAD =
+    Math.PI / 180;
+
+const PX_PER_DEG =
+    7;
 
 
-/* =========================================================
+/*
+   Filter.
+
+   0.10 = sehr weich
+   0.20 = guter Kompromiss
+   0.40 = sehr direkt
+*/
+
+const FILTER =
+    0.18;
+
+const HEADING_FILTER =
+    0.10;
+
+
+/* ==========================================================
    ELEMENTS
-   ========================================================= */
+   ========================================================== */
 
-const horizon = document.getElementById("horizon");
-const pitchLadder = document.getElementById("pitchLadder");
+const horizon =
+    document.getElementById(
+        "horizon"
+    );
 
-const pitchValue = document.getElementById("pitchValue");
-const rollValue = document.getElementById("rollValue");
-const compassValue = document.getElementById("compassValue");
+const pitchLadder =
+    document.getElementById(
+        "pitchLadder"
+    );
 
-const headingTape = document.getElementById("headingTape");
-const headingValue = document.getElementById("headingValue");
+const pitchValue =
+    document.getElementById(
+        "pitchValue"
+    );
 
-const startButton = document.getElementById("startButton");
-const zeroButton = document.getElementById("zeroButton");
-const fullscreenButton = document.getElementById("fullscreenButton");
+const rollValue =
+    document.getElementById(
+        "rollValue"
+    );
 
-const statusBox = document.getElementById("status");
+const compassValue =
+    document.getElementById(
+        "compassValue"
+    );
+
+const headingValue =
+    document.getElementById(
+        "headingValue"
+    );
+
+const headingTape =
+    document.getElementById(
+        "headingTape"
+    );
+
+const headingBox =
+    document.getElementById(
+        "headingBox"
+    );
+
+const statusBox =
+    document.getElementById(
+        "status"
+    );
+
+const debugBox =
+    document.getElementById(
+        "debug"
+    );
+
+const startButton =
+    document.getElementById(
+        "startButton"
+    );
+
+const zeroButton =
+    document.getElementById(
+        "zeroButton"
+    );
+
+const debugButton =
+    document.getElementById(
+        "debugButton"
+    );
+
+const fullscreenButton =
+    document.getElementById(
+        "fullscreenButton"
+    );
 
 
-/* =========================================================
-   STATE
-   ========================================================= */
+/* ==========================================================
+   SENSOR STATE
+   ========================================================== */
 
-let currentQuaternion = null;
-let zeroQuaternion = null;
+let gravityX = 0;
+let gravityY = 0;
+let gravityZ = 0;
+
+let haveGravity =
+    false;
+
+
+/*
+   Absolute Lage aus Gravity
+*/
+
+let rawPitch = 0;
+let rawRoll = 0;
+
+
+/*
+   ZERO-Referenz
+*/
+
+let zeroPitch = 0;
+let zeroRoll = 0;
+
+
+/*
+   Zielwerte nach ZERO
+*/
 
 let targetPitch = 0;
 let targetRoll = 0;
 
+
+/*
+   Angezeigte Werte
+*/
+
 let displayPitch = 0;
 let displayRoll = 0;
+
+
+/*
+   Heading
+*/
 
 let rawHeading = 0;
 let displayHeading = 0;
 
-let haveHeading = false;
-
-
-/* =========================================================
-   MATH
-   ========================================================= */
-
-const DEG = Math.PI / 180;
+let haveHeading =
+    false;
 
 
 /*
-   Quaternion aus DeviceOrientation Euler-Winkeln.
-
-   DeviceOrientation:
-   alpha = Z
-   beta  = X
-   gamma = Y
+   Debug
 */
 
-function quaternionFromEuler(alpha, beta, gamma) {
-
-    const x = beta  * DEG / 2;
-    const y = gamma * DEG / 2;
-    const z = alpha * DEG / 2;
-
-    const cx = Math.cos(x);
-    const sx = Math.sin(x);
-
-    const cy = Math.cos(y);
-    const sy = Math.sin(y);
-
-    const cz = Math.cos(z);
-    const sz = Math.sin(z);
-
-    return {
-        w:
-            cx * cy * cz -
-            sx * sy * sz,
-
-        x:
-            sx * cy * cz -
-            cx * sy * sz,
-
-        y:
-            cx * sy * cz +
-            sx * cy * sz,
-
-        z:
-            cx * cy * sz +
-            sx * sy * cz
-    };
-}
+let debugVisible =
+    false;
 
 
-function quatConjugate(q) {
-
-    return {
-        w: q.w,
-        x: -q.x,
-        y: -q.y,
-        z: -q.z
-    };
-}
-
-
-function quatMultiply(a, b) {
-
-    return {
-
-        w:
-            a.w*b.w -
-            a.x*b.x -
-            a.y*b.y -
-            a.z*b.z,
-
-        x:
-            a.w*b.x +
-            a.x*b.w +
-            a.y*b.z -
-            a.z*b.y,
-
-        y:
-            a.w*b.y -
-            a.x*b.z +
-            a.y*b.w +
-            a.z*b.x,
-
-        z:
-            a.w*b.z +
-            a.x*b.y -
-            a.y*b.x +
-            a.z*b.w
-    };
-}
-
-
-function normalizeQuaternion(q) {
-
-    const n = Math.sqrt(
-        q.w*q.w +
-        q.x*q.x +
-        q.y*q.y +
-        q.z*q.z
-    );
-
-    return {
-        w: q.w/n,
-        x: q.x/n,
-        y: q.y/n,
-        z: q.z/n
-    };
-}
-
-
-/*
-   Quaternion -> relative Euler-Winkel.
-
-   Für unser PFD interessieren uns
-   die Bewegungen relativ zur ZERO-Lage.
-*/
-
-function quaternionToAttitude(q) {
-
-    q = normalizeQuaternion(q);
-
-    /*
-       X rotation
-    */
-
-    const sinr =
-        2 * (
-            q.w*q.x +
-            q.y*q.z
-        );
-
-    const cosr =
-        1 -
-        2 * (
-            q.x*q.x +
-            q.y*q.y
-        );
-
-    const xAngle =
-        Math.atan2(sinr, cosr);
-
-
-    /*
-       Y rotation
-    */
-
-    let sinp =
-        2 * (
-            q.w*q.y -
-            q.z*q.x
-        );
-
-    sinp =
-        Math.max(-1, Math.min(1, sinp));
-
-    const yAngle =
-        Math.asin(sinp);
-
-
-    return {
-        x: xAngle / DEG,
-        y: yAngle / DEG
-    };
-}
-
-
-/* =========================================================
+/* ==========================================================
    SCREEN ORIENTATION
-   ========================================================= */
+   ========================================================== */
 
 function getScreenAngle() {
 
     if (
         screen.orientation &&
-        typeof screen.orientation.angle === "number"
+        typeof screen.orientation.angle
+            === "number"
     ) {
-        return screen.orientation.angle;
+
+        return (
+            screen.orientation.angle +
+            360
+        ) % 360;
     }
 
-    return window.orientation || 0;
+
+    if (
+        typeof window.orientation
+            === "number"
+    ) {
+
+        return (
+            window.orientation +
+            360
+        ) % 360;
+    }
+
+
+    return 0;
 }
 
+
+/* ==========================================================
+   GRAVITY → SCREEN COORDINATES
+   ========================================================== */
 
 /*
-   Wir korrigieren die Sensordaten auf die
+   DeviceMotion liefert x/y bezogen auf das
+   physische Gerät.
+
+   Wir drehen diesen Vektor zunächst in die
    aktuelle Bildschirmorientierung.
 
-   Das ist entscheidend, weil das PFD
-   im Landscape-Modus benutzt wird.
+   Danach gilt unabhängig davon, wie iOS die
+   Device-Achsen intern bezeichnet:
+
+       sx = links / rechts
+       sy = oben / unten
+       sz = senkrecht zum Display
 */
 
-function applyScreenOrientation(q) {
+function gravityToScreen(
+    x,
+    y,
+    z
+) {
 
-    const angle = getScreenAngle();
+    const angle =
+        getScreenAngle();
 
-    const half =
-        (-angle * DEG) / 2;
 
-    const screenQ = {
-        w: Math.cos(half),
-        x: 0,
-        y: 0,
-        z: Math.sin(half)
+    let sx;
+    let sy;
+
+
+    switch(angle) {
+
+        case 90:
+
+            sx = -y;
+            sy = x;
+
+            break;
+
+
+        case 270:
+
+            sx = y;
+            sy = -x;
+
+            break;
+
+
+        case 180:
+
+            sx = -x;
+            sy = -y;
+
+            break;
+
+
+        default:
+
+            sx = x;
+            sy = y;
+
+            break;
+    }
+
+
+    return {
+
+        x: sx,
+
+        y: sy,
+
+        z: z
     };
-
-    return quatMultiply(q, screenQ);
 }
 
 
-/* =========================================================
-   PITCH LADDER
-   ========================================================= */
+/* ==========================================================
+   GRAVITY → PITCH / ROLL
+   ========================================================== */
 
-function createPitchLadder() {
+/*
+   Der entscheidende Unterschied zu V2:
 
-    for (
-        let deg = -40;
-        deg <= 40;
-        deg += 5
+   Pitch und Roll werden NICHT aus
+   DeviceOrientation-Eulerwinkeln berechnet.
+
+   Wir benutzen nur die Richtung der
+   Schwerkraft.
+
+   Dadurch hat eine Änderung des Heading
+   keinerlei Einfluss auf Pitch/Roll.
+*/
+
+function gravityToAttitude(
+    x,
+    y,
+    z
+) {
+
+    /*
+       Normieren
+    */
+
+    const length =
+        Math.sqrt(
+            x*x +
+            y*y +
+            z*z
+        );
+
+
+    if (length < 0.001) {
+
+        return null;
+    }
+
+
+    x /= length;
+    y /= length;
+    z /= length;
+
+
+    /*
+       Roll
+
+       atan2 vermeidet die problematische
+       Euler-Kopplung.
+
+       x = seitlicher Anteil
+       z = Display-Normale
+    */
+
+    const roll =
+        Math.atan2(
+            -x,
+            -z
+        ) * DEG;
+
+
+    /*
+       Pitch
+
+       y wird gegen die Länge der
+       x/z-Komponenten berechnet.
+
+       Dadurch bleibt Pitch auch bei Roll
+       mathematisch sauber definiert.
+    */
+
+    const pitch =
+        Math.atan2(
+            y,
+            Math.sqrt(
+                x*x +
+                z*z
+            )
+        ) * DEG;
+
+
+    return {
+
+        pitch: pitch,
+
+        roll: roll
+    };
+}
+
+
+/* ==========================================================
+   DEVICE MOTION
+   ========================================================== */
+
+function handleMotion(event) {
+
+    const g =
+        event.accelerationIncludingGravity;
+
+
+    if (!g) {
+
+        return;
+    }
+
+
+    if (
+        g.x == null ||
+        g.y == null ||
+        g.z == null
     ) {
 
-        if (deg === 0)
-            continue;
-
-        const line =
-            document.createElement("div");
-
-        line.className =
-            "pitchLine " +
-            (
-                deg % 10 === 0
-                ? "major"
-                : "minor"
-            );
-
-        const y =
-            450 -
-            deg * PX_PER_DEG;
-
-        line.style.top =
-            y + "px";
-
-        pitchLadder.appendChild(line);
+        return;
+    }
 
 
-        if (deg % 10 === 0) {
+    gravityX =
+        g.x;
 
-            const l =
-                document.createElement("div");
+    gravityY =
+        g.y;
 
-            const r =
-                document.createElement("div");
+    gravityZ =
+        g.z;
 
-            l.className =
-                "pitchLabel";
 
-            r.className =
-                "pitchLabel";
+    const screenGravity =
+        gravityToScreen(
+            gravityX,
+            gravityY,
+            gravityZ
+        );
 
-            l.textContent =
-                Math.abs(deg);
 
-            r.textContent =
-                Math.abs(deg);
+    const attitude =
+        gravityToAttitude(
+            screenGravity.x,
+            screenGravity.y,
+            screenGravity.z
+        );
 
-            l.style.top =
-                (y - 10) + "px";
 
-            r.style.top =
-                (y - 10) + "px";
+    if (!attitude) {
 
-            l.style.left =
-                "145px";
+        return;
+    }
 
-            r.style.right =
-                "145px";
 
-            pitchLadder.appendChild(l);
-            pitchLadder.appendChild(r);
-        }
+    rawPitch =
+        attitude.pitch;
+
+    rawRoll =
+        attitude.roll;
+
+
+    /*
+       Relative Werte zur ZERO-Lage
+    */
+
+    targetPitch =
+        rawPitch -
+        zeroPitch;
+
+    targetRoll =
+        normalize180(
+            rawRoll -
+            zeroRoll
+        );
+
+
+    haveGravity =
+        true;
+
+
+    /*
+       Debug
+    */
+
+    if (debugVisible) {
+
+        debugBox.innerHTML =
+
+            "SCREEN: " +
+            getScreenAngle() +
+            "°<br>" +
+
+            "GX: " +
+            gravityX.toFixed(2) +
+            "<br>" +
+
+            "GY: " +
+            gravityY.toFixed(2) +
+            "<br>" +
+
+            "GZ: " +
+            gravityZ.toFixed(2) +
+            "<br><br>" +
+
+            "SX: " +
+            screenGravity.x.toFixed(2) +
+            "<br>" +
+
+            "SY: " +
+            screenGravity.y.toFixed(2) +
+            "<br>" +
+
+            "SZ: " +
+            screenGravity.z.toFixed(2) +
+            "<br><br>" +
+
+            "RAW P: " +
+            rawPitch.toFixed(1) +
+            "°<br>" +
+
+            "RAW R: " +
+            rawRoll.toFixed(1) +
+            "°";
     }
 }
 
-createPitchLadder();
 
+/* ==========================================================
+   HEADING
+   ========================================================== */
 
-/* =========================================================
-   HEADING TAPE
-   ========================================================= */
+function handleOrientation(
+    event
+) {
 
-const HEADING_PX_PER_DEG = 5;
+    /*
+       Safari / iPhone liefert hierfür
+       webkitCompassHeading.
 
-function createHeadingTape() {
+       Pitch und Roll benutzen wir aus
+       diesem Event ABSICHTLICH nicht.
+    */
 
-    for (
-        let deg = -360;
-        deg <= 720;
-        deg += 5
+    if (
+        typeof
+            event.webkitCompassHeading
+            === "number" &&
+
+        !Number.isNaN(
+            event.webkitCompassHeading
+        )
     ) {
 
-        const n =
-            ((deg % 360) + 360) % 360;
+        rawHeading =
+            event.webkitCompassHeading;
 
-        const mark =
-            document.createElement("div");
+        haveHeading =
+            true;
 
-        mark.className =
-            "headingMark " +
+        return;
+    }
+
+
+    /*
+       Fallback
+    */
+
+    if (
+        typeof event.alpha
+            === "number"
+    ) {
+
+        rawHeading =
             (
-                n % 10 === 0
-                ? "major"
-                : ""
-            );
+                360 -
+                event.alpha
+            ) % 360;
 
-        mark.style.left =
-            (deg *
-             HEADING_PX_PER_DEG) +
-            "px";
-
-        headingTape.appendChild(mark);
-
-
-        if (n % 30 === 0) {
-
-            const label =
-                document.createElement("div");
-
-            label.className =
-                "headingLabel";
-
-            if (n === 0)
-                label.textContent = "N";
-
-            else if (n === 90)
-                label.textContent = "E";
-
-            else if (n === 180)
-                label.textContent = "S";
-
-            else if (n === 270)
-                label.textContent = "W";
-
-            else
-                label.textContent =
-                    String(n / 10)
-                    .padStart(2, "0");
-
-
-            label.style.left =
-                (deg *
-                 HEADING_PX_PER_DEG) +
-                "px";
-
-            headingTape.appendChild(label);
-        }
+        haveHeading =
+            true;
     }
 }
 
-createHeadingTape();
+
+/* ==========================================================
+   ANGLE HELPERS
+   ========================================================== */
+
+function normalize180(
+    angle
+) {
+
+    while (
+        angle > 180
+    ) {
+
+        angle -= 360;
+    }
 
 
-/* =========================================================
+    while (
+        angle < -180
+    ) {
+
+        angle += 360;
+    }
+
+
+    return angle;
+}
+
+
+/* ==========================================================
    FILTER
-   ========================================================= */
+   ========================================================== */
 
-function smooth(current, target, factor) {
+function smooth(
+    current,
+    target,
+    factor
+) {
 
     return (
         current +
-        (target-current) * factor
+        (
+            target -
+            current
+        ) *
+        factor
     );
 }
 
 
-function smoothAngle(current, target, factor) {
+function smoothAngle(
+    current,
+    target,
+    factor
+) {
 
     const delta =
         (
@@ -763,185 +1224,113 @@ function smoothAngle(current, target, factor) {
             ) % 360
         ) - 180;
 
+
     return (
         current +
-        delta * factor +
+        delta *
+        factor +
         360
     ) % 360;
 }
 
 
-/* =========================================================
-   ORIENTATION EVENT
-   ========================================================= */
-
-function handleOrientation(event) {
-
-    if (
-        event.alpha == null ||
-        event.beta == null ||
-        event.gamma == null
-    ) {
-        return;
-    }
-
-
-    let q =
-        quaternionFromEuler(
-            event.alpha,
-            event.beta,
-            event.gamma
-        );
-
-
-    q =
-        applyScreenOrientation(q);
-
-    q =
-        normalizeQuaternion(q);
-
-
-    currentQuaternion = q;
-
-
-    /*
-       Beim ersten gültigen Sensorwert
-       automatisch aktuelle Position
-       als Null verwenden.
-    */
-
-    if (!zeroQuaternion) {
-
-        zeroQuaternion =
-            {...currentQuaternion};
-
-        statusBox.textContent =
-            "AUTO ZERO gesetzt";
-    }
-
-
-    /*
-       Relative Lage:
-
-       ZERO^-1 × CURRENT
-    */
-
-    const relative =
-        quatMultiply(
-            quatConjugate(zeroQuaternion),
-            currentQuaternion
-        );
-
-
-    const attitude =
-        quaternionToAttitude(relative);
-
-
-    /*
-       PFD-Zuordnung im Landscape-Modus.
-
-       Falls ein bestimmtes Gerät die
-       Vorzeichen anders liefert, können
-       wir diese beiden Stellen einfach
-       invertieren.
-    */
-
-    targetRoll =
-        attitude.x;
-
-    targetPitch =
-        -attitude.y;
-
-
-    /*
-       Apple-Kompass
-    */
-
-    if (
-        typeof event.webkitCompassHeading ===
-            "number" &&
-        !Number.isNaN(
-            event.webkitCompassHeading
-        )
-    ) {
-
-        rawHeading =
-            event.webkitCompassHeading;
-
-        haveHeading = true;
-    }
-
-    else if (
-        typeof event.alpha === "number"
-    ) {
-
-        rawHeading =
-            (
-                360 -
-                event.alpha
-            ) % 360;
-
-        haveHeading = true;
-    }
-}
-
-
-/* =========================================================
+/* ==========================================================
    SENSOR START
-   ========================================================= */
+   ========================================================== */
 
 async function startSensors() {
 
     try {
 
+        statusBox.textContent =
+            "Sensorfreigabe…";
+
+
+        /*
+           DeviceMotion Permission
+        */
+
         if (
-            typeof DeviceOrientationEvent ===
-            "undefined"
+            typeof DeviceMotionEvent
+                !== "undefined" &&
+
+            typeof DeviceMotionEvent
+                .requestPermission
+                === "function"
         ) {
 
-            statusBox.textContent =
-                "Orientation API nicht verfügbar";
+            const motionPermission =
+                await DeviceMotionEvent
+                    .requestPermission();
 
-            return;
+
+            if (
+                motionPermission
+                    !== "granted"
+            ) {
+
+                statusBox.textContent =
+                    "Motion-Zugriff verweigert";
+
+                return;
+            }
         }
 
 
+        /*
+           DeviceOrientation Permission
+        */
+
         if (
             typeof DeviceOrientationEvent
-                .requestPermission ===
-            "function"
+                !== "undefined" &&
+
+            typeof DeviceOrientationEvent
+                .requestPermission
+                === "function"
         ) {
 
-            statusBox.textContent =
-                "Sensorfreigabe…";
+            let orientationPermission;
 
-            let permission;
 
             try {
 
-                permission =
+                orientationPermission =
                     await DeviceOrientationEvent
                         .requestPermission(true);
 
             }
+
             catch {
 
-                permission =
+                orientationPermission =
                     await DeviceOrientationEvent
                         .requestPermission();
             }
 
 
             if (
-                permission !== "granted"
+                orientationPermission
+                    !== "granted"
             ) {
 
                 statusBox.textContent =
-                    "Sensorzugriff verweigert";
+                    "Kompass-Zugriff verweigert";
 
                 return;
             }
         }
+
+
+        /*
+           Listener
+        */
+
+        window.addEventListener(
+            "devicemotion",
+            handleMotion,
+            true
+        );
 
 
         window.addEventListener(
@@ -954,13 +1343,37 @@ async function startSensors() {
         startButton.style.display =
             "none";
 
+
         statusBox.textContent =
             "Sensoren aktiv";
 
+
+        /*
+           Nach kurzer Zeit automatisch
+           ZERO setzen.
+        */
+
+        setTimeout(
+            function() {
+
+                if (haveGravity) {
+
+                    setZero();
+
+                    statusBox.textContent =
+                        "Sensoren aktiv · AUTO ZERO";
+                }
+
+            },
+            500
+        );
+
     }
+
     catch(error) {
 
         console.error(error);
+
 
         statusBox.textContent =
             "Fehler: " +
@@ -969,23 +1382,27 @@ async function startSensors() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    ZERO
-   ========================================================= */
+   ========================================================== */
 
-function zeroAttitude() {
+function setZero() {
 
-    if (!currentQuaternion) {
+    if (!haveGravity) {
 
         statusBox.textContent =
-            "Noch keine Sensordaten";
+            "Noch keine Bewegungsdaten";
 
         return;
     }
 
 
-    zeroQuaternion =
-        {...currentQuaternion};
+    zeroPitch =
+        rawPitch;
+
+    zeroRoll =
+        rawRoll;
+
 
     targetPitch = 0;
     targetRoll = 0;
@@ -993,14 +1410,284 @@ function zeroAttitude() {
     displayPitch = 0;
     displayRoll = 0;
 
+
     statusBox.textContent =
         "ZERO gesetzt";
 }
 
 
-/* =========================================================
+/* ==========================================================
+   PITCH LADDER
+   ========================================================== */
+
+function createPitchLadder() {
+
+    for (
+        let deg = -40;
+        deg <= 40;
+        deg += 5
+    ) {
+
+        if (
+            deg === 0
+        ) {
+
+            continue;
+        }
+
+
+        const line =
+            document.createElement(
+                "div"
+            );
+
+
+        line.className =
+
+            "pitchLine " +
+
+            (
+                deg % 10 === 0
+                ? "major"
+                : "minor"
+            );
+
+
+        const y =
+            450 -
+            deg *
+            PX_PER_DEG;
+
+
+        line.style.top =
+            y + "px";
+
+
+        pitchLadder
+            .appendChild(
+                line
+            );
+
+
+        if (
+            deg % 10 === 0
+        ) {
+
+            const left =
+                document.createElement(
+                    "div"
+                );
+
+            const right =
+                document.createElement(
+                    "div"
+                );
+
+
+            left.className =
+                "pitchLabel";
+
+            right.className =
+                "pitchLabel";
+
+
+            left.textContent =
+                Math.abs(deg);
+
+            right.textContent =
+                Math.abs(deg);
+
+
+            left.style.top =
+                (y - 10) +
+                "px";
+
+            right.style.top =
+                (y - 10) +
+                "px";
+
+
+            left.style.left =
+                "145px";
+
+            right.style.right =
+                "145px";
+
+
+            pitchLadder
+                .appendChild(
+                    left
+                );
+
+            pitchLadder
+                .appendChild(
+                    right
+                );
+        }
+    }
+}
+
+
+createPitchLadder();
+
+
+/* ==========================================================
+   HEADING TAPE
+   ========================================================== */
+
+const HEADING_PX_PER_DEG =
+    5;
+
+
+function createHeadingTape() {
+
+    for (
+        let deg = -360;
+        deg <= 720;
+        deg += 5
+    ) {
+
+        const normalized =
+            (
+                (
+                    deg % 360
+                ) +
+                360
+            ) % 360;
+
+
+        const mark =
+            document.createElement(
+                "div"
+            );
+
+
+        mark.className =
+
+            "headingMark " +
+
+            (
+                normalized % 10 === 0
+                ? "major"
+                : ""
+            );
+
+
+        mark.style.left =
+
+            (
+                deg *
+                HEADING_PX_PER_DEG
+            ) +
+            "px";
+
+
+        headingTape
+            .appendChild(
+                mark
+            );
+
+
+        if (
+            normalized % 30 === 0
+        ) {
+
+            const label =
+                document.createElement(
+                    "div"
+                );
+
+
+            label.className =
+                "headingLabel";
+
+
+            if (
+                normalized === 0
+            ) {
+
+                label.textContent =
+                    "N";
+            }
+
+            else if (
+                normalized === 90
+            ) {
+
+                label.textContent =
+                    "E";
+            }
+
+            else if (
+                normalized === 180
+            ) {
+
+                label.textContent =
+                    "S";
+            }
+
+            else if (
+                normalized === 270
+            ) {
+
+                label.textContent =
+                    "W";
+            }
+
+            else {
+
+                label.textContent =
+                    String(
+                        normalized / 10
+                    )
+                    .padStart(
+                        2,
+                        "0"
+                    );
+            }
+
+
+            label.style.left =
+
+                (
+                    deg *
+                    HEADING_PX_PER_DEG
+                ) +
+                "px";
+
+
+            headingTape
+                .appendChild(
+                    label
+                );
+        }
+    }
+}
+
+
+createHeadingTape();
+
+
+/* ==========================================================
+   DEBUG
+   ========================================================== */
+
+function toggleDebug() {
+
+    debugVisible =
+        !debugVisible;
+
+
+    debugBox.style.display =
+        debugVisible
+        ? "block"
+        : "none";
+}
+
+
+/* ==========================================================
    FULLSCREEN
-   ========================================================= */
+   ========================================================== */
 
 async function fullscreen() {
 
@@ -1015,135 +1702,212 @@ async function fullscreen() {
                 .documentElement
                 .requestFullscreen();
         }
-
     }
-    catch(e) {
 
-        console.log(e);
+    catch(error) {
+
+        console.log(error);
     }
 }
 
 
-/* =========================================================
+/* ==========================================================
    RENDER
-   ========================================================= */
+   ========================================================== */
 
 function render() {
+
+    /*
+       Filter
+    */
 
     displayPitch =
         smooth(
             displayPitch,
             targetPitch,
-            ATTITUDE_SMOOTHING
+            FILTER
         );
+
 
     displayRoll =
         smooth(
             displayRoll,
             targetRoll,
-            ATTITUDE_SMOOTHING
+            FILTER
         );
 
 
-    if (haveHeading) {
+    /*
+       Heading
+    */
+
+    if (
+        haveHeading
+    ) {
 
         displayHeading =
             smoothAngle(
                 displayHeading,
                 rawHeading,
-                HEADING_SMOOTHING
+                HEADING_FILTER
             );
     }
 
 
     /*
-       PFD:
+       Horizont
 
-       Nase hoch -> Horizont nach unten
+       Nose UP:
+       Horizont bewegt sich nach unten.
 
-       Roll rechts -> Horizont nach links
-       drehen.
+       Roll rechts:
+       Horizont dreht entgegengesetzt.
     */
 
     const pitchPixels =
+
         displayPitch *
         PX_PER_DEG;
 
 
     horizon.style.transform =
-        `translateY(${pitchPixels}px)
-         rotate(${-displayRoll}deg)`;
 
+        "translateY(" +
+        pitchPixels +
+        "px) " +
+
+        "rotate(" +
+        (-displayRoll) +
+        "deg)";
+
+
+    /*
+       Zahlen
+    */
 
     pitchValue.textContent =
-        displayPitch.toFixed(1) +
+
+        displayPitch
+            .toFixed(1) +
         "°";
+
 
     rollValue.textContent =
-        displayRoll.toFixed(1) +
+
+        displayRoll
+            .toFixed(1) +
         "°";
 
 
-    if (haveHeading) {
+    /*
+       Heading
+    */
 
-        let h =
+    if (
+        haveHeading
+    ) {
+
+        let heading =
+
             Math.round(
                 displayHeading
             ) % 360;
 
-        if (h === 0)
-            h = 360;
 
-        const text =
-            String(h)
-            .padStart(3, "0");
+        if (
+            heading === 0
+        ) {
 
-        headingValue.textContent =
-            text;
+            heading =
+                360;
+        }
 
-        compassValue.textContent =
-            text + "°";
+
+        const headingText =
+
+            String(
+                heading
+            )
+            .padStart(
+                3,
+                "0"
+            );
+
+
+        headingValue
+            .textContent =
+            headingText;
+
+
+        compassValue
+            .textContent =
+
+            headingText +
+            "°";
 
 
         const center =
-            document
-            .getElementById("headingBox")
-            .clientWidth / 2;
+
+            headingBox
+                .clientWidth /
+            2;
 
 
-        headingTape.style.transform =
-            `translateX(${
+        headingTape
+            .style
+            .transform =
+
+            "translateX(" +
+
+            (
                 center -
                 displayHeading *
                 HEADING_PX_PER_DEG
-            }px)`;
+            ) +
+
+            "px)";
     }
 
 
-    requestAnimationFrame(render);
+    requestAnimationFrame(
+        render
+    );
 }
+
 
 render();
 
 
-/* =========================================================
+/* ==========================================================
    BUTTONS
-   ========================================================= */
+   ========================================================== */
 
-startButton.addEventListener(
-    "click",
-    startSensors
-);
+startButton
+    .addEventListener(
+        "click",
+        startSensors
+    );
 
-zeroButton.addEventListener(
-    "click",
-    zeroAttitude
-);
 
-fullscreenButton.addEventListener(
-    "click",
-    fullscreen
-);
+zeroButton
+    .addEventListener(
+        "click",
+        setZero
+    );
+
+
+debugButton
+    .addEventListener(
+        "click",
+        toggleDebug
+    );
+
+
+fullscreenButton
+    .addEventListener(
+        "click",
+        fullscreen
+    );
 
 </script>
 

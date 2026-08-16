@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
-<title>PFD V6.14</title>
+<title>PFD V6.15</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif}
@@ -69,7 +69,7 @@ button{appearance:none;-webkit-appearance:none;width:66px;min-height:31px;margin
 <div id="pitchBox" class="dataBox">PITCH&nbsp;<span id="pitchValue">0.0°</span></div>
 <div id="rollBox" class="dataBox">ROLL&nbsp;<span id="rollValue">0.0°</span></div>
 <div id="headingData" class="dataBox">HDG&nbsp;<span id="headingDataValue">---</span></div>
-<div id="status">V6.14</div><div id="debug"></div>
+<div id="status">V6.15</div><div id="debug"></div>
 </div>
 <script>
 const RAD_TO_DEG=180/Math.PI,PX_PER_DEG=7,GRAVITY_FILTER=.08,DISPLAY_FILTER=.14,HEADING_FILTER=.10,DEADBAND=.20,MAX_PITCH=60,MAX_ROLL=60;
@@ -180,7 +180,7 @@ async function startSensors(){
    window.addEventListener("devicemotion",handleMotion,true);
    window.addEventListener("deviceorientation",handleOrientation,true);
    $("startButton").style.display="none";statusBox.textContent="Sensoren aktiv";
-   setTimeout(()=>{if(haveMotion){setZero();statusBox.textContent="V6.14"}},1500)
+   setTimeout(()=>{if(haveMotion){setZero();statusBox.textContent="V6.15"}},1500)
  }catch(e){statusBox.textContent="Fehler: "+e.message}
 }
 
@@ -196,7 +196,7 @@ for(let a=-500;a<=5000;a+=10){const t=document.createElement("div");t.className=
 function updateDebug(){
  if(!debugVisible)return;
  const standalone=window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches;
- debugBox.innerHTML="PFD V6.14<br><br><b>CONTEXT</b><br>SECURE: "+(window.isSecureContext?"YES":"NO")+"<br>STANDALONE: "+(standalone?"YES":"NO")+"<br>GEO API: "+(("geolocation"in navigator)?"YES":"NO")+"<br>PERMISSION: "+gpsPermission+"<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br><b>GPS</b><br>STATE: "+gpsState+"<br>ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"
+ debugBox.innerHTML="PFD V6.15<br><br><b>CONTEXT</b><br>SECURE: "+(window.isSecureContext?"YES":"NO")+"<br>STANDALONE: "+(standalone?"YES":"NO")+"<br>GEO API: "+(("geolocation"in navigator)?"YES":"NO")+"<br>PERMISSION: "+gpsPermission+"<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br><b>GPS</b><br>STATE: "+gpsState+"<br>ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"
 }
 
 function render(){
@@ -212,7 +212,46 @@ function render(){
 render();
 
 $("startButton").addEventListener("click",startSensors);
-$("gpsButton").addEventListener("click",requestGPSPermission);
+$("gpsButton").addEventListener("click", async ()=>{
+    if(!("geolocation" in navigator)){
+        gpsState="UNAVAILABLE"; gpsError="Geolocation API fehlt";
+        statusBox.textContent="GPS API fehlt"; return;
+    }
+
+    gpsState="REQUESTING"; gpsError="---";
+    $("gpsButton").textContent="GPS …";
+    statusBox.textContent=(navigator.standalone===true)?"GPS Standalone…":"GPS Freigabe…";
+
+    const geoPromise=new Promise((resolve,reject)=>{
+        navigator.geolocation.getCurrentPosition(
+            resolve,reject,
+            {enableHighAccuracy:true,maximumAge:0,timeout:10000}
+        );
+    });
+
+    const watchdog=new Promise((_,reject)=>{
+        setTimeout(()=>reject({code:99,message:"IOS_STANDALONE_TIMEOUT"}),12000);
+    });
+
+    try{
+        const position=await Promise.race([geoPromise,watchdog]);
+        processGPSPosition(position);
+        startGPSWatch();
+        $("gpsButton").textContent="GPS ✓";
+        statusBox.textContent="GPS aktiv";
+    }catch(e){
+        if(e && e.message==="IOS_STANDALONE_TIMEOUT"){
+            gpsState="STANDALONE_TIMEOUT";
+            gpsError="Kein Standortdialog / keine Antwort";
+            $("gpsButton").textContent="GPS ERNEUT";
+            statusBox.textContent="GPS: iOS blockiert";
+        }else{
+            processGPSError(e);
+            $("gpsButton").textContent=(e&&e.code===1)?"GPS GESPERRT":"GPS ERNEUT";
+            statusBox.textContent="GPS Fehler";
+        }
+    }
+});
 $("zeroButton").addEventListener("click",setZero);
 $("swapButton").addEventListener("click",swapAxes);
 $("debugButton").addEventListener("click",()=>{debugVisible=!debugVisible;debugBox.style.display=debugVisible?"block":"none";updateDebug()});

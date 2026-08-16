@@ -7,7 +7,7 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,vie
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
 
-<title>PFD V6.9</title>
+<title>PFD V6.10</title>
 
 <style>
 
@@ -794,7 +794,9 @@ button:active{
 
     padding:7px;
 
-    background:rgba(0,0,0,.78);
+    max-width:220px;
+
+    background:rgba(0,0,0,.82);
 
     border:1px solid rgba(0,255,100,.35);
 
@@ -849,6 +851,8 @@ button:active{
         </div>
     </div>
 
+    <!-- SPEED -->
+
     <div id="speedTapeBox" class="gpsTape">
 
         <div id="speedUnit" class="gpsUnit">
@@ -862,6 +866,8 @@ button:active{
         </div>
 
     </div>
+
+    <!-- ALTITUDE -->
 
     <div id="altitudeTapeBox" class="gpsTape">
 
@@ -877,12 +883,16 @@ button:active{
 
     </div>
 
+    <!-- HEADING -->
+
     <div id="headingBox">
         <div id="headingTape"></div>
         <div id="headingIndex"></div>
     </div>
 
     <div id="headingPointer"></div>
+
+    <!-- ROLL -->
 
     <div id="rollScale">
         <div id="rollArc"></div>
@@ -894,11 +904,15 @@ button:active{
 
     <div id="fixedBankPointer"></div>
 
+    <!-- AIRCRAFT -->
+
     <div id="aircraft">
         <div class="wing left"></div>
         <div id="centerCircle"></div>
         <div class="wing right"></div>
     </div>
+
+    <!-- CONTROLS -->
 
     <div id="controls">
 
@@ -920,6 +934,8 @@ button:active{
 
     </div>
 
+    <!-- DATA -->
+
     <div id="pitchBox" class="dataBox">
         PITCH&nbsp;
         <span id="pitchValue">0.0°</span>
@@ -936,7 +952,7 @@ button:active{
     </div>
 
     <div id="status">
-        V6.9
+        V6.10
     </div>
 
     <div id="debug"></div>
@@ -946,13 +962,18 @@ button:active{
 <script>
 
 /* ==========================================================
-   PFD V6.9
+   PFD V6.10
 
    ATTITUDE CORE UNVERÄNDERT.
 
+   GPS:
+   - Standortabfrage direkt aus START
+   - initial getCurrentPosition()
+   - danach watchPosition()
+
    ALTITUDE:
-   1. GPS altitude when accuracy <= 30 m
-   2. DEM terrain elevation fallback
+   - GPS altitude bei accuracy <= 30 m
+   - sonst DEM terrain elevation
 ========================================================== */
 
 const RAD_TO_DEG = 180 / Math.PI;
@@ -977,18 +998,9 @@ const ALT_PX_PER_METER = 2;
 const GPS_DISPLAY_FILTER = 0.16;
 
 
-/* ==========================================================
-   V6.9 ALTITUDE SETTINGS
-========================================================== */
+/* ALTITUDE */
 
 const MAX_GPS_ALTITUDE_ACCURACY = 30;
-
-/*
-   DEM is not requested continuously.
-
-   New request when device moved at least
-   this distance from previous DEM position.
-*/
 
 const DEM_UPDATE_DISTANCE = 100;
 
@@ -1044,7 +1056,7 @@ const altitudeCurrent =
 
 
 /* ==========================================================
-   SENSOR STATE
+   ATTITUDE STATE
 ========================================================== */
 
 let gravity = null;
@@ -1076,22 +1088,38 @@ let swapPitchRoll = true;
    GPS STATE
 ========================================================== */
 
+let gpsState = "IDLE";
+let gpsError = "---";
+
+let gpsLatitude = null;
+let gpsLongitude = null;
+let gpsHorizontalAccuracy = null;
+
 let gpsSpeed = null;
 
 let gpsAltitude = null;
 let gpsAltitudeAccuracy = null;
 
+let gpsWatchId = null;
+
+let haveSpeed = false;
+
+let displaySpeed = 0;
+
+
+/* ==========================================================
+   ALTITUDE STATE
+========================================================== */
+
 let demAltitude = null;
+
+let activeAltitude = null;
 
 let altitudeSource = "NONE";
 
-let displaySpeed = 0;
-let displayAltitude = 0;
-
-let haveSpeed = false;
 let haveAltitude = false;
 
-let gpsWatchId = null;
+let displayAltitude = 0;
 
 
 /* ==========================================================
@@ -1102,6 +1130,9 @@ let lastDemLatitude = null;
 let lastDemLongitude = null;
 
 let demRequestRunning = false;
+
+let demState = "IDLE";
+let demError = "---";
 
 
 /* ==========================================================
@@ -1152,6 +1183,22 @@ function normalize180(angle){
 }
 
 
+function formatNumber(
+    value,
+    decimals=1
+){
+
+    if(
+        value===null ||
+        !Number.isFinite(value)
+    ){
+        return "---";
+    }
+
+    return value.toFixed(decimals);
+}
+
+
 /* ==========================================================
    DISTANCE BETWEEN GPS POSITIONS
 ========================================================== */
@@ -1163,34 +1210,36 @@ function distanceMeters(
     lon2
 ){
 
-    const R = 6371000;
+    const R=6371000;
 
-    const p1 =
-        lat1 * Math.PI / 180;
+    const p1=
+        lat1*Math.PI/180;
 
-    const p2 =
-        lat2 * Math.PI / 180;
+    const p2=
+        lat2*Math.PI/180;
 
-    const dp =
-        (lat2-lat1) *
-        Math.PI / 180;
+    const dp=
+        (lat2-lat1)*
+        Math.PI/180;
 
-    const dl =
-        (lon2-lon1) *
-        Math.PI / 180;
+    const dl=
+        (lon2-lon1)*
+        Math.PI/180;
 
-    const a =
-        Math.sin(dp/2) *
-        Math.sin(dp/2) +
+    const a=
 
-        Math.cos(p1) *
-        Math.cos(p2) *
+        Math.sin(dp/2)*
+        Math.sin(dp/2)+
 
-        Math.sin(dl/2) *
+        Math.cos(p1)*
+        Math.cos(p2)*
+
+        Math.sin(dl/2)*
         Math.sin(dl/2);
 
-    const c =
-        2 *
+    const c=
+
+        2*
         Math.atan2(
             Math.sqrt(a),
             Math.sqrt(1-a)
@@ -1288,8 +1337,8 @@ function calculateAttitude(){
 
     const magnitude=
         Math.sqrt(
-            x*x +
-            y*y +
+            x*x+
+            y*y+
             z*z
         );
 
@@ -1341,99 +1390,6 @@ function calculateAttitude(){
             -MAX_ROLL,
             MAX_ROLL
         );
-
-    updateDebug(
-        x,
-        y,
-        z,
-        magnitude
-    );
-}
-
-
-/* ==========================================================
-   DEBUG V6.9
-========================================================== */
-
-function updateDebug(
-    x,
-    y,
-    z,
-    magnitude
-){
-
-    if(!debugVisible){
-        return;
-    }
-
-    let gpsAltText="---";
-    let gpsAccText="---";
-    let demText="---";
-
-    if(
-        gpsAltitude !== null
-    ){
-        gpsAltText=
-            gpsAltitude.toFixed(1);
-    }
-
-    if(
-        gpsAltitudeAccuracy !== null
-    ){
-        gpsAccText=
-            gpsAltitudeAccuracy.toFixed(1);
-    }
-
-    if(
-        demAltitude !== null
-    ){
-        demText=
-            demAltitude.toFixed(1);
-    }
-
-    debugBox.innerHTML=
-
-        "PFD V6.9<br>"+
-        "SENSOR CORE V6.x<br><br>"+
-
-        "MODE: "+
-        (
-            swapPitchRoll
-            ?"P=Z / R=X"
-            :"P=X / R=Z"
-        )+
-        "<br><br>"+
-
-        "GX: "+x.toFixed(3)+"<br>"+
-        "GY: "+y.toFixed(3)+"<br>"+
-        "GZ: "+z.toFixed(3)+"<br><br>"+
-
-        "|G|: "+
-        magnitude.toFixed(2)+
-        "<br><br>"+
-
-        "RAW P: "+
-        rawPitch.toFixed(2)+
-        "°<br>"+
-
-        "RAW R: "+
-        rawRoll.toFixed(2)+
-        "°<br><br>"+
-
-        "GPS ALT: "+
-        gpsAltText+
-        " m<br>"+
-
-        "ALT ACC: ±"+
-        gpsAccText+
-        " m<br>"+
-
-        "DEM ALT: "+
-        demText+
-        " m<br><br>"+
-
-        "ALT SOURCE: "+
-        altitudeSource;
 }
 
 
@@ -1507,7 +1463,99 @@ function handleOrientation(event){
 
 
 /* ==========================================================
-   V6.9 DEM ALTITUDE
+   GPS ALTITUDE QUALITY
+========================================================== */
+
+function hasGoodGpsAltitude(){
+
+    if(
+        gpsAltitude===null ||
+        !Number.isFinite(gpsAltitude)
+    ){
+        return false;
+    }
+
+    if(
+        gpsAltitudeAccuracy===null ||
+        !Number.isFinite(
+            gpsAltitudeAccuracy
+        )
+    ){
+        return false;
+    }
+
+    return(
+        gpsAltitudeAccuracy <=
+        MAX_GPS_ALTITUDE_ACCURACY
+    );
+}
+
+
+/* ==========================================================
+   SET ALTITUDE
+========================================================== */
+
+function setAltitude(
+    altitude,
+    source
+){
+
+    if(
+        altitude===null ||
+        !Number.isFinite(altitude)
+    ){
+        return;
+    }
+
+    activeAltitude=
+        altitude;
+
+    altitudeSource=
+        source;
+
+    if(!haveAltitude){
+
+        displayAltitude=
+            altitude;
+
+        haveAltitude=true;
+    }
+}
+
+
+/* ==========================================================
+   DEM UPDATE DISTANCE
+========================================================== */
+
+function shouldUpdateDem(
+    latitude,
+    longitude
+){
+
+    if(
+        lastDemLatitude===null ||
+        lastDemLongitude===null
+    ){
+        return true;
+    }
+
+    const distance=
+        distanceMeters(
+            lastDemLatitude,
+            lastDemLongitude,
+            latitude,
+            longitude
+        );
+
+    return(
+        distance >=
+        DEM_UPDATE_DISTANCE
+    );
+}
+
+
+/* ==========================================================
+   DEM ALTITUDE
 ========================================================== */
 
 async function requestDemAltitude(
@@ -1521,6 +1569,9 @@ async function requestDemAltitude(
 
     demRequestRunning=true;
 
+    demState="REQUEST";
+    demError="---";
+
     try{
 
         const url=
@@ -1533,7 +1584,13 @@ async function requestDemAltitude(
 
 
         const response=
-            await fetch(url);
+            await fetch(
+                url,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
 
 
         if(!response.ok){
@@ -1563,6 +1620,7 @@ async function requestDemAltitude(
                 );
 
         }else if(
+            data.elevation!==undefined &&
             Number.isFinite(
                 Number(data.elevation)
             )
@@ -1576,42 +1634,49 @@ async function requestDemAltitude(
 
 
         if(
-            elevation !== null &&
-            Number.isFinite(elevation)
+            elevation===null ||
+            !Number.isFinite(elevation)
         ){
 
-            demAltitude=
-                elevation;
-
-            lastDemLatitude=
-                latitude;
-
-            lastDemLongitude=
-                longitude;
+            throw new Error(
+                "Keine Elevation"
+            );
+        }
 
 
-            /*
-               Only use DEM when GPS altitude
-               is currently not sufficiently
-               accurate.
-            */
+        demAltitude=
+            elevation;
 
-            if(!hasGoodGpsAltitude()){
+        lastDemLatitude=
+            latitude;
 
-                setAltitude(
-                    demAltitude,
-                    "DEM"
-                );
-            }
+        lastDemLongitude=
+            longitude;
+
+        demState="OK";
+
+
+        if(!hasGoodGpsAltitude()){
+
+            setAltitude(
+                demAltitude,
+                "DEM"
+            );
         }
 
     }
 
     catch(error){
 
-        console.log(
-            "DEM:",
-            error.message
+        demState="ERROR";
+
+        demError=
+            error.message ||
+            String(error);
+
+        console.error(
+            "DEM ERROR:",
+            error
         );
 
     }
@@ -1624,310 +1689,276 @@ async function requestDemAltitude(
 
 
 /* ==========================================================
-   CHECK GPS ALTITUDE QUALITY
+   PROCESS GPS POSITION
 ========================================================== */
 
-function hasGoodGpsAltitude(){
+function processGPSPosition(
+    position
+){
+
+    gpsState="ACTIVE";
+    gpsError="---";
+
+    const coords=
+        position.coords;
+
+
+    /* POSITION */
+
+    if(Number.isFinite(coords.latitude)){
+
+        gpsLatitude=
+            coords.latitude;
+    }
+
+    if(Number.isFinite(coords.longitude)){
+
+        gpsLongitude=
+            coords.longitude;
+    }
 
     if(
-        gpsAltitude === null ||
-        !Number.isFinite(gpsAltitude)
+        coords.accuracy!==null &&
+        Number.isFinite(coords.accuracy)
     ){
-        return false;
+
+        gpsHorizontalAccuracy=
+            coords.accuracy;
     }
 
 
-    /*
-       If altitudeAccuracy itself is missing,
-       do NOT treat the altitude as sufficiently
-       trustworthy.
-
-       DEM fallback will then be used.
-    */
+    /* SPEED */
 
     if(
-        gpsAltitudeAccuracy === null ||
-        !Number.isFinite(
-            gpsAltitudeAccuracy
+        coords.speed!==null &&
+        Number.isFinite(coords.speed)
+    ){
+
+        gpsSpeed=
+            Math.max(
+                0,
+                coords.speed*3.6
+            );
+
+        if(!haveSpeed){
+
+            displaySpeed=
+                gpsSpeed;
+
+            haveSpeed=true;
+        }
+
+    }else if(!haveSpeed){
+
+        /*
+           At standstill iOS may return null.
+           Once we have a valid position,
+           show 0 rather than ---.
+        */
+
+        gpsSpeed=0;
+        displaySpeed=0;
+        haveSpeed=true;
+    }
+
+
+    /* GPS ALTITUDE */
+
+    if(
+        coords.altitude!==null &&
+        Number.isFinite(coords.altitude)
+    ){
+
+        gpsAltitude=
+            coords.altitude;
+
+    }else{
+
+        gpsAltitude=null;
+    }
+
+
+    /* ALTITUDE ACCURACY */
+
+    if(
+        coords.altitudeAccuracy!==null &&
+        Number.isFinite(
+            coords.altitudeAccuracy
         )
     ){
-        return false;
+
+        gpsAltitudeAccuracy=
+            coords.altitudeAccuracy;
+
+    }else{
+
+        gpsAltitudeAccuracy=null;
     }
 
 
-    return(
-        gpsAltitudeAccuracy <=
-        MAX_GPS_ALTITUDE_ACCURACY
-    );
-}
+    /* SELECT ALTITUDE SOURCE */
 
+    if(hasGoodGpsAltitude()){
 
-/* ==========================================================
-   SET ACTIVE ALTITUDE
-========================================================== */
-
-function setAltitude(
-    altitude,
-    source
-){
-
-    if(
-        altitude === null ||
-        !Number.isFinite(altitude)
-    ){
-        return;
-    }
-
-
-    gpsAltitude=
-        source==="GPS"
-        ? altitude
-        : gpsAltitude;
-
-
-    /*
-       gpsAltitude is the raw GPS value.
-       Active altitude is stored separately.
-    */
-
-    activeAltitude=
-        altitude;
-
-    altitudeSource=
-        source;
-
-
-    if(!haveAltitude){
-
-        displayAltitude=
-            altitude;
-
-        haveAltitude=true;
-    }
-}
-
-
-/* Active altitude actually shown */
-
-let activeAltitude=null;
-
-
-/* ==========================================================
-   DETERMINE WHETHER DEM UPDATE IS NEEDED
-========================================================== */
-
-function shouldUpdateDem(
-    latitude,
-    longitude
-){
-
-    if(
-        lastDemLatitude === null ||
-        lastDemLongitude === null
-    ){
-        return true;
-    }
-
-
-    const distance=
-        distanceMeters(
-            lastDemLatitude,
-            lastDemLongitude,
-            latitude,
-            longitude
+        setAltitude(
+            gpsAltitude,
+            "GPS"
         );
 
+    }else{
 
-    return(
-        distance >=
-        DEM_UPDATE_DISTANCE
+        if(
+            demAltitude!==null &&
+            Number.isFinite(demAltitude)
+        ){
+
+            setAltitude(
+                demAltitude,
+                "DEM"
+            );
+        }
+
+
+        if(
+            gpsLatitude!==null &&
+            gpsLongitude!==null &&
+            shouldUpdateDem(
+                gpsLatitude,
+                gpsLongitude
+            )
+        ){
+
+            requestDemAltitude(
+                gpsLatitude,
+                gpsLongitude
+            );
+        }
+    }
+}
+
+
+/* ==========================================================
+   GPS ERROR
+========================================================== */
+
+function processGPSError(error){
+
+    let name="UNKNOWN";
+
+    if(error.code===1){
+        name="PERMISSION_DENIED";
+    }
+
+    if(error.code===2){
+        name="POSITION_UNAVAILABLE";
+    }
+
+    if(error.code===3){
+        name="TIMEOUT";
+    }
+
+    gpsState="ERROR";
+
+    gpsError=
+        name+
+        ": "+
+        error.message;
+
+    console.error(
+        "GPS ERROR:",
+        error
     );
 }
 
 
 /* ==========================================================
-   GPS V6.9
+   START GPS WATCH
 ========================================================== */
 
-function startGPS(){
-
-    if(
-        !("geolocation" in navigator)
-    ){
-
-        statusBox.textContent=
-            "GPS nicht verfügbar";
-
-        return;
-    }
-
+function startGPSWatch(){
 
     if(gpsWatchId!==null){
         return;
     }
 
-
     gpsWatchId=
         navigator.geolocation.watchPosition(
 
-            function(position){
+            processGPSPosition,
 
-                const coords=
-                    position.coords;
-
-
-                /* =========================
-                   SPEED
-                ========================= */
-
-                if(
-                    coords.speed !== null &&
-                    Number.isFinite(coords.speed)
-                ){
-
-                    gpsSpeed=
-                        Math.max(
-                            0,
-                            coords.speed * 3.6
-                        );
-
-
-                    if(!haveSpeed){
-
-                        displaySpeed=
-                            gpsSpeed;
-
-                        haveSpeed=true;
-                    }
-                }
-
-
-                /* =========================
-                   RAW GPS ALTITUDE
-                ========================= */
-
-                if(
-                    coords.altitude !== null &&
-                    Number.isFinite(
-                        coords.altitude
-                    )
-                ){
-
-                    gpsAltitude=
-                        coords.altitude;
-
-                }else{
-
-                    gpsAltitude=
-                        null;
-                }
-
-
-                /* =========================
-                   GPS ALTITUDE ACCURACY
-                ========================= */
-
-                if(
-                    coords.altitudeAccuracy !== null &&
-                    Number.isFinite(
-                        coords.altitudeAccuracy
-                    )
-                ){
-
-                    gpsAltitudeAccuracy=
-                        coords.altitudeAccuracy;
-
-                }else{
-
-                    gpsAltitudeAccuracy=
-                        null;
-                }
-
-
-                /* =========================
-                   ALTITUDE SOURCE
-                ========================= */
-
-                if(
-                    hasGoodGpsAltitude()
-                ){
-
-                    setAltitude(
-                        gpsAltitude,
-                        "GPS"
-                    );
-
-                }else{
-
-                    /*
-                       GPS altitude unavailable
-                       or too inaccurate.
-
-                       Use existing DEM value
-                       immediately if available.
-                    */
-
-                    if(
-                        demAltitude !== null
-                    ){
-
-                        setAltitude(
-                            demAltitude,
-                            "DEM"
-                        );
-                    }
-
-
-                    /*
-                       Request terrain elevation
-                       when needed.
-                    */
-
-                    if(
-                        Number.isFinite(
-                            coords.latitude
-                        ) &&
-
-                        Number.isFinite(
-                            coords.longitude
-                        ) &&
-
-                        shouldUpdateDem(
-                            coords.latitude,
-                            coords.longitude
-                        )
-                    ){
-
-                        requestDemAltitude(
-                            coords.latitude,
-                            coords.longitude
-                        );
-                    }
-                }
-            },
-
-
-            function(error){
-
-                console.log(
-                    "GPS:",
-                    error.message
-                );
-
-                if(!haveAltitude){
-
-                    altitudeCurrent.textContent=
-                        "---";
-                }
-            },
-
+            processGPSError,
 
             {
                 enableHighAccuracy:true,
                 maximumAge:1000,
-                timeout:15000
+                timeout:20000
             }
         );
+}
+
+
+/* ==========================================================
+   INITIAL GPS REQUEST
+
+   Called directly from START button flow.
+========================================================== */
+
+function requestInitialGPS(){
+
+    if(
+        !("geolocation" in navigator)
+    ){
+
+        gpsState="UNAVAILABLE";
+
+        gpsError=
+            "Geolocation API fehlt";
+
+        return;
+    }
+
+
+    gpsState="REQUESTING";
+    gpsError="---";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            processGPSPosition(
+                position
+            );
+
+            startGPSWatch();
+        },
+
+
+        function(error){
+
+            processGPSError(
+                error
+            );
+
+            /*
+               Still start watch.
+               Useful if the first request
+               merely timed out.
+            */
+
+            if(error.code!==1){
+
+                startGPSWatch();
+            }
+        },
+
+
+        {
+            enableHighAccuracy:true,
+            maximumAge:0,
+            timeout:20000
+        }
+    );
 }
 
 
@@ -2025,7 +2056,21 @@ async function startSensors(){
     try{
 
         statusBox.textContent=
-            "Sensorfreigabe…";
+            "Freigaben…";
+
+
+        /*
+           IMPORTANT V6.10
+
+           Trigger geolocation immediately
+           from START interaction, before
+           awaiting motion permissions.
+        */
+
+        requestInitialGPS();
+
+
+        /* MOTION PERMISSION */
 
         if(
             typeof DeviceMotionEvent
@@ -2048,6 +2093,9 @@ async function startSensors(){
                 return;
             }
         }
+
+
+        /* ORIENTATION / COMPASS */
 
         if(
             typeof DeviceOrientationEvent
@@ -2082,22 +2130,19 @@ async function startSensors(){
             }
         }
 
+
         window.addEventListener(
             "devicemotion",
             handleMotion,
             true
         );
 
+
         window.addEventListener(
             "deviceorientation",
             handleOrientation,
             true
         );
-
-
-        /* V6.9 GPS + ALTITUDE */
-
-        startGPS();
 
 
         document
@@ -2120,7 +2165,7 @@ async function startSensors(){
                     setZero();
 
                     statusBox.textContent=
-                        "V6.9";
+                        "V6.10";
                 }
 
             },
@@ -2146,7 +2191,7 @@ async function startSensors(){
 
 const pitchMarks=[
     -40,-35,-30,-25,-20,-15,-10,-5,
-      5, 10, 15, 20, 25, 30, 35, 40
+      5,10,15,20,25,30,35,40
 ];
 
 
@@ -2159,7 +2204,7 @@ for(const deg of pitchMarks){
 
     line.className=
 
-        "pitchLine " +
+        "pitchLine "+
 
         (
             Math.abs(deg)%10===0
@@ -2168,8 +2213,8 @@ for(const deg of pitchMarks){
         );
 
     const y=
-        550 -
-        deg *
+        550-
+        deg*
         PX_PER_DEG;
 
     line.style.top=
@@ -2205,6 +2250,7 @@ for(const deg of pitchMarks){
         right.className=
             "pitchLabel";
 
+
         if(
             abs===5 ||
             abs===15
@@ -2223,11 +2269,13 @@ for(const deg of pitchMarks){
                 "500";
         }
 
+
         left.textContent=
             abs;
 
         right.textContent=
             abs;
+
 
         left.style.top=
             (y-9)+"px";
@@ -2235,11 +2283,13 @@ for(const deg of pitchMarks){
         right.style.top=
             (y-9)+"px";
 
+
         left.style.left=
             "128px";
 
         right.style.right=
             "128px";
+
 
         ladder.appendChild(left);
         ladder.appendChild(right);
@@ -2262,6 +2312,7 @@ const rollMarks=[
     10,20,30,45,60
 ];
 
+
 for(const angle of rollMarks){
 
     const tick=
@@ -2271,6 +2322,7 @@ for(const angle of rollMarks){
 
     tick.className=
         "rollTick";
+
 
     if(
         angle===0 ||
@@ -2291,10 +2343,13 @@ for(const angle of rollMarks){
         );
     }
 
+
     tick.style.transform=
         "rotate("+angle+"deg)";
 
+
     rollScale.appendChild(tick);
+
 
     if(angle!==0){
 
@@ -2309,20 +2364,22 @@ for(const angle of rollMarks){
         number.textContent=
             Math.abs(angle);
 
+
         const radius=244;
 
         const rad=
-            angle *
-            Math.PI /
+            angle*
+            Math.PI/
             180;
 
         const x=
-            Math.sin(rad) *
+            Math.sin(rad)*
             radius;
 
         const y=
-            -Math.cos(rad) *
+            -Math.cos(rad)*
             radius;
+
 
         number.style.left=
             "calc(50% + "+x+"px)";
@@ -2335,6 +2392,7 @@ for(const angle of rollMarks){
 
         number.style.marginTop=
             "-9px";
+
 
         rollScale.appendChild(
             number
@@ -2349,6 +2407,7 @@ for(const angle of rollMarks){
 
 const HEADING_PX_PER_DEG=3.7;
 
+
 for(
     let deg=-360;
     deg<=720;
@@ -2358,6 +2417,7 @@ for(
     const normalized=
         ((deg%360)+360)%360;
 
+
     const mark=
         document.createElement(
             "div"
@@ -2365,7 +2425,7 @@ for(
 
     mark.className=
 
-        "headingMark " +
+        "headingMark "+
 
         (
             normalized%10===0
@@ -2373,15 +2433,20 @@ for(
             :""
         );
 
+
     mark.style.left=
 
         (
-            deg *
+            deg*
             HEADING_PX_PER_DEG
         )+
         "px";
 
-    headingTape.appendChild(mark);
+
+    headingTape.appendChild(
+        mark
+    );
+
 
     if(normalized%30===0){
 
@@ -2392,6 +2457,7 @@ for(
 
         label.className=
             "headingLabel";
+
 
         if(normalized===0){
 
@@ -2418,18 +2484,25 @@ for(
             label.textContent=
 
                 String(normalized)
-                .padStart(3,"0");
+                .padStart(
+                    3,
+                    "0"
+                );
         }
+
 
         label.style.left=
 
             (
-                deg *
+                deg*
                 HEADING_PX_PER_DEG
             )+
             "px";
 
-        headingTape.appendChild(label);
+
+        headingTape.appendChild(
+            label
+        );
     }
 }
 
@@ -2451,7 +2524,7 @@ for(
 
     tick.className=
 
-        "gpsTick " +
+        "gpsTick "+
 
         (
             speed%10===0
@@ -2459,15 +2532,20 @@ for(
             :"minor"
         );
 
+
     tick.style.top=
 
         (
-            -speed *
+            -speed*
             SPEED_PX_PER_KMH
         )+
         "px";
 
-    speedTape.appendChild(tick);
+
+    speedTape.appendChild(
+        tick
+    );
+
 
     if(speed%10===0){
 
@@ -2482,15 +2560,19 @@ for(
         label.textContent=
             speed;
 
+
         label.style.top=
 
             (
-                -speed *
+                -speed*
                 SPEED_PX_PER_KMH
             )+
             "px";
 
-        speedTape.appendChild(label);
+
+        speedTape.appendChild(
+            label
+        );
     }
 }
 
@@ -2512,7 +2594,7 @@ for(
 
     tick.className=
 
-        "gpsTick " +
+        "gpsTick "+
 
         (
             altitude%20===0
@@ -2520,15 +2602,20 @@ for(
             :"minor"
         );
 
+
     tick.style.top=
 
         (
-            -altitude *
+            -altitude*
             ALT_PX_PER_METER
         )+
         "px";
 
-    altitudeTape.appendChild(tick);
+
+    altitudeTape.appendChild(
+        tick
+    );
+
 
     if(altitude%20===0){
 
@@ -2543,16 +2630,185 @@ for(
         label.textContent=
             altitude;
 
+
         label.style.top=
 
             (
-                -altitude *
+                -altitude*
                 ALT_PX_PER_METER
             )+
             "px";
 
-        altitudeTape.appendChild(label);
+
+        altitudeTape.appendChild(
+            label
+        );
     }
+}
+
+
+/* ==========================================================
+   DEBUG
+========================================================== */
+
+function updateDebug(){
+
+    if(!debugVisible){
+        return;
+    }
+
+
+    let gx="---";
+    let gy="---";
+    let gz="---";
+    let magnitude="---";
+
+
+    if(gravity){
+
+        gx=
+            gravity.x.toFixed(3);
+
+        gy=
+            gravity.y.toFixed(3);
+
+        gz=
+            gravity.z.toFixed(3);
+
+        magnitude=
+            Math.sqrt(
+                gravity.x*gravity.x+
+                gravity.y*gravity.y+
+                gravity.z*gravity.z
+            ).toFixed(2);
+    }
+
+
+    debugBox.innerHTML=
+
+        "PFD V6.10<br>"+
+        "SENSOR CORE V6.x<br><br>"+
+
+        "SECURE: "+
+        (
+            window.isSecureContext
+            ?"YES"
+            :"NO"
+        )+
+        "<br>"+
+
+        "GEO API: "+
+        (
+            "geolocation" in navigator
+            ?"YES"
+            :"NO"
+        )+
+        "<br><br>"+
+
+        "GPS STATE: "+
+        gpsState+
+        "<br>"+
+
+        "GPS ERROR: "+
+        gpsError+
+        "<br><br>"+
+
+        "LAT: "+
+        formatNumber(
+            gpsLatitude,
+            6
+        )+
+        "<br>"+
+
+        "LON: "+
+        formatNumber(
+            gpsLongitude,
+            6
+        )+
+        "<br>"+
+
+        "GPS ACC: ±"+
+        formatNumber(
+            gpsHorizontalAccuracy,
+            1
+        )+
+        " m<br><br>"+
+
+        "GPS SPEED: "+
+        formatNumber(
+            gpsSpeed,
+            1
+        )+
+        " km/h<br><br>"+
+
+        "GPS ALT: "+
+        formatNumber(
+            gpsAltitude,
+            1
+        )+
+        " m<br>"+
+
+        "ALT ACC: ±"+
+        formatNumber(
+            gpsAltitudeAccuracy,
+            1
+        )+
+        " m<br><br>"+
+
+        "DEM REQ: "+
+        demState+
+        "<br>"+
+
+        "DEM ERROR: "+
+        demError+
+        "<br>"+
+
+        "DEM ALT: "+
+        formatNumber(
+            demAltitude,
+            1
+        )+
+        " m<br><br>"+
+
+        "ALT SOURCE: "+
+        altitudeSource+
+        "<br>"+
+
+        "ACTIVE ALT: "+
+        formatNumber(
+            activeAltitude,
+            1
+        )+
+        " m<br><br>"+
+
+        "MODE: "+
+        (
+            swapPitchRoll
+            ?"P=Z / R=X"
+            :"P=X / R=Z"
+        )+
+        "<br>"+
+
+        "GX: "+gx+
+        "<br>"+
+
+        "GY: "+gy+
+        "<br>"+
+
+        "GZ: "+gz+
+        "<br>"+
+
+        "|G|: "+
+        magnitude+
+        "<br><br>"+
+
+        "RAW P: "+
+        rawPitch.toFixed(2)+
+        "°<br>"+
+
+        "RAW R: "+
+        rawRoll.toFixed(2)+
+        "°";
 }
 
 
@@ -2569,6 +2825,7 @@ function render(){
             DISPLAY_FILTER
         );
 
+
     displayRoll=
         smooth(
             displayRoll,
@@ -2576,11 +2833,12 @@ function render(){
             DISPLAY_FILTER
         );
 
+
     horizon.style.transform=
 
         "translateY("+
         (
-            displayPitch *
+            displayPitch*
             PX_PER_DEG
         )+
         "px) rotate("+
@@ -2602,13 +2860,12 @@ function render(){
     pitchValue.textContent=
         displayPitch.toFixed(1)+"°";
 
+
     rollValue.textContent=
         displayRoll.toFixed(1)+"°";
 
 
-    /* ======================================================
-       HEADING
-    ====================================================== */
+    /* HEADING */
 
     if(haveHeading){
 
@@ -2620,51 +2877,60 @@ function render(){
                 HEADING_FILTER
             );
 
+
         let heading=
 
             Math.round(
                 displayHeading
-            ) % 360;
+            )%360;
+
 
         if(heading===0){
             heading=360;
         }
 
-        const text=
-
-            String(heading)
-            .padStart(3,"0");
 
         headingDataValue.textContent=
-            text+"°";
+
+            String(heading)
+            .padStart(
+                3,
+                "0"
+            )+
+            "°";
+
 
         const center=
             headingBox.clientWidth/2;
+
 
         headingTape.style.transform=
 
             "translateX("+
             (
-                center -
-                displayHeading *
+                center-
+                displayHeading*
                 HEADING_PX_PER_DEG
             )+
             "px)";
     }
 
 
-    /* ======================================================
-       GPS SPEED
-    ====================================================== */
+    /* SPEED */
 
-    if(haveSpeed){
+    if(
+        haveSpeed &&
+        gpsSpeed!==null
+    ){
 
         displaySpeed=
+
             smooth(
                 displaySpeed,
                 gpsSpeed,
                 GPS_DISPLAY_FILTER
             );
+
 
         speedCurrent.textContent=
 
@@ -2672,32 +2938,33 @@ function render(){
                 displaySpeed
             );
 
+
         speedTape.style.transform=
 
             "translateY("+
             (
-                displaySpeed *
+                displaySpeed*
                 SPEED_PX_PER_KMH
             )+
             "px)";
     }
 
 
-    /* ======================================================
-       ALTITUDE — GPS OR DEM
-    ====================================================== */
+    /* ALTITUDE */
 
     if(
         haveAltitude &&
-        activeAltitude !== null
+        activeAltitude!==null
     ){
 
         displayAltitude=
+
             smooth(
                 displayAltitude,
                 activeAltitude,
                 GPS_DISPLAY_FILTER
             );
+
 
         altitudeCurrent.textContent=
 
@@ -2705,18 +2972,24 @@ function render(){
                 displayAltitude
             );
 
+
         altitudeTape.style.transform=
 
             "translateY("+
             (
-                displayAltitude *
+                displayAltitude*
                 ALT_PX_PER_METER
             )+
             "px)";
     }
 
 
-    requestAnimationFrame(render);
+    updateDebug();
+
+
+    requestAnimationFrame(
+        render
+    );
 }
 
 
@@ -2728,7 +3001,9 @@ render();
 ========================================================== */
 
 document
-.getElementById("startButton")
+.getElementById(
+    "startButton"
+)
 .addEventListener(
     "click",
     startSensors
@@ -2736,7 +3011,9 @@ document
 
 
 document
-.getElementById("zeroButton")
+.getElementById(
+    "zeroButton"
+)
 .addEventListener(
     "click",
     setZero
@@ -2744,7 +3021,9 @@ document
 
 
 document
-.getElementById("swapButton")
+.getElementById(
+    "swapButton"
+)
 .addEventListener(
     "click",
     swapAxes
@@ -2752,7 +3031,9 @@ document
 
 
 document
-.getElementById("debugButton")
+.getElementById(
+    "debugButton"
+)
 .addEventListener(
     "click",
     function(){
@@ -2760,11 +3041,15 @@ document
         debugVisible=
             !debugVisible;
 
+
         debugBox.style.display=
 
             debugVisible
             ?"block"
             :"none";
+
+
+        updateDebug();
     }
 );
 

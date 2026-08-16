@@ -9,7 +9,7 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,vie
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000">
 
-<title>PFD V6.1</title>
+<title>PFD V6.2</title>
 
 <style>
 
@@ -46,12 +46,16 @@ html,body{
 
 #horizon{
     position:absolute;
+
     width:300vw;
     height:300vh;
+
     left:50%;
     top:50%;
+
     margin-left:-150vw;
     margin-top:-150vh;
+
     transform-origin:center center;
 
     background:
@@ -70,19 +74,26 @@ html,body{
 
 #pitchLadder{
     position:absolute;
+
     left:50%;
     top:50%;
+
     width:520px;
     height:1000px;
+
     transform:translate(-50%,-50%);
 }
 
 .pitchLine{
     position:absolute;
     left:50%;
+
     height:2px;
+
     background:#fff;
+
     transform:translateX(-50%);
+
     box-shadow:0 0 2px #000;
 }
 
@@ -96,9 +107,12 @@ html,body{
 
 .pitchLabel{
     position:absolute;
+
     color:#fff;
+
     font-size:17px;
     font-weight:600;
+
     text-shadow:1px 1px 2px #000;
 }
 
@@ -106,20 +120,28 @@ html,body{
 
 #aircraft{
     position:absolute;
+
     left:50%;
     top:50%;
+
     width:280px;
     height:60px;
+
     transform:translate(-50%,-50%);
+
     z-index:20;
 }
 
 .wing{
     position:absolute;
+
     top:28px;
+
     width:105px;
     height:5px;
+
     background:#ffd900;
+
     border:1px solid #000;
 }
 
@@ -133,11 +155,16 @@ html,body{
 
 .wing.left::after,
 .wing.right::after{
+
     content:"";
+
     position:absolute;
+
     width:5px;
     height:20px;
+
     top:-15px;
+
     background:#ffd900;
 }
 
@@ -151,12 +178,16 @@ html,body{
 
 #centerCircle{
     position:absolute;
+
     width:18px;
     height:18px;
+
     border:3px solid #ffd900;
     border-radius:50%;
+
     left:50%;
     top:21px;
+
     transform:translateX(-50%);
 }
 
@@ -164,14 +195,22 @@ html,body{
 
 #headingBox{
     position:absolute;
+
     top:env(safe-area-inset-top);
+
     left:50%;
+
     transform:translateX(-50%);
+
     width:72%;
     height:70px;
+
     overflow:hidden;
+
     background:rgba(0,0,0,.6);
+
     border-bottom:1px solid #aaa;
+
     z-index:50;
 }
 
@@ -183,9 +222,12 @@ html,body{
 
 .headingMark{
     position:absolute;
+
     top:34px;
+
     width:2px;
     height:12px;
+
     background:#fff;
 }
 
@@ -195,19 +237,26 @@ html,body{
 
 .headingLabel{
     position:absolute;
+
     top:5px;
+
     transform:translateX(-50%);
+
     font-size:17px;
     font-weight:600;
 }
 
 #headingPointer{
     position:absolute;
+
     left:50%;
     bottom:0;
+
     transform:translateX(-50%);
+
     width:0;
     height:0;
+
     border-left:8px solid transparent;
     border-right:8px solid transparent;
     border-bottom:12px solid #ffd900;
@@ -215,15 +264,24 @@ html,body{
 
 #headingValue{
     position:absolute;
+
     left:50%;
+
     top:calc(73px + env(safe-area-inset-top));
+
     transform:translateX(-50%);
+
     background:#000;
+
     border:2px solid #00ff65;
+
     color:#00ff65;
+
     padding:3px 10px;
+
     font-size:21px;
     font-weight:bold;
+
     z-index:60;
 }
 
@@ -231,21 +289,32 @@ html,body{
 
 #controls{
     position:absolute;
+
     right:10px;
+
     top:calc(88px + env(safe-area-inset-top));
+
     display:flex;
     flex-direction:column;
+
     gap:7px;
+
     z-index:100;
 }
 
 button{
     appearance:none;
+
     border:1px solid #aaa;
+
     border-radius:7px;
+
     background:rgba(0,0,0,.8);
+
     color:#fff;
+
     padding:9px 12px;
+
     font-size:13px;
     font-weight:600;
 }
@@ -255,16 +324,27 @@ button{
     border-color:#00ff65;
 }
 
+#swapButton{
+    color:#ffd900;
+    border-color:#ffd900;
+}
+
 /* ================= DATA ================= */
 
 .dataBox{
     position:absolute;
+
     bottom:calc(12px + env(safe-area-inset-bottom));
+
     background:rgba(0,0,0,.75);
+
     border:1px solid #888;
+
     padding:7px 10px;
+
     font-family:Menlo,monospace;
     font-size:13px;
+
     z-index:70;
 }
 
@@ -284,13 +364,21 @@ button{
 
 #status{
     position:absolute;
+
     left:50%;
+
     bottom:calc(50px + env(safe-area-inset-bottom));
+
     transform:translateX(-50%);
+
     background:rgba(0,0,0,.75);
+
     padding:5px 9px;
+
     border-radius:5px;
+
     font-size:11px;
+
     z-index:100;
 }
 
@@ -298,14 +386,21 @@ button{
 
 #debug{
     position:absolute;
+
     left:8px;
     top:100px;
+
     background:rgba(0,0,0,.82);
+
     color:#00ff65;
+
     font-family:Menlo,monospace;
     font-size:10px;
+
     padding:7px;
+
     z-index:110;
+
     display:none;
 }
 
@@ -316,70 +411,99 @@ button{
 
 <div id="pfd">
 
-    <div id="viewport">
-        <div id="horizon">
-            <div id="pitchLadder"></div>
-        </div>
-    </div>
+<div id="viewport">
 
+    <div id="horizon">
 
-    <div id="aircraft">
-        <div class="wing left"></div>
-        <div id="centerCircle"></div>
-        <div class="wing right"></div>
-    </div>
-
-
-    <div id="headingBox">
-        <div id="headingTape"></div>
-        <div id="headingPointer"></div>
-    </div>
-
-
-    <div id="headingValue">---</div>
-
-
-    <div id="controls">
-
-        <button id="startButton">
-            SENSOREN STARTEN
-        </button>
-
-        <button id="zeroButton">
-            ZERO
-        </button>
-
-        <button id="debugButton">
-            DEBUG
-        </button>
+        <div id="pitchLadder"></div>
 
     </div>
 
-
-    <div id="pitchBox" class="dataBox">
-        PITCH
-        <span id="pitchValue">0.0°</span>
-    </div>
+</div>
 
 
-    <div id="rollBox" class="dataBox">
-        ROLL
-        <span id="rollValue">0.0°</span>
-    </div>
+<div id="aircraft">
+
+    <div class="wing left"></div>
+
+    <div id="centerCircle"></div>
+
+    <div class="wing right"></div>
+
+</div>
 
 
-    <div id="headingData" class="dataBox">
-        HDG
-        <span id="headingDataValue">---</span>
-    </div>
+<div id="headingBox">
+
+    <div id="headingTape"></div>
+
+    <div id="headingPointer"></div>
+
+</div>
 
 
-    <div id="status">
-        V6.1 – Sensoren nicht gestartet
-    </div>
+<div id="headingValue">
+---
+</div>
 
 
-    <div id="debug"></div>
+<div id="controls">
+
+    <button id="startButton">
+        SENSOREN STARTEN
+    </button>
+
+    <button id="zeroButton">
+        ZERO
+    </button>
+
+    <button id="swapButton">
+        P↔R · Z/X
+    </button>
+
+    <button id="debugButton">
+        DEBUG
+    </button>
+
+</div>
+
+
+<div id="pitchBox" class="dataBox">
+
+PITCH
+<span id="pitchValue">
+0.0°
+</span>
+
+</div>
+
+
+<div id="rollBox" class="dataBox">
+
+ROLL
+<span id="rollValue">
+0.0°
+</span>
+
+</div>
+
+
+<div id="headingData" class="dataBox">
+
+HDG
+<span id="headingDataValue">
+---
+</span>
+
+</div>
+
+
+<div id="status">
+V6.2 – Sensoren nicht gestartet
+</div>
+
+
+<div id="debug"></div>
 
 </div>
 
@@ -394,44 +518,17 @@ const RAD_TO_DEG = 180 / Math.PI;
 
 const PX_PER_DEG = 7;
 
-
-/*
-   Niedriger Wert = ruhiger.
-
-   Wir bleiben bewusst bei einem starken
-   Gravity-Tiefpass.
-*/
-
 const GRAVITY_FILTER = 0.08;
-
-
-/*
-   Zusätzliche Glättung der Anzeige.
-*/
 
 const DISPLAY_FILTER = 0.14;
 
-
-/*
-   Kompassfilter.
-*/
-
 const HEADING_FILTER = 0.10;
-
-
-/*
-   Totzone um ZERO.
-*/
 
 const DEADBAND = 0.20;
 
-
-/*
-   Maximaler Anzeigebereich.
-*/
-
 const MAX_PITCH = 60;
-const MAX_ROLL  = 60;
+
+const MAX_ROLL = 60;
 
 
 /* ==========================================================
@@ -468,6 +565,9 @@ const statusBox =
 const debugBox =
     document.getElementById("debug");
 
+const swapButton =
+    document.getElementById("swapButton");
+
 
 /* ==========================================================
    STATE
@@ -491,59 +591,113 @@ let rawHeading = 0;
 let displayHeading = 0;
 
 let haveHeading = false;
+
 let haveMotion = false;
 
 let debugVisible = false;
+
+
+/*
+   NEU V6.2
+
+   true:
+
+   PITCH = Z
+   ROLL  = X
+
+   false:
+
+   PITCH = X
+   ROLL  = Z
+*/
+
+let swapPitchRoll = true;
 
 
 /* ==========================================================
    HELPERS
 ========================================================== */
 
-function clamp(value,min,max){
+function clamp(
+    value,
+    minimum,
+    maximum
+){
 
     return Math.max(
-        min,
+        minimum,
         Math.min(
-            max,
+            maximum,
             value
         )
     );
 }
 
 
-function smooth(current,target,factor){
+function smooth(
+    current,
+    target,
+    factor
+){
 
     return (
         current +
-        (target-current) *
+        (
+            target -
+            current
+        ) *
         factor
     );
 }
 
 
-function smoothAngle(current,target,factor){
+function smoothAngle(
+    current,
+    target,
+    factor
+){
 
     const delta =
-        ((target-current+540)%360)-180;
+
+        (
+            (
+                target -
+                current +
+                540
+            ) % 360
+        ) - 180;
+
 
     return (
+
         current +
-        delta*factor +
+        delta *
+        factor +
         360
-    )%360;
+
+    ) % 360;
 }
 
 
-function normalize180(angle){
+function normalize180(
+    angle
+){
 
-    while(angle>180){
-        angle-=360;
+    while(
+        angle > 180
+    ){
+
+        angle -= 360;
     }
 
-    while(angle<-180){
-        angle+=360;
+
+    while(
+        angle < -180
+    ){
+
+        angle += 360;
     }
+
 
     return angle;
 }
@@ -553,11 +707,15 @@ function normalize180(angle){
    GRAVITY FILTER
 ========================================================== */
 
-function filterGravity(x,y,z){
+function filterGravity(
+    x,
+    y,
+    z
+){
 
     if(!gravity){
 
-        gravity={
+        gravity = {
             x:x,
             y:y,
             z:z
@@ -568,42 +726,106 @@ function filterGravity(x,y,z){
 
 
     gravity.x +=
-        (x-gravity.x) *
+        (
+            x -
+            gravity.x
+        ) *
         GRAVITY_FILTER;
 
 
     gravity.y +=
-        (y-gravity.y) *
+        (
+            y -
+            gravity.y
+        ) *
         GRAVITY_FILTER;
 
 
     gravity.z +=
-        (z-gravity.z) *
+        (
+            z -
+            gravity.z
+        ) *
         GRAVITY_FILTER;
 }
 
 
 /* ==========================================================
-   ATTITUDE V6.1
+   GET ATTITUDE ANGLES
 
-   Gemessene PFD-Nulllage:
+   Hier werden beide möglichen Achsen
+   zunächst unabhängig berechnet.
+========================================================== */
 
-       X ≈ 0
-       Y ≈ -9.8
-       Z ≈ 0
+function getAttitudeAngles(){
 
-   Deshalb ist -Y unser stabiler Nenner.
+    if(!gravity){
+        return null;
+    }
 
-   KORREKTUR V6.1:
 
-       PITCH = X
-       ROLL  = Z
+    const x = gravity.x;
+    const y = gravity.y;
+    const z = gravity.z;
 
+
+    const angleX =
+
+        Math.atan2(
+            x,
+            -y
+        ) *
+        RAD_TO_DEG;
+
+
+    const angleZ =
+
+        Math.atan2(
+            z,
+            -y
+        ) *
+        RAD_TO_DEG;
+
+
+    /*
+       Standard V6.2:
+
+       Pitch = Z
+       Roll  = X
+    */
+
+    if(swapPitchRoll){
+
+        return {
+            pitch:angleZ,
+            roll:angleX
+        };
+
+    }
+
+
+    /*
+       Alternative per Button:
+
+       Pitch = X
+       Roll  = Z
+    */
+
+    return {
+        pitch:angleX,
+        roll:angleZ
+    };
+}
+
+
+/* ==========================================================
+   ATTITUDE
 ========================================================== */
 
 function calculateAttitude(){
 
     if(!gravity){
+
         return;
     }
 
@@ -621,48 +843,31 @@ function calculateAttitude(){
         );
 
 
-    if(magnitude < 3){
+    if(
+        magnitude <
+        3
+    ){
+
         return;
     }
 
 
-    /*
-       ======================================
-       PITCH
+    const angles =
+        getAttitudeAngles();
 
-       V6.1:
-       X ist die Pitch-Komponente.
-       ======================================
-    */
+
+    if(!angles){
+
+        return;
+    }
+
 
     rawPitch =
-        Math.atan2(
-            x,
-            -y
-        ) *
-        RAD_TO_DEG;
-
-
-    /*
-       ======================================
-       ROLL
-
-       V6.1:
-       Z ist die Roll-Komponente.
-       ======================================
-    */
+        angles.pitch;
 
     rawRoll =
-        Math.atan2(
-            z,
-            -y
-        ) *
-        RAD_TO_DEG;
+        angles.roll;
 
-
-    /*
-       ZERO abziehen
-    */
 
     let pitch =
         normalize180(
@@ -679,22 +884,26 @@ function calculateAttitude(){
 
 
     /*
-       Totzone
+       Deadband
     */
 
-    if(Math.abs(pitch)<DEADBAND){
-        pitch=0;
+    if(
+        Math.abs(pitch) <
+        DEADBAND
+    ){
+
+        pitch = 0;
     }
 
 
-    if(Math.abs(roll)<DEADBAND){
-        roll=0;
+    if(
+        Math.abs(roll) <
+        DEADBAND
+    ){
+
+        roll = 0;
     }
 
-
-    /*
-       Begrenzen
-    */
 
     targetPitch =
         clamp(
@@ -720,7 +929,17 @@ function calculateAttitude(){
 
         debugBox.innerHTML =
 
-            "V6.1<br><br>" +
+            "V6.2<br><br>" +
+
+            "MODE: " +
+
+            (
+                swapPitchRoll
+                ? "P=Z / R=X"
+                : "P=X / R=Z"
+            ) +
+
+            "<br><br>" +
 
             "GX: " +
             x.toFixed(3) +
@@ -761,13 +980,16 @@ function calculateAttitude(){
    DEVICE MOTION
 ========================================================== */
 
-function handleMotion(event){
+function handleMotion(
+    event
+){
 
     const g =
         event.accelerationIncludingGravity;
 
 
     if(!g){
+
         return;
     }
 
@@ -777,16 +999,10 @@ function handleMotion(event){
         g.y == null ||
         g.z == null
     ){
+
         return;
     }
 
-
-    /*
-       Direkte iPhone-Geräteachsen.
-
-       Keine screen.orientation-
-       Transformation.
-    */
 
     filterGravity(
         g.x,
@@ -795,7 +1011,8 @@ function handleMotion(event){
     );
 
 
-    haveMotion = true;
+    haveMotion =
+        true;
 
 
     calculateAttitude();
@@ -806,10 +1023,13 @@ function handleMotion(event){
    COMPASS
 ========================================================== */
 
-function handleOrientation(event){
+function handleOrientation(
+    event
+){
 
     if(
-        typeof event.webkitCompassHeading
+        typeof
+            event.webkitCompassHeading
             === "number" &&
 
         !Number.isNaN(
@@ -820,29 +1040,32 @@ function handleOrientation(event){
         rawHeading =
             event.webkitCompassHeading;
 
-        haveHeading = true;
+        haveHeading =
+            true;
 
         return;
     }
 
 
     if(
-        typeof event.alpha === "number"
+        typeof event.alpha
+            === "number"
     ){
 
         rawHeading =
-            (360-event.alpha)%360;
+            (
+                360 -
+                event.alpha
+            ) % 360;
 
-        haveHeading = true;
+        haveHeading =
+            true;
     }
 }
 
 
 /* ==========================================================
-   ZERO V6.1
-
-   Muss exakt dieselben Achsen verwenden
-   wie calculateAttitude().
+   ZERO
 ========================================================== */
 
 function setZero(){
@@ -859,47 +1082,114 @@ function setZero(){
     }
 
 
-    const x = gravity.x;
-    const y = gravity.y;
-    const z = gravity.z;
+    const angles =
+        getAttitudeAngles();
 
 
-    /*
-       PITCH = X
-    */
+    if(!angles){
+
+        return;
+    }
+
 
     zeroPitch =
-        Math.atan2(
-            x,
-            -y
-        ) *
-        RAD_TO_DEG;
-
-
-    /*
-       ROLL = Z
-    */
+        angles.pitch;
 
     zeroRoll =
-        Math.atan2(
-            z,
-            -y
-        ) *
-        RAD_TO_DEG;
+        angles.roll;
 
 
-    rawPitch = zeroPitch;
-    rawRoll  = zeroRoll;
+    rawPitch =
+        zeroPitch;
+
+    rawRoll =
+        zeroRoll;
+
 
     targetPitch = 0;
-    targetRoll  = 0;
+
+    targetRoll = 0;
 
     displayPitch = 0;
-    displayRoll  = 0;
+
+    displayRoll = 0;
 
 
     statusBox.textContent =
         "ZERO gesetzt";
+}
+
+
+/* ==========================================================
+   SWAP PITCH / ROLL
+========================================================== */
+
+function swapAxes(){
+
+    if(
+        !haveMotion ||
+        !gravity
+    ){
+
+        /*
+           Tauschen ist auch vor Sensorstart
+           möglich.
+        */
+
+        swapPitchRoll =
+            !swapPitchRoll;
+
+
+        updateSwapButton();
+
+
+        statusBox.textContent =
+
+            swapPitchRoll
+            ? "Pitch=Z · Roll=X"
+            : "Pitch=X · Roll=Z";
+
+
+        return;
+    }
+
+
+    /*
+       Achsenzuordnung tauschen
+    */
+
+    swapPitchRoll =
+        !swapPitchRoll;
+
+
+    /*
+       Danach aktuelle Position als
+       neue Nullstellung übernehmen.
+
+       Dadurch entsteht kein Sprung.
+    */
+
+    setZero();
+
+
+    updateSwapButton();
+
+
+    statusBox.textContent =
+
+        swapPitchRoll
+        ? "Pitch=Z · Roll=X"
+        : "Pitch=X · Roll=Z";
+}
+
+
+function updateSwapButton(){
+
+    swapButton.textContent =
+
+        swapPitchRoll
+        ? "P↔R · Z/X"
+        : "P↔R · X/Z";
 }
 
 
@@ -915,25 +1205,25 @@ async function startSensors(){
             "Sensorfreigabe…";
 
 
-        /*
-           Motion
-        */
-
         if(
-            typeof DeviceMotionEvent !==
-                "undefined" &&
+            typeof DeviceMotionEvent
+                !== "undefined" &&
 
             typeof DeviceMotionEvent
-                .requestPermission ===
-                "function"
+                .requestPermission
+                === "function"
         ){
 
             const permission =
+
                 await DeviceMotionEvent
                     .requestPermission();
 
 
-            if(permission!=="granted"){
+            if(
+                permission !==
+                "granted"
+            ){
 
                 statusBox.textContent =
                     "Motion verweigert";
@@ -943,17 +1233,13 @@ async function startSensors(){
         }
 
 
-        /*
-           Orientation / Compass
-        */
-
         if(
-            typeof DeviceOrientationEvent !==
-                "undefined" &&
+            typeof DeviceOrientationEvent
+                !== "undefined" &&
 
             typeof DeviceOrientationEvent
-                .requestPermission ===
-                "function"
+                .requestPermission
+                === "function"
         ){
 
             let permission;
@@ -962,6 +1248,7 @@ async function startSensors(){
             try{
 
                 permission =
+
                     await DeviceOrientationEvent
                         .requestPermission(true);
 
@@ -970,12 +1257,16 @@ async function startSensors(){
             catch{
 
                 permission =
+
                     await DeviceOrientationEvent
                         .requestPermission();
             }
 
 
-            if(permission!=="granted"){
+            if(
+                permission !==
+                "granted"
+            ){
 
                 statusBox.textContent =
                     "Kompass verweigert";
@@ -1000,8 +1291,11 @@ async function startSensors(){
 
 
         document
-            .getElementById("startButton")
-            .style.display =
+            .getElementById(
+                "startButton"
+            )
+            .style
+            .display =
             "none";
 
 
@@ -1020,8 +1314,13 @@ async function startSensors(){
 
                     setZero();
 
+
                     statusBox.textContent =
-                        "V6.1 aktiv · AUTO ZERO";
+
+                        swapPitchRoll
+
+                        ? "V6.2 aktiv · P=Z / R=X"
+                        : "V6.2 aktiv · P=X / R=Z";
                 }
 
             },
@@ -1032,7 +1331,9 @@ async function startSensors(){
 
     catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
 
         statusBox.textContent =
@@ -1047,24 +1348,31 @@ async function startSensors(){
 ========================================================== */
 
 for(
-    let deg=-40;
-    deg<=40;
-    deg+=5
+    let deg = -40;
+    deg <= 40;
+    deg += 5
 ){
 
-    if(deg===0){
+    if(
+        deg === 0
+    ){
+
         continue;
     }
 
 
     const line =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     line.className =
+
         "pitchLine " +
+
         (
-            deg%10===0
+            deg % 10 === 0
             ? "major"
             : "minor"
         );
@@ -1077,19 +1385,29 @@ for(
 
 
     line.style.top =
-        y+"px";
+        y +
+        "px";
 
 
-    ladder.appendChild(line);
+    ladder.appendChild(
+        line
+    );
 
 
-    if(deg%10===0){
+    if(
+        deg % 10 === 0
+    ){
 
         const left =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         const right =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         left.className =
@@ -1100,28 +1418,49 @@ for(
 
 
         left.textContent =
-            Math.abs(deg);
+            Math.abs(
+                deg
+            );
+
 
         right.textContent =
-            Math.abs(deg);
+            Math.abs(
+                deg
+            );
 
 
         left.style.top =
-            (y-10)+"px";
+            (
+                y -
+                10
+            ) +
+            "px";
+
 
         right.style.top =
-            (y-10)+"px";
+            (
+                y -
+                10
+            ) +
+            "px";
 
 
         left.style.left =
             "145px";
 
+
         right.style.right =
             "145px";
 
 
-        ladder.appendChild(left);
-        ladder.appendChild(right);
+        ladder.appendChild(
+            left
+        );
+
+
+        ladder.appendChild(
+            right
+        );
     }
 }
 
@@ -1130,33 +1469,45 @@ for(
    HEADING TAPE
 ========================================================== */
 
-const HEADING_PX_PER_DEG = 5;
+const HEADING_PX_PER_DEG =
+    5;
 
 
 for(
-    let deg=-360;
-    deg<=720;
-    deg+=5
+    let deg = -360;
+    deg <= 720;
+    deg += 5
 ){
 
     const normalized =
-        ((deg%360)+360)%360;
+
+        (
+            (
+                deg % 360
+            ) +
+            360
+        ) % 360;
 
 
     const mark =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     mark.className =
+
         "headingMark " +
+
         (
-            normalized%10===0
+            normalized % 10 === 0
             ? "major"
             : ""
         );
 
 
     mark.style.left =
+
         (
             deg *
             HEADING_PX_PER_DEG
@@ -1164,40 +1515,67 @@ for(
         "px";
 
 
-    headingTape.appendChild(mark);
+    headingTape.appendChild(
+        mark
+    );
 
 
-    if(normalized%30===0){
+    if(
+        normalized % 30 === 0
+    ){
 
         const label =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         label.className =
             "headingLabel";
 
 
-        if(normalized===0){
-
-            label.textContent="N";
-
-        }else if(normalized===90){
-
-            label.textContent="E";
-
-        }else if(normalized===180){
-
-            label.textContent="S";
-
-        }else if(normalized===270){
-
-            label.textContent="W";
-
-        }else{
+        if(
+            normalized === 0
+        ){
 
             label.textContent =
+                "N";
+
+        }
+
+        else if(
+            normalized === 90
+        ){
+
+            label.textContent =
+                "E";
+
+        }
+
+        else if(
+            normalized === 180
+        ){
+
+            label.textContent =
+                "S";
+
+        }
+
+        else if(
+            normalized === 270
+        ){
+
+            label.textContent =
+                "W";
+
+        }
+
+        else{
+
+            label.textContent =
+
                 String(
-                    normalized/10
+                    normalized / 10
                 )
                 .padStart(
                     2,
@@ -1207,6 +1585,7 @@ for(
 
 
         label.style.left =
+
             (
                 deg *
                 HEADING_PX_PER_DEG
@@ -1214,22 +1593,24 @@ for(
             "px";
 
 
-        headingTape.appendChild(label);
+        headingTape.appendChild(
+            label
+        );
     }
 }
 
 
 /* ==========================================================
    RENDER
+
+   Die eigentliche PFD-Darstellung bleibt
+   wie V6.1.
 ========================================================== */
 
 function render(){
 
-    /*
-       Ruhige zweite Filterstufe.
-    */
-
     displayPitch =
+
         smooth(
             displayPitch,
             targetPitch,
@@ -1238,16 +1619,13 @@ function render(){
 
 
     displayRoll =
+
         smooth(
             displayRoll,
             targetRoll,
             DISPLAY_FILTER
         );
 
-
-    /*
-       PFD Horizont
-    */
 
     horizon.style.transform =
 
@@ -1268,12 +1646,14 @@ function render(){
 
 
     pitchValue.textContent =
+
         displayPitch
             .toFixed(1) +
         "°";
 
 
     rollValue.textContent =
+
         displayRoll
             .toFixed(1) +
         "°";
@@ -1283,9 +1663,12 @@ function render(){
        HEADING
     */
 
-    if(haveHeading){
+    if(
+        haveHeading
+    ){
 
         displayHeading =
+
             smoothAngle(
                 displayHeading,
                 rawHeading,
@@ -1294,22 +1677,30 @@ function render(){
 
 
         let heading =
+
             Math.round(
                 displayHeading
-            )%360;
+            ) % 360;
 
 
-        if(heading===0){
-            heading=360;
+        if(
+            heading === 0
+        ){
+
+            heading =
+                360;
         }
 
 
         const text =
-            String(heading)
-                .padStart(
-                    3,
-                    "0"
-                );
+
+            String(
+                heading
+            )
+            .padStart(
+                3,
+                "0"
+            );
 
 
         headingValue.textContent =
@@ -1317,14 +1708,21 @@ function render(){
 
 
         headingDataValue.textContent =
-            text+"°";
+
+            text +
+            "°";
 
 
         const center =
-            headingBox.clientWidth/2;
+
+            headingBox
+                .clientWidth /
+            2;
 
 
-        headingTape.style.transform =
+        headingTape
+            .style
+            .transform =
 
             "translateX(" +
 
@@ -1338,7 +1736,9 @@ function render(){
     }
 
 
-    requestAnimationFrame(render);
+    requestAnimationFrame(
+        render
+    );
 }
 
 
@@ -1350,7 +1750,9 @@ render();
 ========================================================== */
 
 document
-    .getElementById("startButton")
+    .getElementById(
+        "startButton"
+    )
     .addEventListener(
         "click",
         startSensors
@@ -1358,7 +1760,9 @@ document
 
 
 document
-    .getElementById("zeroButton")
+    .getElementById(
+        "zeroButton"
+    )
     .addEventListener(
         "click",
         setZero
@@ -1366,7 +1770,19 @@ document
 
 
 document
-    .getElementById("debugButton")
+    .getElementById(
+        "swapButton"
+    )
+    .addEventListener(
+        "click",
+        swapAxes
+    );
+
+
+document
+    .getElementById(
+        "debugButton"
+    )
     .addEventListener(
         "click",
         function(){
@@ -1376,11 +1792,20 @@ document
 
 
             debugBox.style.display =
+
                 debugVisible
                 ? "block"
                 : "none";
         }
     );
+
+
+/*
+   Richtigen Startzustand des
+   Swap-Buttons anzeigen.
+*/
+
+updateSwapButton();
 
 </script>
 

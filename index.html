@@ -7,7 +7,7 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,vie
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
 
-<title>PFD V6.6</title>
+<title>PFD V6.7</title>
 
 <style>
 
@@ -357,12 +357,9 @@ html,body{
 }
 
 /* =========================================================
-   ROLL SCALE V6.6
-
-   Geometrischer Mittelpunkt der Roll-Skala:
-   Flugzeug-Mittelpunkt / Bildschirmmitte.
-
-   Radius: 280 px
+   ROLL SCALE V6.7
+   Mittelpunkt = Flugzeug-Mittelpunkt
+   Radius = 280 px
 ========================================================= */
 
 #rollScale{
@@ -380,11 +377,6 @@ html,body{
 
     z-index:85;
 }
-
-/*
-   Sichtbarer Kreisbogen.
-   Der Kreis selbst liegt exakt um den Flugzeugmittelpunkt.
-*/
 
 #rollArc{
     position:absolute;
@@ -412,14 +404,6 @@ html,body{
 
     opacity:.92;
 }
-
-/*
-   Roll-Markierungen.
-
-   Ausgangspunkt ist 12 Uhr.
-   transform-origin liegt exakt
-   im Mittelpunkt des Flugzeugs.
-*/
 
 .rollTick{
     position:absolute;
@@ -454,11 +438,6 @@ html,body{
     margin-left:-1.25px;
 }
 
-/*
-   Zahlen liegen etwas innerhalb
-   der Tick-Markierungen.
-*/
-
 .rollNumber{
     position:absolute;
 
@@ -488,8 +467,6 @@ html,body{
 
 /* =========================================================
    FIXED BANK POINTER
-
-   Fest bei 0°.
 ========================================================= */
 
 #fixedBankPointer{
@@ -515,9 +492,6 @@ html,body{
 
 /* =========================================================
    MOVING BANK POINTER
-
-   Gleicher Mittelpunkt und Radius
-   wie die Roll-Skala.
 ========================================================= */
 
 #movingBank{
@@ -905,7 +879,7 @@ button:active{
 
 
     <div id="status">
-        V6.6
+        V6.7
     </div>
 
     <div id="debug"></div>
@@ -916,14 +890,13 @@ button:active{
 <script>
 
 /* ==========================================================
-   V6.6
+   PFD V6.7
 
    SENSOR-/FILTERBERECHNUNG:
-   1:1 AUS V6.5
+   1:1 AUS V6.6
 
-   ÄNDERUNG V6.6:
-   Roll-Skala mit geometrischem Mittelpunkt
-   auf dem Flugzeug-Mittelpunkt.
+   V6.7:
+   Pitch-Zahlen 5° und 15° kleiner.
 ========================================================== */
 
 const RAD_TO_DEG = 180 / Math.PI;
@@ -1224,8 +1197,8 @@ function calculateAttitude(){
 
         debugBox.innerHTML=
 
-        "PFD V6.6<br>"+
-        "SENSOR CORE V6.5<br><br>"+
+        "PFD V6.7<br>"+
+        "SENSOR CORE V6.6<br><br>"+
 
         "MODE: "+
         (
@@ -1561,8 +1534,8 @@ async function startSensors(){
                     statusBox.textContent=
 
                         swapPitchRoll
-                        ?"V6.6 · P=Z/R=X"
-                        :"V6.6 · P=X/R=Z";
+                        ?"V6.7 · P=Z/R=X"
+                        :"V6.7 · P=X/R=Z";
                 }
 
             },
@@ -1583,7 +1556,7 @@ async function startSensors(){
 
 
 /* ==========================================================
-   PITCH LADDER
+   PITCH LADDER V6.7
 ========================================================== */
 
 const pitchMarks=[
@@ -1659,6 +1632,31 @@ for(
             "pitchLabel";
 
 
+        /*
+           V6.7:
+           5° und 15° kleiner als
+           10° / 20° / 30° / 40°.
+        */
+
+        if(
+            abs===5 ||
+            abs===15
+        ){
+
+            left.style.fontSize=
+                "11px";
+
+            right.style.fontSize=
+                "11px";
+
+            left.style.fontWeight=
+                "500";
+
+            right.style.fontWeight=
+                "500";
+        }
+
+
         left.textContent=
             abs;
 
@@ -1692,7 +1690,7 @@ for(
 
 
 /* ==========================================================
-   ROLL SCALE V6.6
+   ROLL SCALE
 ========================================================== */
 
 const rollScale=
@@ -1769,29 +1767,6 @@ for(
         number.textContent=
             Math.abs(angle);
 
-
-        /*
-           Erst um den Flugzeugmittelpunkt drehen,
-           anschließend die Zahl selbst zurückdrehen.
-
-           Dadurch sitzt die Zahl auf dem Kreisbogen,
-           bleibt aber horizontal lesbar.
-        */
-
-        number.style.transform=
-
-            "rotate("+
-            angle+
-            "deg) "+
-            "rotate("+
-            (-angle)+
-            "deg)";
-
-
-        /*
-           Die Position wird geometrisch berechnet,
-           damit die Zahlen exakt auf dem Kreis liegen.
-        */
 
         const radius=244;
 
@@ -1984,10 +1959,6 @@ function render(){
         );
 
 
-    /*
-       ATTITUDE MOVEMENT
-    */
-
     horizon.style.transform=
 
         "translateY("+
@@ -2005,14 +1976,6 @@ function render(){
 
         "deg)";
 
-
-    /*
-       MOVING BANK INDEX
-
-       V6.6:
-       Rotation erfolgt exakt um
-       den Flugzeug-Mittelpunkt.
-    */
 
     movingBank.style.transform=
 

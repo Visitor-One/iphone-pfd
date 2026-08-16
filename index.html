@@ -2,1812 +2,869 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000">
-
-<title>PFD V6.2</title>
+<title>PFD V6.3</title>
 
 <style>
-
-*{
-    box-sizing:border-box;
-    -webkit-user-select:none;
-    user-select:none;
-}
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 
 html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    color:#fff;
-    font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+    margin:0;width:100%;height:100%;overflow:hidden;
+    background:#000;color:#fff;
+    font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,Arial,sans-serif
 }
 
-#pfd{
-    position:fixed;
-    inset:0;
-    overflow:hidden;
-    background:#000;
-}
+#pfd{position:fixed;inset:0;overflow:hidden;background:#000}
 
-/* ================= HORIZON ================= */
+/* ATTITUDE */
 
-#viewport{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-}
+#viewport{position:absolute;inset:0;overflow:hidden}
 
 #horizon{
     position:absolute;
-
-    width:300vw;
-    height:300vh;
-
-    left:50%;
-    top:50%;
-
-    margin-left:-150vw;
-    margin-top:-150vh;
-
+    width:320vw;height:320vh;
+    left:50%;top:50%;
+    margin-left:-160vw;margin-top:-160vh;
     transform-origin:center center;
-
     background:
-    linear-gradient(
-        to bottom,
-        #168bc0 0%,
-        #168bc0 49.8%,
-        #fff 49.8%,
-        #fff 50.2%,
-        #814326 50.2%,
-        #814326 100%
-    );
+      linear-gradient(to bottom,
+        #168dbd 0%,#168dbd 49.84%,
+        #f5f5f5 49.84%,#f5f5f5 50.16%,
+        #804326 50.16%,#804326 100%);
 }
 
-/* ================= PITCH LADDER ================= */
+/* PITCH LADDER */
 
 #pitchLadder{
     position:absolute;
-
-    left:50%;
-    top:50%;
-
-    width:520px;
-    height:1000px;
-
-    transform:translate(-50%,-50%);
+    left:50%;top:50%;
+    width:600px;height:1100px;
+    transform:translate(-50%,-50%)
 }
 
 .pitchLine{
-    position:absolute;
-    left:50%;
-
-    height:2px;
-
-    background:#fff;
-
+    position:absolute;left:50%;
+    height:3px;background:#fff;
     transform:translateX(-50%);
-
-    box-shadow:0 0 2px #000;
+    box-shadow:0 1px 2px rgba(0,0,0,.8)
 }
 
-.pitchLine.major{
-    width:130px;
-}
-
-.pitchLine.minor{
-    width:70px;
-}
+.pitchLine.five{width:72px}
+.pitchLine.ten{width:165px}
 
 .pitchLabel{
     position:absolute;
-
-    color:#fff;
-
-    font-size:17px;
-    font-weight:600;
-
-    text-shadow:1px 1px 2px #000;
+    width:42px;text-align:center;
+    font-size:17px;font-weight:650;
+    line-height:20px;
+    text-shadow:0 1px 3px #000
 }
 
-/* ================= AIRCRAFT ================= */
+/* AIRCRAFT */
 
 #aircraft{
     position:absolute;
-
-    left:50%;
-    top:50%;
-
-    width:280px;
-    height:60px;
-
+    left:50%;top:50%;
+    width:310px;height:65px;
     transform:translate(-50%,-50%);
-
-    z-index:20;
+    z-index:40
 }
 
 .wing{
-    position:absolute;
-
-    top:28px;
-
-    width:105px;
-    height:5px;
-
-    background:#ffd900;
-
-    border:1px solid #000;
+    position:absolute;top:30px;
+    width:118px;height:5px;
+    background:#ffd800;
+    border:1px solid #111
 }
+.wing.left{left:0}
+.wing.right{right:0}
 
-.wing.left{
-    left:0;
+.wing.left:after,.wing.right:after{
+    content:"";position:absolute;
+    top:-17px;width:6px;height:22px;
+    background:#ffd800;border:1px solid #111
 }
-
-.wing.right{
-    right:0;
-}
-
-.wing.left::after,
-.wing.right::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:5px;
-    height:20px;
-
-    top:-15px;
-
-    background:#ffd900;
-}
-
-.wing.left::after{
-    right:0;
-}
-
-.wing.right::after{
-    left:0;
-}
+.wing.left:after{right:-1px}
+.wing.right:after{left:-1px}
 
 #centerCircle{
-    position:absolute;
-
-    width:18px;
-    height:18px;
-
-    border:3px solid #ffd900;
-    border-radius:50%;
-
-    left:50%;
-    top:21px;
-
+    position:absolute;left:50%;top:22px;
+    width:21px;height:21px;
     transform:translateX(-50%);
+    border:4px solid #ffd800;border-radius:50%
 }
 
-/* ================= HEADING ================= */
+/* ROLL SCALE */
+
+#rollScale{
+    position:absolute;
+    left:50%;top:105px;
+    width:390px;height:150px;
+    transform:translateX(-50%);
+    z-index:50;
+    pointer-events:none
+}
+
+.rollTick{
+    position:absolute;
+    left:50%;top:0;
+    width:2px;height:14px;
+    background:#fff;
+    transform-origin:1px 126px;
+    box-shadow:0 1px 2px #000
+}
+
+.rollTick.medium{height:19px}
+.rollTick.major{width:3px;height:24px}
+
+.rollNumber{
+    position:absolute;
+    left:50%;top:0;
+    width:38px;margin-left:-19px;
+    text-align:center;
+    font-size:13px;font-weight:700;
+    transform-origin:19px 126px;
+    text-shadow:0 1px 3px #000
+}
+
+/* fixed aircraft bank reference */
+
+#fixedBankPointer{
+    position:absolute;
+    left:50%;top:216px;
+    transform:translateX(-50%);
+    width:0;height:0;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-bottom:17px solid #ffd800;
+    z-index:54
+}
+
+/* moving roll pointer - DISPLAY ONLY */
+
+#movingBank{
+    position:absolute;
+    left:50%;top:105px;
+    width:390px;height:150px;
+    transform:translateX(-50%) rotate(0deg);
+    transform-origin:50% 126px;
+    z-index:53;
+    pointer-events:none
+}
+
+#movingBankPointer{
+    position:absolute;
+    left:50%;top:18px;
+    transform:translateX(-50%);
+    width:0;height:0;
+    border-left:8px solid transparent;
+    border-right:8px solid transparent;
+    border-top:14px solid #fff;
+    filter:drop-shadow(0 1px 2px #000)
+}
+
+/* HEADING */
 
 #headingBox{
     position:absolute;
-
-    top:env(safe-area-inset-top);
-
-    left:50%;
-
+    left:50%;top:env(safe-area-inset-top);
     transform:translateX(-50%);
-
-    width:72%;
-    height:70px;
-
+    width:72%;height:72px;
     overflow:hidden;
-
-    background:rgba(0,0,0,.6);
-
-    border-bottom:1px solid #aaa;
-
-    z-index:50;
+    background:rgba(4,27,39,.82);
+    border:1px solid rgba(255,255,255,.35);
+    z-index:70
 }
 
-#headingTape{
-    position:absolute;
-    top:0;
-    height:100%;
-}
+#headingTape{position:absolute;top:0;height:100%}
 
 .headingMark{
-    position:absolute;
-
-    top:34px;
-
-    width:2px;
-    height:12px;
-
-    background:#fff;
+    position:absolute;top:38px;
+    width:1px;height:10px;background:#fff
 }
-
-.headingMark.major{
-    height:21px;
-}
+.headingMark.ten{width:2px;height:17px}
 
 .headingLabel{
-    position:absolute;
-
-    top:5px;
-
+    position:absolute;top:5px;
     transform:translateX(-50%);
-
-    font-size:17px;
-    font-weight:600;
+    font-size:16px;font-weight:700;
+    white-space:nowrap
 }
 
 #headingPointer{
-    position:absolute;
-
-    left:50%;
-    bottom:0;
-
+    position:absolute;left:50%;bottom:0;
     transform:translateX(-50%);
-
-    width:0;
-    height:0;
-
+    width:0;height:0;
     border-left:8px solid transparent;
     border-right:8px solid transparent;
-    border-bottom:12px solid #ffd900;
+    border-bottom:13px solid #ffd800
 }
 
 #headingValue{
     position:absolute;
-
-    left:50%;
-
-    top:calc(73px + env(safe-area-inset-top));
-
+    left:50%;top:calc(77px + env(safe-area-inset-top));
     transform:translateX(-50%);
-
-    background:#000;
-
-    border:2px solid #00ff65;
-
-    color:#00ff65;
-
-    padding:3px 10px;
-
-    font-size:21px;
-    font-weight:bold;
-
-    z-index:60;
+    min-width:72px;
+    padding:3px 9px;
+    text-align:center;
+    background:#020706;
+    border:2px solid #00ef68;
+    color:#00f06a;
+    font-family:Menlo,monospace;
+    font-size:21px;font-weight:700;
+    z-index:72
 }
 
-/* ================= CONTROLS ================= */
+/* CONTROLS */
 
 #controls{
     position:absolute;
-
-    right:10px;
-
-    top:calc(88px + env(safe-area-inset-top));
-
-    display:flex;
-    flex-direction:column;
-
-    gap:7px;
-
-    z-index:100;
+    right:10px;top:calc(104px + env(safe-area-inset-top));
+    display:flex;flex-direction:column;gap:6px;
+    z-index:100
 }
 
 button{
     appearance:none;
-
-    border:1px solid #aaa;
-
+    min-width:92px;
+    border:1px solid rgba(255,255,255,.65);
     border-radius:7px;
-
-    background:rgba(0,0,0,.8);
-
+    background:rgba(2,18,27,.78);
     color:#fff;
-
-    padding:9px 12px;
-
-    font-size:13px;
-    font-weight:600;
+    padding:8px 9px;
+    font-size:12px;font-weight:650
 }
 
-#startButton{
-    color:#00ff65;
-    border-color:#00ff65;
-}
+#startButton{color:#00ff65;border-color:#00ff65}
+#swapButton{color:#ffd800;border-color:#ffd800}
 
-#swapButton{
-    color:#ffd900;
-    border-color:#ffd900;
-}
-
-/* ================= DATA ================= */
+/* DATA */
 
 .dataBox{
     position:absolute;
-
-    bottom:calc(12px + env(safe-area-inset-bottom));
-
-    background:rgba(0,0,0,.75);
-
-    border:1px solid #888;
-
-    padding:7px 10px;
-
-    font-family:Menlo,monospace;
-    font-size:13px;
-
-    z-index:70;
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    padding:6px 9px;
+    background:rgba(0,0,0,.70);
+    border:1px solid rgba(255,255,255,.5);
+    font:12px Menlo,monospace;
+    z-index:80
 }
 
-#pitchBox{
-    left:10px;
-}
-
-#rollBox{
-    left:135px;
-}
-
-#headingData{
-    right:10px;
-}
-
-/* ================= STATUS ================= */
+#pitchBox{left:10px}
+#rollBox{left:135px}
+#headingData{right:10px}
 
 #status{
     position:absolute;
-
-    left:50%;
-
-    bottom:calc(50px + env(safe-area-inset-bottom));
-
+    left:50%;bottom:calc(48px + env(safe-area-inset-bottom));
     transform:translateX(-50%);
-
-    background:rgba(0,0,0,.75);
-
-    padding:5px 9px;
-
+    padding:4px 8px;
+    background:rgba(0,0,0,.68);
     border-radius:5px;
-
-    font-size:11px;
-
-    z-index:100;
+    font-size:10px;
+    z-index:100
 }
-
-/* ================= DEBUG ================= */
 
 #debug{
-    position:absolute;
-
-    left:8px;
-    top:100px;
-
-    background:rgba(0,0,0,.82);
-
-    color:#00ff65;
-
-    font-family:Menlo,monospace;
-    font-size:10px;
-
+    position:absolute;left:8px;top:105px;
     padding:7px;
-
-    z-index:110;
-
-    display:none;
+    background:rgba(0,0,0,.84);
+    color:#00ff65;
+    font:10px Menlo,monospace;
+    z-index:110;display:none
 }
-
 </style>
 </head>
 
 <body>
-
 <div id="pfd">
 
 <div id="viewport">
-
     <div id="horizon">
-
         <div id="pitchLadder"></div>
-
     </div>
-
 </div>
 
+<div id="rollScale"></div>
+
+<div id="movingBank">
+    <div id="movingBankPointer"></div>
+</div>
+
+<div id="fixedBankPointer"></div>
 
 <div id="aircraft">
-
     <div class="wing left"></div>
-
     <div id="centerCircle"></div>
-
     <div class="wing right"></div>
-
 </div>
-
 
 <div id="headingBox">
-
     <div id="headingTape"></div>
-
     <div id="headingPointer"></div>
-
 </div>
 
-
-<div id="headingValue">
----
-</div>
-
+<div id="headingValue">---</div>
 
 <div id="controls">
-
-    <button id="startButton">
-        SENSOREN STARTEN
-    </button>
-
-    <button id="zeroButton">
-        ZERO
-    </button>
-
-    <button id="swapButton">
-        P↔R · Z/X
-    </button>
-
-    <button id="debugButton">
-        DEBUG
-    </button>
-
+    <button id="startButton">SENSOREN STARTEN</button>
+    <button id="zeroButton">ZERO</button>
+    <button id="swapButton">P↔R · Z/X</button>
+    <button id="debugButton">DEBUG</button>
 </div>
-
 
 <div id="pitchBox" class="dataBox">
-
-PITCH
-<span id="pitchValue">
-0.0°
-</span>
-
+    PITCH <span id="pitchValue">0.0°</span>
 </div>
-
 
 <div id="rollBox" class="dataBox">
-
-ROLL
-<span id="rollValue">
-0.0°
-</span>
-
+    ROLL <span id="rollValue">0.0°</span>
 </div>
-
 
 <div id="headingData" class="dataBox">
-
-HDG
-<span id="headingDataValue">
----
-</span>
-
+    HDG <span id="headingDataValue">---</span>
 </div>
 
-
-<div id="status">
-V6.2 – Sensoren nicht gestartet
-</div>
-
-
+<div id="status">V6.3 – Sensoren nicht gestartet</div>
 <div id="debug"></div>
 
 </div>
 
-
 <script>
 
 /* ==========================================================
-   CONFIG
+   V6.2 SENSOR CONFIG — UNVERÄNDERT
 ========================================================== */
 
 const RAD_TO_DEG = 180 / Math.PI;
-
 const PX_PER_DEG = 7;
-
 const GRAVITY_FILTER = 0.08;
-
 const DISPLAY_FILTER = 0.14;
-
 const HEADING_FILTER = 0.10;
-
 const DEADBAND = 0.20;
-
 const MAX_PITCH = 60;
-
 const MAX_ROLL = 60;
 
+/* ELEMENTS */
 
-/* ==========================================================
-   ELEMENTS
-========================================================== */
+const horizon=document.getElementById("horizon");
+const ladder=document.getElementById("pitchLadder");
+const pitchValue=document.getElementById("pitchValue");
+const rollValue=document.getElementById("rollValue");
+const headingValue=document.getElementById("headingValue");
+const headingDataValue=document.getElementById("headingDataValue");
+const headingBox=document.getElementById("headingBox");
+const headingTape=document.getElementById("headingTape");
+const statusBox=document.getElementById("status");
+const debugBox=document.getElementById("debug");
+const swapButton=document.getElementById("swapButton");
+const movingBank=document.getElementById("movingBank");
 
-const horizon =
-    document.getElementById("horizon");
+/* STATE — V6.2 */
 
-const ladder =
-    document.getElementById("pitchLadder");
+let gravity=null;
+let rawPitch=0;
+let rawRoll=0;
+let zeroPitch=0;
+let zeroRoll=0;
+let targetPitch=0;
+let targetRoll=0;
+let displayPitch=0;
+let displayRoll=0;
+let rawHeading=0;
+let displayHeading=0;
+let haveHeading=false;
+let haveMotion=false;
+let debugVisible=false;
 
-const pitchValue =
-    document.getElementById("pitchValue");
+let swapPitchRoll=true;
 
-const rollValue =
-    document.getElementById("rollValue");
+/* HELPERS — V6.2 */
 
-const headingValue =
-    document.getElementById("headingValue");
-
-const headingDataValue =
-    document.getElementById("headingDataValue");
-
-const headingBox =
-    document.getElementById("headingBox");
-
-const headingTape =
-    document.getElementById("headingTape");
-
-const statusBox =
-    document.getElementById("status");
-
-const debugBox =
-    document.getElementById("debug");
-
-const swapButton =
-    document.getElementById("swapButton");
-
-
-/* ==========================================================
-   STATE
-========================================================== */
-
-let gravity = null;
-
-let rawPitch = 0;
-let rawRoll = 0;
-
-let zeroPitch = 0;
-let zeroRoll = 0;
-
-let targetPitch = 0;
-let targetRoll = 0;
-
-let displayPitch = 0;
-let displayRoll = 0;
-
-let rawHeading = 0;
-let displayHeading = 0;
-
-let haveHeading = false;
-
-let haveMotion = false;
-
-let debugVisible = false;
-
-
-/*
-   NEU V6.2
-
-   true:
-
-   PITCH = Z
-   ROLL  = X
-
-   false:
-
-   PITCH = X
-   ROLL  = Z
-*/
-
-let swapPitchRoll = true;
-
-
-/* ==========================================================
-   HELPERS
-========================================================== */
-
-function clamp(
-    value,
-    minimum,
-    maximum
-){
-
-    return Math.max(
-        minimum,
-        Math.min(
-            maximum,
-            value
-        )
-    );
+function clamp(value,minimum,maximum){
+    return Math.max(minimum,Math.min(maximum,value));
 }
 
-
-function smooth(
-    current,
-    target,
-    factor
-){
-
-    return (
-        current +
-        (
-            target -
-            current
-        ) *
-        factor
-    );
+function smooth(current,target,factor){
+    return current+(target-current)*factor;
 }
 
-
-function smoothAngle(
-    current,
-    target,
-    factor
-){
-
-    const delta =
-
-        (
-            (
-                target -
-                current +
-                540
-            ) % 360
-        ) - 180;
-
-
-    return (
-
-        current +
-        delta *
-        factor +
-        360
-
-    ) % 360;
+function smoothAngle(current,target,factor){
+    const delta=((target-current+540)%360)-180;
+    return (current+delta*factor+360)%360;
 }
 
-
-function normalize180(
-    angle
-){
-
-    while(
-        angle > 180
-    ){
-
-        angle -= 360;
-    }
-
-
-    while(
-        angle < -180
-    ){
-
-        angle += 360;
-    }
-
-
+function normalize180(angle){
+    while(angle>180) angle-=360;
+    while(angle<-180) angle+=360;
     return angle;
 }
 
+/* GRAVITY FILTER — V6.2 */
 
-/* ==========================================================
-   GRAVITY FILTER
-========================================================== */
-
-function filterGravity(
-    x,
-    y,
-    z
-){
+function filterGravity(x,y,z){
 
     if(!gravity){
-
-        gravity = {
-            x:x,
-            y:y,
-            z:z
-        };
-
+        gravity={x:x,y:y,z:z};
         return;
     }
 
-
-    gravity.x +=
-        (
-            x -
-            gravity.x
-        ) *
-        GRAVITY_FILTER;
-
-
-    gravity.y +=
-        (
-            y -
-            gravity.y
-        ) *
-        GRAVITY_FILTER;
-
-
-    gravity.z +=
-        (
-            z -
-            gravity.z
-        ) *
-        GRAVITY_FILTER;
+    gravity.x+=(x-gravity.x)*GRAVITY_FILTER;
+    gravity.y+=(y-gravity.y)*GRAVITY_FILTER;
+    gravity.z+=(z-gravity.z)*GRAVITY_FILTER;
 }
 
-
-/* ==========================================================
-   GET ATTITUDE ANGLES
-
-   Hier werden beide möglichen Achsen
-   zunächst unabhängig berechnet.
-========================================================== */
+/* ATTITUDE AXES — V6.2 */
 
 function getAttitudeAngles(){
 
-    if(!gravity){
-        return null;
-    }
+    if(!gravity) return null;
 
+    const x=gravity.x;
+    const y=gravity.y;
+    const z=gravity.z;
 
-    const x = gravity.x;
-    const y = gravity.y;
-    const z = gravity.z;
-
-
-    const angleX =
-
-        Math.atan2(
-            x,
-            -y
-        ) *
-        RAD_TO_DEG;
-
-
-    const angleZ =
-
-        Math.atan2(
-            z,
-            -y
-        ) *
-        RAD_TO_DEG;
-
-
-    /*
-       Standard V6.2:
-
-       Pitch = Z
-       Roll  = X
-    */
+    const angleX=Math.atan2(x,-y)*RAD_TO_DEG;
+    const angleZ=Math.atan2(z,-y)*RAD_TO_DEG;
 
     if(swapPitchRoll){
-
-        return {
+        return{
             pitch:angleZ,
             roll:angleX
         };
-
     }
 
-
-    /*
-       Alternative per Button:
-
-       Pitch = X
-       Roll  = Z
-    */
-
-    return {
+    return{
         pitch:angleX,
         roll:angleZ
     };
 }
 
-
-/* ==========================================================
-   ATTITUDE
-========================================================== */
+/* ATTITUDE — V6.2 */
 
 function calculateAttitude(){
 
-    if(!gravity){
+    if(!gravity) return;
 
-        return;
-    }
+    const x=gravity.x;
+    const y=gravity.y;
+    const z=gravity.z;
 
+    const magnitude=Math.sqrt(x*x+y*y+z*z);
 
-    const x = gravity.x;
-    const y = gravity.y;
-    const z = gravity.z;
+    if(magnitude<3) return;
 
+    const angles=getAttitudeAngles();
+    if(!angles) return;
 
-    const magnitude =
-        Math.sqrt(
-            x*x +
-            y*y +
-            z*z
-        );
+    rawPitch=angles.pitch;
+    rawRoll=angles.roll;
 
+    let pitch=normalize180(rawPitch-zeroPitch);
+    let roll=normalize180(rawRoll-zeroRoll);
 
-    if(
-        magnitude <
-        3
-    ){
+    if(Math.abs(pitch)<DEADBAND) pitch=0;
+    if(Math.abs(roll)<DEADBAND) roll=0;
 
-        return;
-    }
-
-
-    const angles =
-        getAttitudeAngles();
-
-
-    if(!angles){
-
-        return;
-    }
-
-
-    rawPitch =
-        angles.pitch;
-
-    rawRoll =
-        angles.roll;
-
-
-    let pitch =
-        normalize180(
-            rawPitch -
-            zeroPitch
-        );
-
-
-    let roll =
-        normalize180(
-            rawRoll -
-            zeroRoll
-        );
-
-
-    /*
-       Deadband
-    */
-
-    if(
-        Math.abs(pitch) <
-        DEADBAND
-    ){
-
-        pitch = 0;
-    }
-
-
-    if(
-        Math.abs(roll) <
-        DEADBAND
-    ){
-
-        roll = 0;
-    }
-
-
-    targetPitch =
-        clamp(
-            pitch,
-            -MAX_PITCH,
-            MAX_PITCH
-        );
-
-
-    targetRoll =
-        clamp(
-            roll,
-            -MAX_ROLL,
-            MAX_ROLL
-        );
-
-
-    /*
-       DEBUG
-    */
+    targetPitch=clamp(pitch,-MAX_PITCH,MAX_PITCH);
+    targetRoll=clamp(roll,-MAX_ROLL,MAX_ROLL);
 
     if(debugVisible){
 
-        debugBox.innerHTML =
-
-            "V6.2<br><br>" +
-
-            "MODE: " +
-
-            (
-                swapPitchRoll
-                ? "P=Z / R=X"
-                : "P=X / R=Z"
-            ) +
-
-            "<br><br>" +
-
-            "GX: " +
-            x.toFixed(3) +
-            "<br>" +
-
-            "GY: " +
-            y.toFixed(3) +
-            "<br>" +
-
-            "GZ: " +
-            z.toFixed(3) +
-            "<br><br>" +
-
-            "|G|: " +
-            magnitude.toFixed(2) +
-            "<br><br>" +
-
-            "RAW P: " +
-            rawPitch.toFixed(2) +
-            "°<br>" +
-
-            "RAW R: " +
-            rawRoll.toFixed(2) +
-            "°<br><br>" +
-
-            "REL P: " +
-            pitch.toFixed(2) +
-            "°<br>" +
-
-            "REL R: " +
-            roll.toFixed(2) +
-            "°";
+        debugBox.innerHTML=
+        "V6.3 / SENSOR V6.2<br><br>"+
+        "MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br><br>"+
+        "GX: "+x.toFixed(3)+"<br>"+
+        "GY: "+y.toFixed(3)+"<br>"+
+        "GZ: "+z.toFixed(3)+"<br><br>"+
+        "|G|: "+magnitude.toFixed(2)+"<br><br>"+
+        "RAW P: "+rawPitch.toFixed(2)+"°<br>"+
+        "RAW R: "+rawRoll.toFixed(2)+"°<br><br>"+
+        "REL P: "+pitch.toFixed(2)+"°<br>"+
+        "REL R: "+roll.toFixed(2)+"°";
     }
 }
 
+/* MOTION — V6.2 */
 
-/* ==========================================================
-   DEVICE MOTION
-========================================================== */
+function handleMotion(event){
 
-function handleMotion(
-    event
-){
+    const g=event.accelerationIncludingGravity;
 
-    const g =
-        event.accelerationIncludingGravity;
+    if(!g) return;
+    if(g.x==null||g.y==null||g.z==null) return;
 
+    filterGravity(g.x,g.y,g.z);
 
-    if(!g){
-
-        return;
-    }
-
-
-    if(
-        g.x == null ||
-        g.y == null ||
-        g.z == null
-    ){
-
-        return;
-    }
-
-
-    filterGravity(
-        g.x,
-        g.y,
-        g.z
-    );
-
-
-    haveMotion =
-        true;
-
-
+    haveMotion=true;
     calculateAttitude();
 }
 
+/* COMPASS — V6.2 */
 
-/* ==========================================================
-   COMPASS
-========================================================== */
-
-function handleOrientation(
-    event
-){
+function handleOrientation(event){
 
     if(
-        typeof
-            event.webkitCompassHeading
-            === "number" &&
-
-        !Number.isNaN(
-            event.webkitCompassHeading
-        )
+        typeof event.webkitCompassHeading==="number" &&
+        !Number.isNaN(event.webkitCompassHeading)
     ){
-
-        rawHeading =
-            event.webkitCompassHeading;
-
-        haveHeading =
-            true;
-
+        rawHeading=event.webkitCompassHeading;
+        haveHeading=true;
         return;
     }
 
-
-    if(
-        typeof event.alpha
-            === "number"
-    ){
-
-        rawHeading =
-            (
-                360 -
-                event.alpha
-            ) % 360;
-
-        haveHeading =
-            true;
+    if(typeof event.alpha==="number"){
+        rawHeading=(360-event.alpha)%360;
+        haveHeading=true;
     }
 }
 
-
-/* ==========================================================
-   ZERO
-========================================================== */
+/* ZERO — V6.2 */
 
 function setZero(){
 
-    if(
-        !haveMotion ||
-        !gravity
-    ){
-
-        statusBox.textContent =
-            "Noch keine Sensordaten";
-
+    if(!haveMotion||!gravity){
+        statusBox.textContent="Noch keine Sensordaten";
         return;
     }
 
+    const angles=getAttitudeAngles();
+    if(!angles) return;
 
-    const angles =
-        getAttitudeAngles();
+    zeroPitch=angles.pitch;
+    zeroRoll=angles.roll;
 
+    rawPitch=zeroPitch;
+    rawRoll=zeroRoll;
 
-    if(!angles){
+    targetPitch=0;
+    targetRoll=0;
+    displayPitch=0;
+    displayRoll=0;
 
-        return;
-    }
-
-
-    zeroPitch =
-        angles.pitch;
-
-    zeroRoll =
-        angles.roll;
-
-
-    rawPitch =
-        zeroPitch;
-
-    rawRoll =
-        zeroRoll;
-
-
-    targetPitch = 0;
-
-    targetRoll = 0;
-
-    displayPitch = 0;
-
-    displayRoll = 0;
-
-
-    statusBox.textContent =
-        "ZERO gesetzt";
+    statusBox.textContent="ZERO gesetzt";
 }
 
-
-/* ==========================================================
-   SWAP PITCH / ROLL
-========================================================== */
+/* SWAP — V6.2 */
 
 function swapAxes(){
 
-    if(
-        !haveMotion ||
-        !gravity
-    ){
+    if(!haveMotion||!gravity){
 
-        /*
-           Tauschen ist auch vor Sensorstart
-           möglich.
-        */
-
-        swapPitchRoll =
-            !swapPitchRoll;
-
-
+        swapPitchRoll=!swapPitchRoll;
         updateSwapButton();
 
-
-        statusBox.textContent =
-
+        statusBox.textContent=
             swapPitchRoll
-            ? "Pitch=Z · Roll=X"
-            : "Pitch=X · Roll=Z";
-
+            ?"Pitch=Z · Roll=X"
+            :"Pitch=X · Roll=Z";
 
         return;
     }
 
-
-    /*
-       Achsenzuordnung tauschen
-    */
-
-    swapPitchRoll =
-        !swapPitchRoll;
-
-
-    /*
-       Danach aktuelle Position als
-       neue Nullstellung übernehmen.
-
-       Dadurch entsteht kein Sprung.
-    */
+    swapPitchRoll=!swapPitchRoll;
 
     setZero();
-
-
     updateSwapButton();
 
-
-    statusBox.textContent =
-
+    statusBox.textContent=
         swapPitchRoll
-        ? "Pitch=Z · Roll=X"
-        : "Pitch=X · Roll=Z";
+        ?"Pitch=Z · Roll=X"
+        :"Pitch=X · Roll=Z";
 }
-
 
 function updateSwapButton(){
-
-    swapButton.textContent =
-
+    swapButton.textContent=
         swapPitchRoll
-        ? "P↔R · Z/X"
-        : "P↔R · X/Z";
+        ?"P↔R · Z/X"
+        :"P↔R · X/Z";
 }
 
-
-/* ==========================================================
-   START
-========================================================== */
+/* SENSOR START — V6.2 */
 
 async function startSensors(){
 
     try{
 
-        statusBox.textContent =
-            "Sensorfreigabe…";
-
+        statusBox.textContent="Sensorfreigabe…";
 
         if(
-            typeof DeviceMotionEvent
-                !== "undefined" &&
-
-            typeof DeviceMotionEvent
-                .requestPermission
-                === "function"
+            typeof DeviceMotionEvent!=="undefined" &&
+            typeof DeviceMotionEvent.requestPermission==="function"
         ){
+            const permission=await DeviceMotionEvent.requestPermission();
 
-            const permission =
-
-                await DeviceMotionEvent
-                    .requestPermission();
-
-
-            if(
-                permission !==
-                "granted"
-            ){
-
-                statusBox.textContent =
-                    "Motion verweigert";
-
+            if(permission!=="granted"){
+                statusBox.textContent="Motion verweigert";
                 return;
             }
         }
 
-
         if(
-            typeof DeviceOrientationEvent
-                !== "undefined" &&
-
-            typeof DeviceOrientationEvent
-                .requestPermission
-                === "function"
+            typeof DeviceOrientationEvent!=="undefined" &&
+            typeof DeviceOrientationEvent.requestPermission==="function"
         ){
 
             let permission;
 
-
             try{
-
-                permission =
-
-                    await DeviceOrientationEvent
-                        .requestPermission(true);
-
+                permission=await DeviceOrientationEvent.requestPermission(true);
+            }catch{
+                permission=await DeviceOrientationEvent.requestPermission();
             }
 
-            catch{
-
-                permission =
-
-                    await DeviceOrientationEvent
-                        .requestPermission();
-            }
-
-
-            if(
-                permission !==
-                "granted"
-            ){
-
-                statusBox.textContent =
-                    "Kompass verweigert";
-
+            if(permission!=="granted"){
+                statusBox.textContent="Kompass verweigert";
                 return;
             }
         }
 
+        window.addEventListener("devicemotion",handleMotion,true);
+        window.addEventListener("deviceorientation",handleOrientation,true);
 
-        window.addEventListener(
-            "devicemotion",
-            handleMotion,
-            true
-        );
+        document.getElementById("startButton").style.display="none";
 
+        statusBox.textContent="Sensoren aktiv";
 
-        window.addEventListener(
-            "deviceorientation",
-            handleOrientation,
-            true
-        );
+        setTimeout(function(){
 
+            if(haveMotion){
 
-        document
-            .getElementById(
-                "startButton"
-            )
-            .style
-            .display =
-            "none";
+                setZero();
 
+                statusBox.textContent=
+                    swapPitchRoll
+                    ?"V6.3 aktiv · P=Z / R=X"
+                    :"V6.3 aktiv · P=X / R=Z";
+            }
 
-        statusBox.textContent =
-            "Sensoren aktiv";
+        },1500);
 
+    }catch(error){
 
-        /*
-           Filter einschwingen lassen.
-        */
-
-        setTimeout(
-            function(){
-
-                if(haveMotion){
-
-                    setZero();
-
-
-                    statusBox.textContent =
-
-                        swapPitchRoll
-
-                        ? "V6.2 aktiv · P=Z / R=X"
-                        : "V6.2 aktiv · P=X / R=Z";
-                }
-
-            },
-            1500
-        );
-
-    }
-
-    catch(error){
-
-        console.error(
-            error
-        );
-
-
-        statusBox.textContent =
-            "Fehler: " +
-            error.message;
+        console.error(error);
+        statusBox.textContent="Fehler: "+error.message;
     }
 }
-
 
 /* ==========================================================
-   PITCH LADDER
+   PITCH LADDER — OPTIK
 ========================================================== */
 
-for(
-    let deg = -40;
-    deg <= 40;
-    deg += 5
-){
+const pitchMarks=[
+    -40,-30,-20,-15,-10,-5,
+     5,10,15,20,30,40
+];
 
-    if(
-        deg === 0
-    ){
+for(const deg of pitchMarks){
 
-        continue;
-    }
+    const line=document.createElement("div");
 
+    line.className=
+        "pitchLine "+
+        (Math.abs(deg)%10===0?"ten":"five");
 
-    const line =
-        document.createElement(
-            "div"
-        );
+    const y=550-deg*PX_PER_DEG;
 
+    line.style.top=y+"px";
+    ladder.appendChild(line);
 
-    line.className =
+    /* Zahlen nur 10/20/30/40 */
 
-        "pitchLine " +
+    if(Math.abs(deg)%10===0){
 
-        (
-            deg % 10 === 0
-            ? "major"
-            : "minor"
-        );
+        const left=document.createElement("div");
+        const right=document.createElement("div");
 
+        left.className="pitchLabel";
+        right.className="pitchLabel";
 
-    const y =
-        500 -
-        deg *
-        PX_PER_DEG;
+        left.textContent=Math.abs(deg);
+        right.textContent=Math.abs(deg);
 
+        left.style.top=(y-9)+"px";
+        right.style.top=(y-9)+"px";
 
-    line.style.top =
-        y +
-        "px";
+        left.style.left="165px";
+        right.style.right="165px";
 
-
-    ladder.appendChild(
-        line
-    );
-
-
-    if(
-        deg % 10 === 0
-    ){
-
-        const left =
-            document.createElement(
-                "div"
-            );
-
-
-        const right =
-            document.createElement(
-                "div"
-            );
-
-
-        left.className =
-            "pitchLabel";
-
-        right.className =
-            "pitchLabel";
-
-
-        left.textContent =
-            Math.abs(
-                deg
-            );
-
-
-        right.textContent =
-            Math.abs(
-                deg
-            );
-
-
-        left.style.top =
-            (
-                y -
-                10
-            ) +
-            "px";
-
-
-        right.style.top =
-            (
-                y -
-                10
-            ) +
-            "px";
-
-
-        left.style.left =
-            "145px";
-
-
-        right.style.right =
-            "145px";
-
-
-        ladder.appendChild(
-            left
-        );
-
-
-        ladder.appendChild(
-            right
-        );
+        ladder.appendChild(left);
+        ladder.appendChild(right);
     }
 }
-
 
 /* ==========================================================
-   HEADING TAPE
+   ROLL SCALE — OPTIK
 ========================================================== */
 
-const HEADING_PX_PER_DEG =
-    5;
+const rollScale=document.getElementById("rollScale");
 
+const rollMarks=[
+    -60,-45,-30,-20,-10,
+    0,
+    10,20,30,45,60
+];
 
-for(
-    let deg = -360;
-    deg <= 720;
-    deg += 5
-){
+for(const angle of rollMarks){
 
-    const normalized =
+    const tick=document.createElement("div");
+    tick.className="rollTick";
 
-        (
-            (
-                deg % 360
-            ) +
-            360
-        ) % 360;
+    if(angle===0||Math.abs(angle)===30||Math.abs(angle)===60)
+        tick.classList.add("major");
+    else if(Math.abs(angle)===45)
+        tick.classList.add("medium");
 
+    tick.style.transform="rotate("+angle+"deg)";
 
-    const mark =
-        document.createElement(
-            "div"
-        );
+    rollScale.appendChild(tick);
 
+    if(angle!==0){
 
-    mark.className =
+        const number=document.createElement("div");
 
-        "headingMark " +
+        number.className="rollNumber";
+        number.textContent=Math.abs(angle);
+        number.style.transform="rotate("+angle+"deg)";
 
-        (
-            normalized % 10 === 0
-            ? "major"
-            : ""
-        );
-
-
-    mark.style.left =
-
-        (
-            deg *
-            HEADING_PX_PER_DEG
-        ) +
-        "px";
-
-
-    headingTape.appendChild(
-        mark
-    );
-
-
-    if(
-        normalized % 30 === 0
-    ){
-
-        const label =
-            document.createElement(
-                "div"
-            );
-
-
-        label.className =
-            "headingLabel";
-
-
-        if(
-            normalized === 0
-        ){
-
-            label.textContent =
-                "N";
-
-        }
-
-        else if(
-            normalized === 90
-        ){
-
-            label.textContent =
-                "E";
-
-        }
-
-        else if(
-            normalized === 180
-        ){
-
-            label.textContent =
-                "S";
-
-        }
-
-        else if(
-            normalized === 270
-        ){
-
-            label.textContent =
-                "W";
-
-        }
-
-        else{
-
-            label.textContent =
-
-                String(
-                    normalized / 10
-                )
-                .padStart(
-                    2,
-                    "0"
-                );
-        }
-
-
-        label.style.left =
-
-            (
-                deg *
-                HEADING_PX_PER_DEG
-            ) +
-            "px";
-
-
-        headingTape.appendChild(
-            label
-        );
+        rollScale.appendChild(number);
     }
 }
 
+/* ==========================================================
+   HEADING TAPE — OPTIK
+========================================================== */
+
+const HEADING_PX_PER_DEG=5;
+
+for(let deg=-360;deg<=720;deg+=5){
+
+    const normalized=((deg%360)+360)%360;
+
+    const mark=document.createElement("div");
+
+    mark.className=
+        "headingMark "+
+        (normalized%10===0?"ten":"");
+
+    mark.style.left=(deg*HEADING_PX_PER_DEG)+"px";
+
+    headingTape.appendChild(mark);
+
+    if(normalized%30===0){
+
+        const label=document.createElement("div");
+
+        label.className="headingLabel";
+
+        if(normalized===0) label.textContent="N";
+        else if(normalized===90) label.textContent="E";
+        else if(normalized===180) label.textContent="S";
+        else if(normalized===270) label.textContent="W";
+        else label.textContent=String(normalized/10).padStart(2,"0");
+
+        label.style.left=(deg*HEADING_PX_PER_DEG)+"px";
+
+        headingTape.appendChild(label);
+    }
+}
 
 /* ==========================================================
    RENDER
 
-   Die eigentliche PFD-Darstellung bleibt
-   wie V6.1.
+   Horizontbewegung 1:1 V6.2.
+   movingBank verwendet displayRoll NUR zur Darstellung.
 ========================================================== */
 
 function render(){
 
-    displayPitch =
+    displayPitch=
+        smooth(displayPitch,targetPitch,DISPLAY_FILTER);
 
-        smooth(
-            displayPitch,
-            targetPitch,
-            DISPLAY_FILTER
-        );
+    displayRoll=
+        smooth(displayRoll,targetRoll,DISPLAY_FILTER);
 
+    /* V6.2 unverändert */
 
-    displayRoll =
-
-        smooth(
-            displayRoll,
-            targetRoll,
-            DISPLAY_FILTER
-        );
-
-
-    horizon.style.transform =
-
-        "translateY(" +
-
-        (
-            displayPitch *
-            PX_PER_DEG
-        ) +
-
-        "px) rotate(" +
-
-        (
-            -displayRoll
-        ) +
-
+    horizon.style.transform=
+        "translateY("+
+        (displayPitch*PX_PER_DEG)+
+        "px) rotate("+
+        (-displayRoll)+
         "deg)";
 
-
-    pitchValue.textContent =
-
-        displayPitch
-            .toFixed(1) +
-        "°";
-
-
-    rollValue.textContent =
-
-        displayRoll
-            .toFixed(1) +
-        "°";
-
-
     /*
-       HEADING
+       NEU:
+       rein grafische Bank-Markierung.
+       Keine Rückwirkung auf Sensorik.
     */
 
-    if(
-        haveHeading
-    ){
+    movingBank.style.transform=
+        "translateX(-50%) rotate("+
+        (-displayRoll)+
+        "deg)";
 
-        displayHeading =
+    pitchValue.textContent=
+        displayPitch.toFixed(1)+"°";
 
+    rollValue.textContent=
+        displayRoll.toFixed(1)+"°";
+
+    if(haveHeading){
+
+        displayHeading=
             smoothAngle(
                 displayHeading,
                 rawHeading,
                 HEADING_FILTER
             );
 
+        let heading=Math.round(displayHeading)%360;
 
-        let heading =
+        if(heading===0) heading=360;
 
-            Math.round(
-                displayHeading
-            ) % 360;
+        const text=String(heading).padStart(3,"0");
 
+        headingValue.textContent=text;
+        headingDataValue.textContent=text+"°";
 
-        if(
-            heading === 0
-        ){
+        const center=headingBox.clientWidth/2;
 
-            heading =
-                360;
-        }
-
-
-        const text =
-
-            String(
-                heading
-            )
-            .padStart(
-                3,
-                "0"
-            );
-
-
-        headingValue.textContent =
-            text;
-
-
-        headingDataValue.textContent =
-
-            text +
-            "°";
-
-
-        const center =
-
-            headingBox
-                .clientWidth /
-            2;
-
-
-        headingTape
-            .style
-            .transform =
-
-            "translateX(" +
-
-            (
-                center -
-                displayHeading *
-                HEADING_PX_PER_DEG
-            ) +
-
+        headingTape.style.transform=
+            "translateX("+
+            (center-displayHeading*HEADING_PX_PER_DEG)+
             "px)";
     }
 
-
-    requestAnimationFrame(
-        render
-    );
+    requestAnimationFrame(render);
 }
-
 
 render();
 
+/* BUTTONS */
 
-/* ==========================================================
-   BUTTONS
-========================================================== */
+document.getElementById("startButton")
+.addEventListener("click",startSensors);
 
-document
-    .getElementById(
-        "startButton"
-    )
-    .addEventListener(
-        "click",
-        startSensors
-    );
+document.getElementById("zeroButton")
+.addEventListener("click",setZero);
 
+document.getElementById("swapButton")
+.addEventListener("click",swapAxes);
 
-document
-    .getElementById(
-        "zeroButton"
-    )
-    .addEventListener(
-        "click",
-        setZero
-    );
+document.getElementById("debugButton")
+.addEventListener("click",function(){
 
+    debugVisible=!debugVisible;
 
-document
-    .getElementById(
-        "swapButton"
-    )
-    .addEventListener(
-        "click",
-        swapAxes
-    );
-
-
-document
-    .getElementById(
-        "debugButton"
-    )
-    .addEventListener(
-        "click",
-        function(){
-
-            debugVisible =
-                !debugVisible;
-
-
-            debugBox.style.display =
-
-                debugVisible
-                ? "block"
-                : "none";
-        }
-    );
-
-
-/*
-   Richtigen Startzustand des
-   Swap-Buttons anzeigen.
-*/
+    debugBox.style.display=
+        debugVisible?"block":"none";
+});
 
 updateSwapButton();
 
 </script>
-
 </body>
 </html>

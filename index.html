@@ -2,17 +2,14 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport"
 content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000">
 
-<title>PFD V6.1</title>
+<title>PFD V7</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     -webkit-user-select:none;
@@ -26,7 +23,7 @@ html,body{
     overflow:hidden;
     background:#000;
     color:#fff;
-    font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
 }
 
 #pfd{
@@ -36,7 +33,9 @@ html,body{
     background:#000;
 }
 
-/* ================= HORIZON ================= */
+/* =====================================================
+   ATTITUDE
+===================================================== */
 
 #viewport{
     position:absolute;
@@ -46,133 +45,252 @@ html,body{
 
 #horizon{
     position:absolute;
-    width:300vw;
-    height:300vh;
+    width:320vw;
+    height:320vh;
     left:50%;
     top:50%;
-    margin-left:-150vw;
-    margin-top:-150vh;
+    margin-left:-160vw;
+    margin-top:-160vh;
     transform-origin:center center;
 
     background:
     linear-gradient(
         to bottom,
-        #168bc0 0%,
-        #168bc0 49.8%,
-        #fff 49.8%,
-        #fff 50.2%,
-        #814326 50.2%,
-        #814326 100%
+        #1689bc 0%,
+        #1689bc 49.88%,
+        #fff 49.88%,
+        #fff 50.12%,
+        #84502f 50.12%,
+        #84502f 100%
     );
 }
 
-/* ================= PITCH LADDER ================= */
+/* =====================================================
+   PITCH LADDER
+===================================================== */
 
 #pitchLadder{
     position:absolute;
     left:50%;
     top:50%;
-    width:520px;
-    height:1000px;
+    width:620px;
+    height:1200px;
     transform:translate(-50%,-50%);
 }
 
 .pitchLine{
     position:absolute;
     left:50%;
-    height:2px;
+    height:3px;
     background:#fff;
     transform:translateX(-50%);
-    box-shadow:0 0 2px #000;
+    box-shadow:0 1px 2px #000;
 }
 
-.pitchLine.major{
-    width:130px;
+.pitchLine.five{
+    width:64px;
 }
 
-.pitchLine.minor{
-    width:70px;
+.pitchLine.ten{
+    width:145px;
+}
+
+.pitchLine.thirty{
+    width:175px;
 }
 
 .pitchLabel{
     position:absolute;
+    width:38px;
+    text-align:center;
+    font-size:16px;
+    line-height:20px;
+    font-weight:700;
     color:#fff;
-    font-size:17px;
-    font-weight:600;
-    text-shadow:1px 1px 2px #000;
+    text-shadow:
+        -1px -1px 1px #000,
+         1px  1px 1px #000;
 }
 
-/* ================= AIRCRAFT ================= */
+/* =====================================================
+   AIRCRAFT SYMBOL
+===================================================== */
 
 #aircraft{
     position:absolute;
     left:50%;
     top:50%;
-    width:280px;
-    height:60px;
+    width:300px;
+    height:70px;
     transform:translate(-50%,-50%);
-    z-index:20;
+    z-index:40;
 }
 
-.wing{
+.aircraftWing{
     position:absolute;
-    top:28px;
-    width:105px;
-    height:5px;
-    background:#ffd900;
-    border:1px solid #000;
+    top:32px;
+    height:6px;
+    width:112px;
+    background:#ffd800;
+    border:1px solid #222;
+    box-shadow:0 0 2px #000;
 }
 
-.wing.left{
+.aircraftWing.left{
     left:0;
 }
 
-.wing.right{
+.aircraftWing.right{
     right:0;
 }
 
-.wing.left::after,
-.wing.right::after{
+.aircraftWing.left::after,
+.aircraftWing.right::after{
     content:"";
     position:absolute;
-    width:5px;
-    height:20px;
-    top:-15px;
-    background:#ffd900;
+    width:6px;
+    height:23px;
+    top:-17px;
+    background:#ffd800;
+    border:1px solid #222;
 }
 
-.wing.left::after{
+.aircraftWing.left::after{
     right:0;
 }
 
-.wing.right::after{
+.aircraftWing.right::after{
     left:0;
 }
 
-#centerCircle{
+#aircraftCenter{
     position:absolute;
-    width:18px;
-    height:18px;
-    border:3px solid #ffd900;
-    border-radius:50%;
     left:50%;
-    top:21px;
+    top:24px;
+    width:22px;
+    height:22px;
     transform:translateX(-50%);
+    border:4px solid #ffd800;
+    border-radius:50%;
+    box-shadow:0 0 2px #000;
 }
 
-/* ================= HEADING ================= */
+/* =====================================================
+   ROLL SCALE
+===================================================== */
+
+#rollScale{
+    position:absolute;
+    left:50%;
+    top:88px;
+    width:360px;
+    height:125px;
+    transform:translateX(-50%);
+    z-index:45;
+    pointer-events:none;
+}
+
+#rollTicks{
+    position:absolute;
+    inset:0;
+}
+
+.rollTick{
+    position:absolute;
+    left:50%;
+    top:0;
+    width:2px;
+    height:13px;
+    background:#fff;
+    transform-origin:1px 105px;
+    box-shadow:0 0 2px #000;
+}
+
+.rollTick.major{
+    height:21px;
+    width:3px;
+}
+
+.rollTick.medium{
+    height:17px;
+}
+
+.rollNumber{
+    position:absolute;
+    left:50%;
+    top:0;
+    width:34px;
+    margin-left:-17px;
+    text-align:center;
+    font-size:13px;
+    font-weight:700;
+    transform-origin:17px 105px;
+    text-shadow:0 1px 2px #000;
+}
+
+/*
+   Feststehendes Dreieck oben.
+*/
+
+#fixedRollPointer{
+    position:absolute;
+    left:50%;
+    top:96px;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:9px solid transparent;
+    border-right:9px solid transparent;
+    border-top:15px solid #ffd800;
+    z-index:48;
+}
+
+/*
+   Beweglicher Bank-Pointer.
+*/
+
+#bankPointerWrapper{
+    position:absolute;
+    left:50%;
+    top:88px;
+    width:360px;
+    height:125px;
+    transform:translateX(-50%);
+    transform-origin:50% 105px;
+    z-index:47;
+    pointer-events:none;
+}
+
+#bankPointer{
+    position:absolute;
+    left:50%;
+    top:20px;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:8px solid transparent;
+    border-right:8px solid transparent;
+    border-bottom:13px solid #fff;
+    filter:drop-shadow(0 1px 1px #000);
+}
+
+/* =====================================================
+   HEADING TAPE
+===================================================== */
 
 #headingBox{
     position:absolute;
-    top:env(safe-area-inset-top);
     left:50%;
+    top:calc(env(safe-area-inset-top) + 4px);
+    width:70%;
+    height:64px;
     transform:translateX(-50%);
-    width:72%;
-    height:70px;
     overflow:hidden;
-    background:rgba(0,0,0,.6);
-    border-bottom:1px solid #aaa;
-    z-index:50;
+    background:rgba(0,0,0,.58);
+    border-left:1px solid rgba(255,255,255,.35);
+    border-right:1px solid rgba(255,255,255,.35);
+    border-bottom:1px solid rgba(255,255,255,.55);
+    z-index:70;
 }
 
 #headingTape{
@@ -183,22 +301,24 @@ html,body{
 
 .headingMark{
     position:absolute;
-    top:34px;
-    width:2px;
-    height:12px;
+    top:35px;
+    width:1px;
+    height:10px;
     background:#fff;
 }
 
 .headingMark.major{
-    height:21px;
+    width:2px;
+    height:18px;
 }
 
 .headingLabel{
     position:absolute;
-    top:5px;
+    top:6px;
     transform:translateX(-50%);
-    font-size:17px;
-    font-weight:600;
+    font-size:15px;
+    font-weight:700;
+    white-space:nowrap;
 }
 
 #headingPointer{
@@ -208,64 +328,46 @@ html,body{
     transform:translateX(-50%);
     width:0;
     height:0;
-    border-left:8px solid transparent;
-    border-right:8px solid transparent;
-    border-bottom:12px solid #ffd900;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-bottom:11px solid #ffd800;
 }
 
 #headingValue{
     position:absolute;
     left:50%;
-    top:calc(73px + env(safe-area-inset-top));
+    top:calc(env(safe-area-inset-top) + 70px);
     transform:translateX(-50%);
-    background:#000;
-    border:2px solid #00ff65;
-    color:#00ff65;
-    padding:3px 10px;
-    font-size:21px;
-    font-weight:bold;
-    z-index:60;
+    min-width:65px;
+    padding:3px 8px;
+    text-align:center;
+    background:#050505;
+    border:2px solid #00ff63;
+    color:#00ff63;
+    font-family:Menlo,monospace;
+    font-size:20px;
+    font-weight:700;
+    z-index:72;
 }
 
-/* ================= CONTROLS ================= */
-
-#controls{
-    position:absolute;
-    right:10px;
-    top:calc(88px + env(safe-area-inset-top));
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-    z-index:100;
-}
-
-button{
-    appearance:none;
-    border:1px solid #aaa;
-    border-radius:7px;
-    background:rgba(0,0,0,.8);
-    color:#fff;
-    padding:9px 12px;
-    font-size:13px;
-    font-weight:600;
-}
-
-#startButton{
-    color:#00ff65;
-    border-color:#00ff65;
-}
-
-/* ================= DATA ================= */
+/* =====================================================
+   BOTTOM DATA
+===================================================== */
 
 .dataBox{
     position:absolute;
-    bottom:calc(12px + env(safe-area-inset-bottom));
-    background:rgba(0,0,0,.75);
-    border:1px solid #888;
-    padding:7px 10px;
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    padding:6px 9px;
+    background:rgba(0,0,0,.72);
+    border:1px solid rgba(255,255,255,.45);
     font-family:Menlo,monospace;
-    font-size:13px;
-    z-index:70;
+    font-size:12px;
+    z-index:80;
+}
+
+.dataValue{
+    color:#00ff63;
+    font-weight:700;
 }
 
 #pitchBox{
@@ -273,38 +375,63 @@ button{
 }
 
 #rollBox{
-    left:135px;
+    left:125px;
 }
 
 #headingData{
     right:10px;
 }
 
-/* ================= STATUS ================= */
+/* =====================================================
+   CONTROLS
+===================================================== */
+
+#controls{
+    position:absolute;
+    right:10px;
+    top:calc(88px + env(safe-area-inset-top));
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    z-index:100;
+}
+
+button{
+    appearance:none;
+    border:1px solid #aaa;
+    border-radius:6px;
+    background:rgba(0,0,0,.76);
+    color:#fff;
+    padding:8px 10px;
+    font-size:12px;
+    font-weight:650;
+}
+
+#startButton{
+    border-color:#00ff63;
+    color:#00ff63;
+}
 
 #status{
     position:absolute;
     left:50%;
-    bottom:calc(50px + env(safe-area-inset-bottom));
+    bottom:calc(47px + env(safe-area-inset-bottom));
     transform:translateX(-50%);
-    background:rgba(0,0,0,.75);
-    padding:5px 9px;
-    border-radius:5px;
-    font-size:11px;
+    padding:4px 8px;
+    background:rgba(0,0,0,.65);
+    border-radius:4px;
+    font-size:10px;
     z-index:100;
 }
-
-/* ================= DEBUG ================= */
 
 #debug{
     position:absolute;
     left:8px;
-    top:100px;
-    background:rgba(0,0,0,.82);
-    color:#00ff65;
-    font-family:Menlo,monospace;
-    font-size:10px;
+    top:95px;
     padding:7px;
+    background:rgba(0,0,0,.82);
+    color:#00ff63;
+    font:10px Menlo,monospace;
     z-index:110;
     display:none;
 }
@@ -322,23 +449,33 @@ button{
         </div>
     </div>
 
-
-    <div id="aircraft">
-        <div class="wing left"></div>
-        <div id="centerCircle"></div>
-        <div class="wing right"></div>
+    <!-- Roll scale -->
+    <div id="rollScale">
+        <div id="rollTicks"></div>
     </div>
 
+    <div id="fixedRollPointer"></div>
 
+    <div id="bankPointerWrapper">
+        <div id="bankPointer"></div>
+    </div>
+
+    <!-- Fixed aircraft -->
+    <div id="aircraft">
+        <div class="aircraftWing left"></div>
+        <div id="aircraftCenter"></div>
+        <div class="aircraftWing right"></div>
+    </div>
+
+    <!-- Heading -->
     <div id="headingBox">
         <div id="headingTape"></div>
         <div id="headingPointer"></div>
     </div>
 
-
     <div id="headingValue">---</div>
 
-
+    <!-- Controls -->
     <div id="controls">
 
         <button id="startButton">
@@ -355,29 +492,25 @@ button{
 
     </div>
 
-
+    <!-- Data -->
     <div id="pitchBox" class="dataBox">
         PITCH
-        <span id="pitchValue">0.0°</span>
+        <span id="pitchValue" class="dataValue">0.0°</span>
     </div>
-
 
     <div id="rollBox" class="dataBox">
         ROLL
-        <span id="rollValue">0.0°</span>
+        <span id="rollValue" class="dataValue">0.0°</span>
     </div>
-
 
     <div id="headingData" class="dataBox">
         HDG
-        <span id="headingDataValue">---</span>
+        <span id="headingDataValue" class="dataValue">---</span>
     </div>
-
 
     <div id="status">
-        V6.1 – Sensoren nicht gestartet
+        PFD V7
     </div>
-
 
     <div id="debug"></div>
 
@@ -387,51 +520,25 @@ button{
 <script>
 
 /* ==========================================================
-   CONFIG
+   SENSOR CONFIG
+   V6.1 BASIS
 ========================================================== */
 
 const RAD_TO_DEG = 180 / Math.PI;
 
 const PX_PER_DEG = 7;
 
-
-/*
-   Niedriger Wert = ruhiger.
-
-   Wir bleiben bewusst bei einem starken
-   Gravity-Tiefpass.
-*/
-
 const GRAVITY_FILTER = 0.08;
-
-
-/*
-   Zusätzliche Glättung der Anzeige.
-*/
 
 const DISPLAY_FILTER = 0.14;
 
-
-/*
-   Kompassfilter.
-*/
-
 const HEADING_FILTER = 0.10;
-
-
-/*
-   Totzone um ZERO.
-*/
 
 const DEADBAND = 0.20;
 
-
-/*
-   Maximaler Anzeigebereich.
-*/
-
 const MAX_PITCH = 60;
-const MAX_ROLL  = 60;
+
+const MAX_ROLL = 60;
 
 
 /* ==========================================================
@@ -461,6 +568,9 @@ const headingBox =
 
 const headingTape =
     document.getElementById("headingTape");
+
+const bankPointerWrapper =
+    document.getElementById("bankPointerWrapper");
 
 const statusBox =
     document.getElementById("status");
@@ -504,10 +614,7 @@ function clamp(value,min,max){
 
     return Math.max(
         min,
-        Math.min(
-            max,
-            value
-        )
+        Math.min(max,value)
     );
 }
 
@@ -566,16 +673,13 @@ function filterGravity(x,y,z){
         return;
     }
 
-
     gravity.x +=
         (x-gravity.x) *
         GRAVITY_FILTER;
 
-
     gravity.y +=
         (y-gravity.y) *
         GRAVITY_FILTER;
-
 
     gravity.z +=
         (z-gravity.z) *
@@ -584,21 +688,14 @@ function filterGravity(x,y,z){
 
 
 /* ==========================================================
-   ATTITUDE V6.1
+   ATTITUDE
 
-   Gemessene PFD-Nulllage:
+   IDENTISCHES V6.1-PRINZIP
 
-       X ≈ 0
-       Y ≈ -9.8
-       Z ≈ 0
+   PITCH = X
+   ROLL  = Z
 
-   Deshalb ist -Y unser stabiler Nenner.
-
-   KORREKTUR V6.1:
-
-       PITCH = X
-       ROLL  = Z
-
+   -Y bleibt stabiler Nenner.
 ========================================================== */
 
 function calculateAttitude(){
@@ -607,11 +704,9 @@ function calculateAttitude(){
         return;
     }
 
-
     const x = gravity.x;
     const y = gravity.y;
     const z = gravity.z;
-
 
     const magnitude =
         Math.sqrt(
@@ -620,20 +715,12 @@ function calculateAttitude(){
             z*z
         );
 
-
     if(magnitude < 3){
         return;
     }
 
 
-    /*
-       ======================================
-       PITCH
-
-       V6.1:
-       X ist die Pitch-Komponente.
-       ======================================
-    */
+    /* PITCH */
 
     rawPitch =
         Math.atan2(
@@ -643,14 +730,7 @@ function calculateAttitude(){
         RAD_TO_DEG;
 
 
-    /*
-       ======================================
-       ROLL
-
-       V6.1:
-       Z ist die Roll-Komponente.
-       ======================================
-    */
+    /* ROLL */
 
     rawRoll =
         Math.atan2(
@@ -660,16 +740,11 @@ function calculateAttitude(){
         RAD_TO_DEG;
 
 
-    /*
-       ZERO abziehen
-    */
-
     let pitch =
         normalize180(
             rawPitch -
             zeroPitch
         );
-
 
     let roll =
         normalize180(
@@ -678,23 +753,14 @@ function calculateAttitude(){
         );
 
 
-    /*
-       Totzone
-    */
-
     if(Math.abs(pitch)<DEADBAND){
         pitch=0;
     }
-
 
     if(Math.abs(roll)<DEADBAND){
         roll=0;
     }
 
-
-    /*
-       Begrenzen
-    */
 
     targetPitch =
         clamp(
@@ -702,7 +768,6 @@ function calculateAttitude(){
             -MAX_PITCH,
             MAX_PITCH
         );
-
 
     targetRoll =
         clamp(
@@ -712,15 +777,11 @@ function calculateAttitude(){
         );
 
 
-    /*
-       DEBUG
-    */
-
     if(debugVisible){
 
         debugBox.innerHTML =
 
-            "V6.1<br><br>" +
+            "PFD V7 / V6.1 SENSOR<br><br>" +
 
             "GX: " +
             x.toFixed(3) +
@@ -746,11 +807,11 @@ function calculateAttitude(){
             rawRoll.toFixed(2) +
             "°<br><br>" +
 
-            "REL P: " +
+            "PITCH: " +
             pitch.toFixed(2) +
             "°<br>" +
 
-            "REL R: " +
+            "ROLL: " +
             roll.toFixed(2) +
             "°";
     }
@@ -766,11 +827,9 @@ function handleMotion(event){
     const g =
         event.accelerationIncludingGravity;
 
-
     if(!g){
         return;
     }
-
 
     if(
         g.x == null ||
@@ -780,23 +839,13 @@ function handleMotion(event){
         return;
     }
 
-
-    /*
-       Direkte iPhone-Geräteachsen.
-
-       Keine screen.orientation-
-       Transformation.
-    */
-
     filterGravity(
         g.x,
         g.y,
         g.z
     );
 
-
     haveMotion = true;
-
 
     calculateAttitude();
 }
@@ -811,7 +860,6 @@ function handleOrientation(event){
     if(
         typeof event.webkitCompassHeading
             === "number" &&
-
         !Number.isNaN(
             event.webkitCompassHeading
         )
@@ -839,10 +887,7 @@ function handleOrientation(event){
 
 
 /* ==========================================================
-   ZERO V6.1
-
-   Muss exakt dieselben Achsen verwenden
-   wie calculateAttitude().
+   ZERO
 ========================================================== */
 
 function setZero(){
@@ -858,15 +903,10 @@ function setZero(){
         return;
     }
 
-
     const x = gravity.x;
     const y = gravity.y;
     const z = gravity.z;
 
-
-    /*
-       PITCH = X
-    */
 
     zeroPitch =
         Math.atan2(
@@ -875,10 +915,6 @@ function setZero(){
         ) *
         RAD_TO_DEG;
 
-
-    /*
-       ROLL = Z
-    */
 
     zeroRoll =
         Math.atan2(
@@ -889,14 +925,13 @@ function setZero(){
 
 
     rawPitch = zeroPitch;
-    rawRoll  = zeroRoll;
+    rawRoll = zeroRoll;
 
     targetPitch = 0;
-    targetRoll  = 0;
+    targetRoll = 0;
 
     displayPitch = 0;
-    displayRoll  = 0;
-
+    displayRoll = 0;
 
     statusBox.textContent =
         "ZERO gesetzt";
@@ -904,7 +939,7 @@ function setZero(){
 
 
 /* ==========================================================
-   START
+   SENSOR START
 ========================================================== */
 
 async function startSensors(){
@@ -915,14 +950,9 @@ async function startSensors(){
             "Sensorfreigabe…";
 
 
-        /*
-           Motion
-        */
-
         if(
             typeof DeviceMotionEvent !==
                 "undefined" &&
-
             typeof DeviceMotionEvent
                 .requestPermission ===
                 "function"
@@ -932,8 +962,7 @@ async function startSensors(){
                 await DeviceMotionEvent
                     .requestPermission();
 
-
-            if(permission!=="granted"){
+            if(permission !== "granted"){
 
                 statusBox.textContent =
                     "Motion verweigert";
@@ -943,14 +972,9 @@ async function startSensors(){
         }
 
 
-        /*
-           Orientation / Compass
-        */
-
         if(
             typeof DeviceOrientationEvent !==
                 "undefined" &&
-
             typeof DeviceOrientationEvent
                 .requestPermission ===
                 "function"
@@ -958,24 +982,20 @@ async function startSensors(){
 
             let permission;
 
-
             try{
 
                 permission =
                     await DeviceOrientationEvent
                         .requestPermission(true);
 
-            }
-
-            catch{
+            }catch{
 
                 permission =
                     await DeviceOrientationEvent
                         .requestPermission();
             }
 
-
-            if(permission!=="granted"){
+            if(permission !== "granted"){
 
                 statusBox.textContent =
                     "Kompass verweigert";
@@ -990,7 +1010,6 @@ async function startSensors(){
             handleMotion,
             true
         );
-
 
         window.addEventListener(
             "deviceorientation",
@@ -1009,10 +1028,6 @@ async function startSensors(){
             "Sensoren aktiv";
 
 
-        /*
-           Filter einschwingen lassen.
-        */
-
         setTimeout(
             function(){
 
@@ -1021,19 +1036,16 @@ async function startSensors(){
                     setZero();
 
                     statusBox.textContent =
-                        "V6.1 aktiv · AUTO ZERO";
+                        "PFD aktiv · AUTO ZERO";
                 }
 
             },
             1500
         );
 
-    }
-
-    catch(error){
+    }catch(error){
 
         console.error(error);
-
 
         statusBox.textContent =
             "Fehler: " +
@@ -1044,6 +1056,9 @@ async function startSensors(){
 
 /* ==========================================================
    PITCH LADDER
+
+   5° Schritte.
+   10° stärker.
 ========================================================== */
 
 for(
@@ -1061,17 +1076,25 @@ for(
         document.createElement("div");
 
 
-    line.className =
-        "pitchLine " +
-        (
-            deg%10===0
-            ? "major"
-            : "minor"
-        );
+    if(Math.abs(deg)>=30 && deg%10===0){
+
+        line.className =
+            "pitchLine thirty";
+
+    }else if(deg%10===0){
+
+        line.className =
+            "pitchLine ten";
+
+    }else{
+
+        line.className =
+            "pitchLine five";
+    }
 
 
     const y =
-        500 -
+        600 -
         deg *
         PX_PER_DEG;
 
@@ -1107,21 +1130,107 @@ for(
 
 
         left.style.top =
-            (y-10)+"px";
+            (y-9)+"px";
 
         right.style.top =
-            (y-10)+"px";
+            (y-9)+"px";
 
 
         left.style.left =
-            "145px";
+            "188px";
 
         right.style.right =
-            "145px";
+            "188px";
 
 
         ladder.appendChild(left);
         ladder.appendChild(right);
+    }
+}
+
+
+/* ==========================================================
+   ROLL SCALE
+
+   ±10 / 20 / 30 / 45 / 60
+========================================================== */
+
+const rollTicks =
+    document.getElementById("rollTicks");
+
+
+const rollMarks = [
+    -60,-45,-30,-20,-10,
+    0,
+    10,20,30,45,60
+];
+
+
+for(const angle of rollMarks){
+
+    const tick =
+        document.createElement("div");
+
+
+    tick.className =
+        "rollTick";
+
+
+    if(
+        angle===0 ||
+        Math.abs(angle)===30 ||
+        Math.abs(angle)===60
+    ){
+
+        tick.classList.add("major");
+
+    }else if(
+        Math.abs(angle)===45
+    ){
+
+        tick.classList.add("medium");
+    }
+
+
+    tick.style.transform =
+        "rotate(" +
+        angle +
+        "deg)";
+
+
+    rollTicks.appendChild(tick);
+
+
+    if(
+        angle!==0 &&
+        (
+            Math.abs(angle)===10 ||
+            Math.abs(angle)===20 ||
+            Math.abs(angle)===30 ||
+            Math.abs(angle)===45 ||
+            Math.abs(angle)===60
+        )
+    ){
+
+        const number =
+            document.createElement("div");
+
+
+        number.className =
+            "rollNumber";
+
+
+        number.textContent =
+            Math.abs(angle);
+
+
+        number.style.transform =
+            "rotate(" +
+            angle +
+            "deg)";
+
+
+        rollTicks.appendChild(number);
     }
 }
 
@@ -1196,13 +1305,8 @@ for(
         }else{
 
             label.textContent =
-                String(
-                    normalized/10
-                )
-                .padStart(
-                    2,
-                    "0"
-                );
+                String(normalized/10)
+                    .padStart(2,"0");
         }
 
 
@@ -1226,7 +1330,7 @@ for(
 function render(){
 
     /*
-       Ruhige zweite Filterstufe.
+       IDENTISCHE V6.1-Glättung
     */
 
     displayPitch =
@@ -1246,7 +1350,7 @@ function render(){
 
 
     /*
-       PFD Horizont
+       Artificial horizon
     */
 
     horizon.style.transform =
@@ -1267,6 +1371,25 @@ function render(){
         "deg)";
 
 
+    /*
+       Beweglicher Bank-Pointer
+    */
+
+    bankPointerWrapper.style.transform =
+
+        "translateX(-50%) rotate(" +
+
+        (
+            -displayRoll
+        ) +
+
+        "deg)";
+
+
+    /*
+       Digitalwerte
+    */
+
     pitchValue.textContent =
         displayPitch
             .toFixed(1) +
@@ -1280,7 +1403,7 @@ function render(){
 
 
     /*
-       HEADING
+       Heading
     */
 
     if(haveHeading){
@@ -1306,10 +1429,7 @@ function render(){
 
         const text =
             String(heading)
-                .padStart(
-                    3,
-                    "0"
-                );
+                .padStart(3,"0");
 
 
         headingValue.textContent =
@@ -1373,7 +1493,6 @@ document
 
             debugVisible =
                 !debugVisible;
-
 
             debugBox.style.display =
                 debugVisible

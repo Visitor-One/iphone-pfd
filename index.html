@@ -2,402 +2,183 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport"
 content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000">
-
-<title>PFD V4</title>
+<title>PFD V5</title>
 
 <style>
-
-*{
-    box-sizing:border-box;
-    -webkit-user-select:none;
-    user-select:none;
-}
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 
 html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    color:white;
-    font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+ margin:0;width:100%;height:100%;overflow:hidden;
+ background:#000;color:#fff;
+ font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif
 }
 
-#pfd{
-    position:fixed;
-    inset:0;
-    overflow:hidden;
-    background:#000;
-}
+#pfd{position:fixed;inset:0;overflow:hidden;background:#000}
 
-/* ================= HORIZON ================= */
-
-#viewport{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-}
+#viewport{position:absolute;inset:0;overflow:hidden}
 
 #horizon{
-    position:absolute;
-
-    width:300vw;
-    height:300vh;
-
-    left:50%;
-    top:50%;
-
-    margin-left:-150vw;
-    margin-top:-150vh;
-
-    transform-origin:center center;
-
-    background:
-    linear-gradient(
-        to bottom,
-        #168bc0 0%,
-        #168bc0 49.8%,
-        #fff 49.8%,
-        #fff 50.2%,
-        #814326 50.2%,
-        #814326 100%
-    );
+ position:absolute;
+ width:300vw;height:300vh;
+ left:50%;top:50%;
+ margin-left:-150vw;margin-top:-150vh;
+ transform-origin:center;
+ background:linear-gradient(
+   to bottom,
+   #168bc0 0%,#168bc0 49.8%,
+   #fff 49.8%,#fff 50.2%,
+   #814326 50.2%,#814326 100%
+ )
 }
 
-/* ================= PITCH LADDER ================= */
-
 #pitchLadder{
-    position:absolute;
-
-    left:50%;
-    top:50%;
-
-    width:520px;
-    height:1000px;
-
-    transform:translate(-50%,-50%);
+ position:absolute;
+ left:50%;top:50%;
+ width:520px;height:1000px;
+ transform:translate(-50%,-50%)
 }
 
 .pitchLine{
-    position:absolute;
-    left:50%;
-
-    height:2px;
-
-    background:white;
-
-    transform:translateX(-50%);
-
-    box-shadow:0 0 2px black;
+ position:absolute;left:50%;
+ height:2px;background:white;
+ transform:translateX(-50%);
+ box-shadow:0 0 2px #000
 }
-
-.pitchLine.major{
-    width:130px;
-}
-
-.pitchLine.minor{
-    width:70px;
-}
+.pitchLine.major{width:130px}
+.pitchLine.minor{width:70px}
 
 .pitchLabel{
-    position:absolute;
-
-    color:white;
-
-    font-size:17px;
-    font-weight:600;
-
-    text-shadow:1px 1px 2px black;
+ position:absolute;color:#fff;
+ font-size:17px;font-weight:600;
+ text-shadow:1px 1px 2px #000
 }
 
-/* ================= AIRCRAFT ================= */
-
 #aircraft{
-    position:absolute;
-
-    left:50%;
-    top:50%;
-
-    width:280px;
-    height:60px;
-
-    transform:translate(-50%,-50%);
-
-    z-index:20;
+ position:absolute;left:50%;top:50%;
+ width:280px;height:60px;
+ transform:translate(-50%,-50%);
+ z-index:20
 }
 
 .wing{
-    position:absolute;
-
-    top:28px;
-
-    width:105px;
-    height:5px;
-
-    background:#ffd900;
-
-    border:1px solid black;
+ position:absolute;top:28px;
+ width:105px;height:5px;
+ background:#ffd900;border:1px solid #000
 }
+.wing.left{left:0}
+.wing.right{right:0}
 
-.wing.left{
-    left:0;
+.wing.left:after,.wing.right:after{
+ content:"";position:absolute;
+ width:5px;height:20px;top:-15px;background:#ffd900
 }
-
-.wing.right{
-    right:0;
-}
-
-.wing.left::after,
-.wing.right::after{
-    content:"";
-
-    position:absolute;
-
-    width:5px;
-    height:20px;
-
-    top:-15px;
-
-    background:#ffd900;
-}
-
-.wing.left::after{
-    right:0;
-}
-
-.wing.right::after{
-    left:0;
-}
+.wing.left:after{right:0}
+.wing.right:after{left:0}
 
 #centerCircle{
-    position:absolute;
-
-    width:18px;
-    height:18px;
-
-    border:3px solid #ffd900;
-    border-radius:50%;
-
-    left:50%;
-    top:21px;
-
-    transform:translateX(-50%);
+ position:absolute;width:18px;height:18px;
+ border:3px solid #ffd900;border-radius:50%;
+ left:50%;top:21px;transform:translateX(-50%)
 }
 
-/* ================= HEADING ================= */
+/* HEADING */
 
 #headingBox{
-    position:absolute;
-
-    top:env(safe-area-inset-top);
-
-    left:50%;
-
-    width:72%;
-    height:70px;
-
-    transform:translateX(-50%);
-
-    overflow:hidden;
-
-    background:rgba(0,0,0,.6);
-
-    border-bottom:1px solid #aaa;
-
-    z-index:50;
+ position:absolute;
+ top:env(safe-area-inset-top);
+ left:50%;transform:translateX(-50%);
+ width:72%;height:70px;overflow:hidden;
+ background:rgba(0,0,0,.6);
+ border-bottom:1px solid #aaa;
+ z-index:50
 }
 
-#headingTape{
-    position:absolute;
-    top:0;
-    height:100%;
-}
+#headingTape{position:absolute;top:0;height:100%}
 
 .headingMark{
-    position:absolute;
-
-    top:34px;
-
-    width:2px;
-    height:12px;
-
-    background:white;
+ position:absolute;top:34px;
+ width:2px;height:12px;background:#fff
 }
-
-.headingMark.major{
-    height:21px;
-}
+.headingMark.major{height:21px}
 
 .headingLabel{
-    position:absolute;
-
-    top:5px;
-
-    transform:translateX(-50%);
-
-    font-size:17px;
-    font-weight:600;
+ position:absolute;top:5px;
+ transform:translateX(-50%);
+ font-size:17px;font-weight:600
 }
 
 #headingPointer{
-    position:absolute;
-
-    left:50%;
-    bottom:0;
-
-    transform:translateX(-50%);
-
-    width:0;
-    height:0;
-
-    border-left:8px solid transparent;
-    border-right:8px solid transparent;
-    border-bottom:12px solid #ffd900;
-
-    z-index:60;
+ position:absolute;left:50%;bottom:0;
+ transform:translateX(-50%);
+ width:0;height:0;
+ border-left:8px solid transparent;
+ border-right:8px solid transparent;
+ border-bottom:12px solid #ffd900
 }
 
 #headingValue{
-    position:absolute;
-
-    left:50%;
-
-    top:calc(73px + env(safe-area-inset-top));
-
-    transform:translateX(-50%);
-
-    padding:3px 10px;
-
-    background:#000;
-
-    border:2px solid #00ff65;
-
-    color:#00ff65;
-
-    font-size:21px;
-    font-weight:bold;
-
-    z-index:60;
+ position:absolute;
+ left:50%;top:calc(73px + env(safe-area-inset-top));
+ transform:translateX(-50%);
+ background:#000;border:2px solid #00ff65;
+ color:#00ff65;padding:3px 10px;
+ font-size:21px;font-weight:bold;z-index:60
 }
 
-/* ================= VALUES ================= */
-
-.dataBox{
-    position:absolute;
-
-    bottom:calc(12px + env(safe-area-inset-bottom));
-
-    background:rgba(0,0,0,.72);
-
-    border:1px solid #888;
-
-    padding:7px 10px;
-
-    font-family:Menlo,monospace;
-    font-size:13px;
-
-    z-index:60;
-}
-
-#pitchBox{
-    left:10px;
-}
-
-#rollBox{
-    left:130px;
-}
-
-#headingData{
-    right:10px;
-}
-
-/* ================= CONTROLS ================= */
+/* CONTROLS */
 
 #controls{
-    position:absolute;
-
-    right:10px;
-
-    top:calc(88px + env(safe-area-inset-top));
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:7px;
-
-    z-index:100;
+ position:absolute;
+ right:10px;
+ top:calc(88px + env(safe-area-inset-top));
+ display:flex;flex-direction:column;gap:7px;
+ z-index:100
 }
 
 button{
-    appearance:none;
-
-    border:1px solid #aaa;
-
-    border-radius:7px;
-
-    background:rgba(0,0,0,.78);
-
-    color:white;
-
-    padding:9px 12px;
-
-    font-size:13px;
-    font-weight:600;
+ appearance:none;border:1px solid #aaa;
+ border-radius:7px;background:rgba(0,0,0,.8);
+ color:#fff;padding:9px 12px;
+ font-size:13px;font-weight:600
 }
 
-#startButton{
-    color:#00ff65;
-    border-color:#00ff65;
+#start{color:#00ff65;border-color:#00ff65}
+
+.data{
+ position:absolute;
+ bottom:calc(12px + env(safe-area-inset-bottom));
+ background:rgba(0,0,0,.75);
+ border:1px solid #888;
+ padding:7px 10px;
+ font-family:Menlo,monospace;
+ font-size:13px;z-index:70
 }
+
+#pitchData{left:10px}
+#rollData{left:135px}
+#headingData{right:10px}
 
 #status{
-    position:absolute;
-
-    left:50%;
-
-    bottom:calc(50px + env(safe-area-inset-bottom));
-
-    transform:translateX(-50%);
-
-    background:rgba(0,0,0,.72);
-
-    padding:5px 9px;
-
-    border-radius:5px;
-
-    font-size:11px;
-
-    z-index:100;
+ position:absolute;
+ left:50%;bottom:50px;
+ transform:translateX(-50%);
+ background:rgba(0,0,0,.75);
+ padding:5px 9px;border-radius:5px;
+ font-size:11px;z-index:100
 }
 
 #debug{
-    position:absolute;
-
-    left:8px;
-    top:95px;
-
-    background:rgba(0,0,0,.75);
-
-    color:#00ff65;
-
-    font-family:Menlo,monospace;
-
-    font-size:10px;
-
-    padding:7px;
-
-    z-index:100;
-
-    display:none;
+ position:absolute;left:8px;top:100px;
+ background:rgba(0,0,0,.82);
+ color:#00ff65;
+ font:10px Menlo,monospace;
+ padding:7px;z-index:110;
+ display:none
 }
-
 </style>
 </head>
 
@@ -405,1478 +186,765 @@ button{
 
 <div id="pfd">
 
-<div id="viewport">
+ <div id="viewport">
+  <div id="horizon">
+   <div id="pitchLadder"></div>
+  </div>
+ </div>
 
-    <div id="horizon">
+ <div id="aircraft">
+  <div class="wing left"></div>
+  <div id="centerCircle"></div>
+  <div class="wing right"></div>
+ </div>
 
-        <div id="pitchLadder"></div>
+ <div id="headingBox">
+  <div id="headingTape"></div>
+  <div id="headingPointer"></div>
+ </div>
 
-    </div>
+ <div id="headingValue">---</div>
 
-</div>
+ <div id="controls">
+  <button id="start">SENSOREN STARTEN</button>
+  <button id="zero">ZERO</button>
+  <button id="debugButton">DEBUG</button>
+ </div>
 
+ <div id="pitchData" class="data">
+  PITCH <span id="pitchValue">0.0°</span>
+ </div>
 
-<div id="aircraft">
+ <div id="rollData" class="data">
+  ROLL <span id="rollValue">0.0°</span>
+ </div>
 
-    <div class="wing left"></div>
+ <div id="headingData" class="data">
+  HDG <span id="headingDataValue">---</span>
+ </div>
 
-    <div id="centerCircle"></div>
-
-    <div class="wing right"></div>
-
-</div>
-
-
-<div id="headingBox">
-
-    <div id="headingTape"></div>
-
-    <div id="headingPointer"></div>
-
-</div>
-
-
-<div id="headingValue">---</div>
-
-
-<div id="controls">
-
-    <button id="startButton">
-        SENSOREN STARTEN
-    </button>
-
-    <button id="zeroButton">
-        ZERO
-    </button>
-
-    <button id="debugButton">
-        DEBUG
-    </button>
-
-    <button id="fullscreenButton">
-        VOLLBILD
-    </button>
+ <div id="status">V5 – Sensoren nicht gestartet</div>
+ <div id="debug"></div>
 
 </div>
-
-
-<div id="pitchBox" class="dataBox">
-PITCH <span id="pitchValue">0.0°</span>
-</div>
-
-<div id="rollBox" class="dataBox">
-ROLL <span id="rollValue">0.0°</span>
-</div>
-
-<div id="headingData" class="dataBox">
-HDG <span id="compassValue">---</span>
-</div>
-
-
-<div id="status">
-Sensoren nicht gestartet
-</div>
-
-
-<div id="debug"></div>
-
-</div>
-
 
 <script>
 
-/* =========================================================
+/* =====================================================
    CONFIG
-   ========================================================= */
+===================================================== */
 
-const RAD_TO_DEG =
-    180 / Math.PI;
-
-const PX_PER_DEG =
-    7;
-
+const PX_PER_DEG = 7;
 
 /*
-   Filter des Gravity-Vektors.
+ Gyro-Anteil des Complementary Filters.
 
-   Klein = ruhiger.
-   Groß = schneller.
+ Höher = schneller / weniger Einfluss
+ linearer Beschleunigungen.
 
-   0.12 ist bewusst relativ weich.
+ 0.985 ist ein guter Startwert.
 */
-
-const GRAVITY_FILTER =
-    0.12;
-
+const GYRO_WEIGHT = 0.985;
 
 /*
-   Zweite Glättung der PFD-Anzeige
+ Gravity wird zusätzlich vorgefiltert.
 */
-
-const DISPLAY_FILTER =
-    0.18;
-
+const GRAVITY_FILTER = 0.08;
 
 /*
-   Kompass
+ Anzeige leicht glätten.
 */
+const DISPLAY_FILTER = 0.22;
 
-const HEADING_FILTER =
-    0.10;
+const HEADING_FILTER = 0.10;
 
+const DEADBAND = 0.12;
 
-/*
-   Kleine Bewegungen um ZERO ignorieren.
-*/
 
-const DEADBAND =
-    0.15;
+/* =====================================================
+   STATE
+===================================================== */
 
+let gravity = null;
 
-/*
-   Begrenzung.
+let attitudePitch = 0;
+let attitudeRoll = 0;
 
-   Verhindert grafische Überschläge,
-   falls der Sensor einmal Unsinn liefert.
-*/
-
-const MAX_PITCH =
-    85;
-
-const MAX_ROLL =
-    85;
-
-
-/* =========================================================
-   ELEMENTS
-   ========================================================= */
-
-const horizon =
-    document.getElementById("horizon");
-
-const pitchLadder =
-    document.getElementById("pitchLadder");
-
-const pitchValue =
-    document.getElementById("pitchValue");
-
-const rollValue =
-    document.getElementById("rollValue");
-
-const compassValue =
-    document.getElementById("compassValue");
-
-const headingValue =
-    document.getElementById("headingValue");
-
-const headingTape =
-    document.getElementById("headingTape");
-
-const headingBox =
-    document.getElementById("headingBox");
-
-const statusBox =
-    document.getElementById("status");
-
-const debugBox =
-    document.getElementById("debug");
-
-const startButton =
-    document.getElementById("startButton");
-
-const zeroButton =
-    document.getElementById("zeroButton");
-
-const debugButton =
-    document.getElementById("debugButton");
-
-const fullscreenButton =
-    document.getElementById("fullscreenButton");
-
-
-/* =========================================================
-   VECTOR HELPERS
-   ========================================================= */
-
-function normalizeVector(v){
-
-    const length =
-        Math.sqrt(
-            v.x*v.x +
-            v.y*v.y +
-            v.z*v.z
-        );
-
-    if(length < 0.0001){
-
-        return null;
-    }
-
-    return {
-
-        x:v.x/length,
-        y:v.y/length,
-        z:v.z/length
-    };
-}
-
-
-function dot(a,b){
-
-    return (
-        a.x*b.x +
-        a.y*b.y +
-        a.z*b.z
-    );
-}
-
-
-function cross(a,b){
-
-    return {
-
-        x:
-            a.y*b.z -
-            a.z*b.y,
-
-        y:
-            a.z*b.x -
-            a.x*b.z,
-
-        z:
-            a.x*b.y -
-            a.y*b.x
-    };
-}
-
-
-/* =========================================================
-   SCREEN ORIENTATION
-   ========================================================= */
-
-function getScreenAngle(){
-
-    if(
-        screen.orientation &&
-        typeof screen.orientation.angle === "number"
-    ){
-
-        return (
-            screen.orientation.angle +
-            360
-        ) % 360;
-    }
-
-
-    if(
-        typeof window.orientation === "number"
-    ){
-
-        return (
-            window.orientation +
-            360
-        ) % 360;
-    }
-
-
-    return 0;
-}
-
-
-/*
-   DeviceMotion → Bildschirmkoordinaten
-
-   Ergebnis:
-
-   x = links/rechts
-   y = oben/unten
-   z = senkrecht zum Display
-*/
-
-function toScreenCoordinates(x,y,z){
-
-    const angle =
-        getScreenAngle();
-
-
-    switch(angle){
-
-        case 90:
-
-            return {
-                x:-y,
-                y:x,
-                z:z
-            };
-
-
-        case 270:
-
-            return {
-                x:y,
-                y:-x,
-                z:z
-            };
-
-
-        case 180:
-
-            return {
-                x:-x,
-                y:-y,
-                z:z
-            };
-
-
-        default:
-
-            return {
-                x:x,
-                y:y,
-                z:z
-            };
-    }
-}
-
-
-/* =========================================================
-   SENSOR STATE
-   ========================================================= */
-
-let filteredGravity = null;
-
-
-/*
-   Kompletter Gravity-Vektor bei ZERO.
-*/
-
-let zeroGravity = null;
-
-
-/*
-   Lokales Koordinatensystem bei ZERO.
-
-   right0 = horizontale Bildschirmachse
-   up0    = vertikale Bildschirmachse
-   normal0= Schwerkraftreferenz
-*/
-
-let right0 = null;
-let up0 = null;
-let normal0 = null;
-
-
-let targetPitch = 0;
-let targetRoll = 0;
+let zeroPitch = 0;
+let zeroRoll = 0;
 
 let displayPitch = 0;
 let displayRoll = 0;
 
-
 let rawHeading = 0;
 let displayHeading = 0;
-
 let haveHeading = false;
 
+let lastMotionTime = null;
+
+let started = false;
 let debugVisible = false;
 
-
-/* =========================================================
-   GRAVITY FILTER
-   ========================================================= */
-
-function filterGravity(v){
-
-    if(!filteredGravity){
-
-        filteredGravity = {
-            x:v.x,
-            y:v.y,
-            z:v.z
-        };
-
-        return;
-    }
+let lastAlpha = 0;
+let lastBeta = 0;
+let lastGamma = 0;
 
 
-    filteredGravity.x +=
-        (v.x-filteredGravity.x) *
-        GRAVITY_FILTER;
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const horizon = document.getElementById("horizon");
+const ladder = document.getElementById("pitchLadder");
+
+const pitchValue = document.getElementById("pitchValue");
+const rollValue = document.getElementById("rollValue");
+
+const headingValue = document.getElementById("headingValue");
+const headingDataValue = document.getElementById("headingDataValue");
+
+const headingBox = document.getElementById("headingBox");
+const headingTape = document.getElementById("headingTape");
+
+const status = document.getElementById("status");
+const debug = document.getElementById("debug");
 
 
-    filteredGravity.y +=
-        (v.y-filteredGravity.y) *
-        GRAVITY_FILTER;
+/* =====================================================
+   HELPERS
+===================================================== */
 
+function smooth(a,b,f){
+ return a+(b-a)*f;
+}
 
-    filteredGravity.z +=
-        (v.z-filteredGravity.z) *
-        GRAVITY_FILTER;
+function smoothAngle(a,b,f){
+ let d=((b-a+540)%360)-180;
+ return (a+d*f+360)%360;
+}
+
+function deadband(v){
+ return Math.abs(v)<DEADBAND ? 0 : v;
+}
+
+function screenAngle(){
+ if(screen.orientation &&
+    typeof screen.orientation.angle==="number")
+  return (screen.orientation.angle+360)%360;
+
+ return ((window.orientation||0)+360)%360;
 }
 
 
-/* =========================================================
-   CREATE ZERO FRAME
-   ========================================================= */
+/* =====================================================
+   DEVICE → SCREEN AXES
+===================================================== */
 
-function createZeroFrame(){
+function vectorToScreen(x,y,z){
 
-    if(!filteredGravity){
+ switch(screenAngle()){
 
-        return false;
-    }
+  case 90:
+   return {x:-y,y:x,z:z};
 
+  case 270:
+   return {x:y,y:-x,z:z};
 
-    const g =
-        normalizeVector(
-            filteredGravity
-        );
+  case 180:
+   return {x:-x,y:-y,z:z};
 
-
-    if(!g){
-
-        return false;
-    }
-
-
-    zeroGravity = {
-        ...g
-    };
-
-
-    /*
-       normal0 ist unsere Schwerkraftrichtung
-       bei ZERO.
-    */
-
-    normal0 = {
-        ...g
-    };
-
-
-    /*
-       Bildschirm-Rechts-Achse.
-
-       Wir nehmen zunächst die reale
-       Bildschirm-X-Achse.
-    */
-
-    let screenRight = {
-        x:1,
-        y:0,
-        z:0
-    };
-
-
-    /*
-       Diese Achse wird auf die Ebene
-       senkrecht zur ZERO-Schwerkraft
-       projiziert.
-
-       Damit erhalten wir eine stabile
-       lokale Roll-Achse.
-    */
-
-    const d =
-        dot(
-            screenRight,
-            normal0
-        );
-
-
-    let projectedRight = {
-
-        x:
-            screenRight.x -
-            normal0.x*d,
-
-        y:
-            screenRight.y -
-            normal0.y*d,
-
-        z:
-            screenRight.z -
-            normal0.z*d
-    };
-
-
-    right0 =
-        normalizeVector(
-            projectedRight
-        );
-
-
-    /*
-       Sonderfall:
-
-       Sollte das Gerät so stehen,
-       dass die Bildschirm-X-Achse fast
-       parallel zur Schwerkraft ist,
-       verwenden wir die Y-Achse.
-    */
-
-    if(!right0){
-
-        const screenUp = {
-            x:0,
-            y:-1,
-            z:0
-        };
-
-
-        const d2 =
-            dot(
-                screenUp,
-                normal0
-            );
-
-
-        projectedRight = {
-
-            x:
-                screenUp.x -
-                normal0.x*d2,
-
-            y:
-                screenUp.y -
-                normal0.y*d2,
-
-            z:
-                screenUp.z -
-                normal0.z*d2
-        };
-
-
-        right0 =
-            normalizeVector(
-                projectedRight
-            );
-    }
-
-
-    /*
-       Zweite Achse orthogonal erzeugen.
-    */
-
-    up0 =
-        normalizeVector(
-            cross(
-                normal0,
-                right0
-            )
-        );
-
-
-    return !!(
-        right0 &&
-        up0 &&
-        normal0
-    );
+  default:
+   return {x:x,y:y,z:z};
+ }
 }
 
 
-/* =========================================================
-   RELATIVE ATTITUDE
-   ========================================================= */
+/*
+ RotationRate besitzt ebenfalls
+ Geräteachsen.
 
-function calculateRelativeAttitude(){
+ alpha = um Z
+ beta  = um X
+ gamma = um Y
 
-    if(
-        !zeroGravity ||
-        !right0 ||
-        !up0 ||
-        !normal0 ||
-        !filteredGravity
-    ){
+ Wir drehen Beta/Gamma entsprechend
+ der Landscape-Ausrichtung.
+*/
 
-        return;
-    }
+function gyroToScreen(beta,gamma){
 
+ switch(screenAngle()){
 
-    const g =
-        normalizeVector(
-            filteredGravity
-        );
+  case 90:
+   return {
+    pitch: beta,
+    roll: -gamma
+   };
 
+  case 270:
+   return {
+    pitch: -beta,
+    roll: gamma
+   };
 
-    if(!g){
+  case 180:
+   return {
+    pitch: -gamma,
+    roll: -beta
+   };
 
-        return;
-    }
-
-
-    /*
-       Aktuelle Schwerkraft in unserem
-       beim ZERO gespeicherten lokalen
-       Koordinatensystem.
-    */
-
-    const gx =
-        dot(
-            g,
-            right0
-        );
-
-
-    const gy =
-        dot(
-            g,
-            up0
-        );
-
-
-    const gz =
-        dot(
-            g,
-            normal0
-        );
-
-
-    /*
-       Der große Unterschied zu V3:
-
-       Bei ZERO ist:
-
-           gx = 0
-           gy = 0
-           gz = 1
-
-       Wir befinden uns damit weit weg
-       von der atan2-Singularität.
-    */
-
-
-    let roll =
-        Math.atan2(
-            gx,
-            gz
-        ) *
-        RAD_TO_DEG;
-
-
-    let pitch =
-        Math.atan2(
-            -gy,
-            Math.sqrt(
-                gx*gx +
-                gz*gz
-            )
-        ) *
-        RAD_TO_DEG;
-
-
-    /*
-       Deadband
-    */
-
-    if(
-        Math.abs(pitch) <
-        DEADBAND
-    ){
-
-        pitch = 0;
-    }
-
-
-    if(
-        Math.abs(roll) <
-        DEADBAND
-    ){
-
-        roll = 0;
-    }
-
-
-    /*
-       Schutz gegen Überschläge.
-    */
-
-    pitch =
-        Math.max(
-            -MAX_PITCH,
-            Math.min(
-                MAX_PITCH,
-                pitch
-            )
-        );
-
-
-    roll =
-        Math.max(
-            -MAX_ROLL,
-            Math.min(
-                MAX_ROLL,
-                roll
-            )
-        );
-
-
-    targetPitch =
-        pitch;
-
-    targetRoll =
-        roll;
-
-
-    if(debugVisible){
-
-        debugBox.innerHTML =
-
-        "SCREEN " +
-        getScreenAngle() +
-        "°<br><br>" +
-
-        "G X " +
-        g.x.toFixed(3) +
-        "<br>" +
-
-        "G Y " +
-        g.y.toFixed(3) +
-        "<br>" +
-
-        "G Z " +
-        g.z.toFixed(3) +
-        "<br><br>" +
-
-        "LOCAL X " +
-        gx.toFixed(3) +
-        "<br>" +
-
-        "LOCAL Y " +
-        gy.toFixed(3) +
-        "<br>" +
-
-        "LOCAL Z " +
-        gz.toFixed(3) +
-        "<br><br>" +
-
-        "P " +
-        pitch.toFixed(2) +
-        "°<br>" +
-
-        "R " +
-        roll.toFixed(2) +
-        "°";
-    }
+  default:
+   return {
+    pitch: gamma,
+    roll: beta
+   };
+ }
 }
 
 
-/* =========================================================
-   MOTION
-   ========================================================= */
+/* =====================================================
+   GRAVITY ATTITUDE
+===================================================== */
 
-function handleMotion(event){
+/*
+ Hier verwenden wir Gravity nur als
+ langsame Referenz.
 
-    const gravity =
-        event.accelerationIncludingGravity;
+ Im normalen Landscape-Arbeitsbereich
+ erhalten wir daraus zwei unabhängige
+ Neigungswerte.
+*/
 
+function gravityAttitude(g){
 
-    if(!gravity){
+ const n=Math.sqrt(
+  g.x*g.x+
+  g.y*g.y+
+  g.z*g.z
+ );
 
-        return;
-    }
+ if(n<0.1) return null;
 
+ const x=g.x/n;
+ const y=g.y/n;
+ const z=g.z/n;
 
-    if(
-        gravity.x == null ||
-        gravity.y == null ||
-        gravity.z == null
-    ){
+ /*
+  Landscape-PFD:
 
-        return;
-    }
+  Pitch = Neigung der oberen/unteren
+  Bildschirmkante.
 
+  Roll = seitliche Neigung.
+ */
 
-    const screenGravity =
-        toScreenCoordinates(
-            gravity.x,
-            gravity.y,
-            gravity.z
-        );
+ const pitch =
+   Math.atan2(
+     -y,
+     Math.sqrt(x*x+z*z)
+   )*180/Math.PI;
 
+ const roll =
+   Math.atan2(
+     x,
+     Math.sqrt(y*y+z*z)
+   )*180/Math.PI;
 
-    filterGravity(
-        screenGravity
-    );
-
-
-    calculateRelativeAttitude();
+ return {pitch,roll};
 }
 
 
-/* =========================================================
-   HEADING
-   ========================================================= */
+/* =====================================================
+   DEVICE MOTION
+===================================================== */
 
-function handleOrientation(event){
+function motion(e){
 
-    if(
-        typeof event.webkitCompassHeading ===
-        "number" &&
-        !Number.isNaN(
-            event.webkitCompassHeading
-        )
-    ){
+ const now=performance.now();
 
-        rawHeading =
-            event.webkitCompassHeading;
+ if(lastMotionTime===null){
+  lastMotionTime=now;
+  return;
+ }
 
-        haveHeading =
-            true;
+ let dt=(now-lastMotionTime)/1000;
+ lastMotionTime=now;
 
-        return;
-    }
+ /*
+  Schutz gegen Tab-Wechsel usw.
+ */
+ if(dt<=0 || dt>0.1) return;
 
 
-    if(
-        typeof event.alpha ===
-        "number"
-    ){
+ /* -----------------------------
+    GRAVITY
+ ----------------------------- */
 
-        rawHeading =
-            (
-                360 -
-                event.alpha
-            ) % 360;
+ const ag=e.accelerationIncludingGravity;
 
-        haveHeading =
-            true;
-    }
+ if(ag &&
+    ag.x!==null &&
+    ag.y!==null &&
+    ag.z!==null){
+
+  const g=vectorToScreen(
+   ag.x,
+   ag.y,
+   ag.z
+  );
+
+  if(!gravity){
+   gravity={...g};
+  }else{
+   gravity.x +=
+    (g.x-gravity.x)*GRAVITY_FILTER;
+
+   gravity.y +=
+    (g.y-gravity.y)*GRAVITY_FILTER;
+
+   gravity.z +=
+    (g.z-gravity.z)*GRAVITY_FILTER;
+  }
+ }
+
+
+ /* -----------------------------
+    GYRO
+ ----------------------------- */
+
+ const r=e.rotationRate;
+
+ if(!r) return;
+
+ const beta=r.beta || 0;
+ const gamma=r.gamma || 0;
+
+ const gyro=
+   gyroToScreen(beta,gamma);
+
+
+ /*
+  Gyro integrieren.
+
+  rotationRate ist Grad/Sekunde.
+ */
+
+ attitudePitch +=
+   gyro.pitch*dt;
+
+ attitudeRoll +=
+   gyro.roll*dt;
+
+
+ /* -----------------------------
+    COMPLEMENTARY FILTER
+ ----------------------------- */
+
+ if(gravity){
+
+  const ga=
+    gravityAttitude(gravity);
+
+  if(ga){
+
+   attitudePitch =
+     GYRO_WEIGHT*
+     attitudePitch +
+     (1-GYRO_WEIGHT)*
+     ga.pitch;
+
+   attitudeRoll =
+     GYRO_WEIGHT*
+     attitudeRoll +
+     (1-GYRO_WEIGHT)*
+     ga.roll;
+  }
+ }
+
+
+ if(debugVisible){
+
+  debug.innerHTML=
+   "SCREEN "+screenAngle()+"°<br>"+
+   "dt "+dt.toFixed(3)+"<br><br>"+
+
+   "GYRO P "+
+   gyro.pitch.toFixed(1)+
+   " °/s<br>"+
+
+   "GYRO R "+
+   gyro.roll.toFixed(1)+
+   " °/s<br><br>"+
+
+   "ATT P "+
+   attitudePitch.toFixed(2)+"°<br>"+
+
+   "ATT R "+
+   attitudeRoll.toFixed(2)+"°<br><br>"+
+
+   "ORI α "+
+   lastAlpha.toFixed(1)+"<br>"+
+
+   "ORI β "+
+   lastBeta.toFixed(1)+"<br>"+
+
+   "ORI γ "+
+   lastGamma.toFixed(1);
+ }
 }
 
 
-/* =========================================================
+/* =====================================================
+   COMPASS
+===================================================== */
+
+function orientation(e){
+
+ lastAlpha=e.alpha||0;
+ lastBeta=e.beta||0;
+ lastGamma=e.gamma||0;
+
+ if(typeof e.webkitCompassHeading==="number"){
+
+  rawHeading=e.webkitCompassHeading;
+  haveHeading=true;
+
+ }else if(typeof e.alpha==="number"){
+
+  rawHeading=(360-e.alpha)%360;
+  haveHeading=true;
+ }
+}
+
+
+/* =====================================================
    ZERO
-   ========================================================= */
+===================================================== */
 
 function setZero(){
 
-    if(!filteredGravity){
+ zeroPitch=attitudePitch;
+ zeroRoll=attitudeRoll;
 
-        statusBox.textContent =
-            "Noch keine Sensordaten";
+ displayPitch=0;
+ displayRoll=0;
 
-        return;
-    }
-
-
-    if(
-        !createZeroFrame()
-    ){
-
-        statusBox.textContent =
-            "ZERO nicht möglich";
-
-        return;
-    }
-
-
-    targetPitch = 0;
-    targetRoll = 0;
-
-    displayPitch = 0;
-    displayRoll = 0;
-
-
-    statusBox.textContent =
-        "ZERO gesetzt";
+ status.textContent="ZERO gesetzt";
 }
 
 
-/* =========================================================
-   SENSOR START
-   ========================================================= */
+/* =====================================================
+   START
+===================================================== */
 
 async function startSensors(){
 
-    try{
+ try{
 
-        statusBox.textContent =
-            "Sensorfreigabe…";
-
-
-        if(
-            typeof DeviceMotionEvent !==
-            "undefined" &&
-
-            typeof DeviceMotionEvent
-            .requestPermission ===
-            "function"
-        ){
-
-            const permission =
-                await DeviceMotionEvent
-                .requestPermission();
+  status.textContent="Sensorfreigabe…";
 
 
-            if(
-                permission !==
-                "granted"
-            ){
+  if(typeof DeviceMotionEvent!=="undefined" &&
+     typeof DeviceMotionEvent.requestPermission==="function"){
 
-                statusBox.textContent =
-                    "Motion verweigert";
+   const p=
+    await DeviceMotionEvent.requestPermission();
 
-                return;
-            }
-        }
-
-
-        if(
-            typeof DeviceOrientationEvent !==
-            "undefined" &&
-
-            typeof DeviceOrientationEvent
-            .requestPermission ===
-            "function"
-        ){
-
-            let permission;
+   if(p!=="granted"){
+    status.textContent="Motion verweigert";
+    return;
+   }
+  }
 
 
-            try{
+  if(typeof DeviceOrientationEvent!=="undefined" &&
+     typeof DeviceOrientationEvent.requestPermission==="function"){
 
-                permission =
-                    await DeviceOrientationEvent
-                    .requestPermission(true);
+   let p;
 
-            }
+   try{
+    p=await DeviceOrientationEvent.requestPermission(true);
+   }catch{
+    p=await DeviceOrientationEvent.requestPermission();
+   }
 
-            catch{
-
-                permission =
-                    await DeviceOrientationEvent
-                    .requestPermission();
-            }
-
-
-            if(
-                permission !==
-                "granted"
-            ){
-
-                statusBox.textContent =
-                    "Kompass verweigert";
-
-                return;
-            }
-        }
+   if(p!=="granted"){
+    status.textContent="Orientation verweigert";
+    return;
+   }
+  }
 
 
-        window.addEventListener(
-            "devicemotion",
-            handleMotion,
-            true
-        );
+  window.addEventListener(
+   "devicemotion",
+   motion,
+   true
+  );
+
+  window.addEventListener(
+   "deviceorientation",
+   orientation,
+   true
+  );
 
 
-        window.addEventListener(
-            "deviceorientation",
-            handleOrientation,
-            true
-        );
+  started=true;
+
+  document.getElementById("start").style.display="none";
+
+  status.textContent="AHRS aktiv";
 
 
-        startButton.style.display =
-            "none";
+  /*
+   Filter zunächst stabilisieren.
+  */
 
+  setTimeout(()=>{
 
-        statusBox.textContent =
-            "Sensoren aktiv";
+   if(gravity){
 
+    const ga=gravityAttitude(gravity);
 
-        /*
-           Etwas länger warten, damit sich
-           der Gravity-Filter stabilisiert.
-        */
-
-        setTimeout(
-            function(){
-
-                if(filteredGravity){
-
-                    setZero();
-
-                    statusBox.textContent =
-                        "Sensoren aktiv · AUTO ZERO";
-                }
-
-            },
-            1000
-        );
-
+    if(ga){
+     attitudePitch=ga.pitch;
+     attitudeRoll=ga.roll;
     }
 
-    catch(error){
+    setZero();
 
-        console.error(error);
+    status.textContent=
+     "AHRS aktiv · AUTO ZERO";
+   }
 
-        statusBox.textContent =
-            "Fehler: " +
-            error.message;
-    }
+  },1500);
+
+
+ }catch(err){
+
+  status.textContent=
+   "Fehler: "+err.message;
+ }
 }
 
 
-/* =========================================================
-   FILTER DISPLAY
-   ========================================================= */
-
-function smooth(
-    current,
-    target,
-    factor
-){
-
-    return (
-        current +
-        (
-            target -
-            current
-        ) *
-        factor
-    );
-}
-
-
-function smoothHeading(
-    current,
-    target,
-    factor
-){
-
-    const delta =
-        (
-            (
-                target -
-                current +
-                540
-            ) % 360
-        ) - 180;
-
-
-    return (
-        current +
-        delta *
-        factor +
-        360
-    ) % 360;
-}
-
-
-/* =========================================================
+/* =====================================================
    PITCH LADDER
-   ========================================================= */
+===================================================== */
 
-function createPitchLadder(){
+for(let deg=-40;deg<=40;deg+=5){
 
-    for(
-        let deg=-40;
-        deg<=40;
-        deg+=5
-    ){
+ if(deg===0) continue;
 
-        if(deg===0){
-            continue;
-        }
+ const line=document.createElement("div");
 
+ line.className=
+  "pitchLine "+
+  (deg%10===0?"major":"minor");
 
-        const line =
-            document.createElement(
-                "div"
-            );
+ const y=500-deg*PX_PER_DEG;
+
+ line.style.top=y+"px";
+
+ ladder.appendChild(line);
 
 
-        line.className =
-            "pitchLine " +
-            (
-                deg%10===0
-                ? "major"
-                : "minor"
-            );
+ if(deg%10===0){
 
+  const l=document.createElement("div");
+  const r=document.createElement("div");
 
-        const y =
-            500 -
-            deg *
-            PX_PER_DEG;
+  l.className="pitchLabel";
+  r.className="pitchLabel";
 
+  l.textContent=Math.abs(deg);
+  r.textContent=Math.abs(deg);
 
-        line.style.top =
-            y+"px";
+  l.style.top=(y-10)+"px";
+  r.style.top=(y-10)+"px";
 
+  l.style.left="145px";
+  r.style.right="145px";
 
-        pitchLadder.appendChild(
-            line
-        );
-
-
-        if(
-            deg%10===0
-        ){
-
-            const left =
-                document.createElement(
-                    "div"
-                );
-
-            const right =
-                document.createElement(
-                    "div"
-                );
-
-
-            left.className =
-                "pitchLabel";
-
-            right.className =
-                "pitchLabel";
-
-
-            left.textContent =
-                Math.abs(deg);
-
-            right.textContent =
-                Math.abs(deg);
-
-
-            left.style.top =
-                (y-10)+"px";
-
-            right.style.top =
-                (y-10)+"px";
-
-
-            left.style.left =
-                "145px";
-
-            right.style.right =
-                "145px";
-
-
-            pitchLadder.appendChild(
-                left
-            );
-
-            pitchLadder.appendChild(
-                right
-            );
-        }
-    }
+  ladder.appendChild(l);
+  ladder.appendChild(r);
+ }
 }
 
 
-createPitchLadder();
-
-
-/* =========================================================
+/* =====================================================
    HEADING TAPE
-   ========================================================= */
+===================================================== */
 
-const HEADING_PX_PER_DEG =
-    5;
+const HDG_PX=5;
 
+for(let deg=-360;deg<=720;deg+=5){
 
-function createHeadingTape(){
+ const n=((deg%360)+360)%360;
 
-    for(
-        let deg=-360;
-        deg<=720;
-        deg+=5
-    ){
+ const mark=document.createElement("div");
 
-        const normalized =
-            (
-                (
-                    deg%360
-                )+
-                360
-            )%360;
+ mark.className=
+  "headingMark "+
+  (n%10===0?"major":"");
+
+ mark.style.left=
+  deg*HDG_PX+"px";
+
+ headingTape.appendChild(mark);
 
 
-        const mark =
-            document.createElement(
-                "div"
-            );
+ if(n%30===0){
 
+  const label=document.createElement("div");
 
-        mark.className =
-            "headingMark " +
-            (
-                normalized%10===0
-                ? "major"
-                : ""
-            );
+  label.className="headingLabel";
 
+  if(n===0) label.textContent="N";
+  else if(n===90) label.textContent="E";
+  else if(n===180) label.textContent="S";
+  else if(n===270) label.textContent="W";
+  else label.textContent=
+    String(n/10).padStart(2,"0");
 
-        mark.style.left =
-            (
-                deg *
-                HEADING_PX_PER_DEG
-            ) +
-            "px";
+  label.style.left=
+    deg*HDG_PX+"px";
 
-
-        headingTape.appendChild(
-            mark
-        );
-
-
-        if(
-            normalized%30===0
-        ){
-
-            const label =
-                document.createElement(
-                    "div"
-                );
-
-
-            label.className =
-                "headingLabel";
-
-
-            if(normalized===0){
-
-                label.textContent="N";
-
-            }else if(normalized===90){
-
-                label.textContent="E";
-
-            }else if(normalized===180){
-
-                label.textContent="S";
-
-            }else if(normalized===270){
-
-                label.textContent="W";
-
-            }else{
-
-                label.textContent =
-                    String(
-                        normalized/10
-                    ).padStart(
-                        2,
-                        "0"
-                    );
-            }
-
-
-            label.style.left =
-                (
-                    deg *
-                    HEADING_PX_PER_DEG
-                ) +
-                "px";
-
-
-            headingTape.appendChild(
-                label
-            );
-        }
-    }
+  headingTape.appendChild(label);
+ }
 }
 
 
-createHeadingTape();
-
-
-/* =========================================================
-   DEBUG
-   ========================================================= */
-
-function toggleDebug(){
-
-    debugVisible =
-        !debugVisible;
-
-
-    debugBox.style.display =
-        debugVisible
-        ? "block"
-        : "none";
-}
-
-
-/* =========================================================
-   FULLSCREEN
-   ========================================================= */
-
-async function fullscreen(){
-
-    try{
-
-        if(
-            document.documentElement
-            .requestFullscreen
-        ){
-
-            await document
-            .documentElement
-            .requestFullscreen();
-        }
-
-    }catch(error){
-
-        console.log(error);
-    }
-}
-
-
-/* =========================================================
+/* =====================================================
    RENDER
-   ========================================================= */
+===================================================== */
 
 function render(){
 
-    displayPitch =
-        smooth(
-            displayPitch,
-            targetPitch,
-            DISPLAY_FILTER
-        );
+ /*
+  relative Lage zur ZERO-Position
+ */
+
+ let p=
+   attitudePitch-zeroPitch;
+
+ let r=
+   attitudeRoll-zeroRoll;
 
 
-    displayRoll =
-        smooth(
-            displayRoll,
-            targetRoll,
-            DISPLAY_FILTER
-        );
+ /*
+  kleine Sensorbewegungen entfernen
+ */
+
+ p=deadband(p);
+ r=deadband(r);
 
 
-    if(haveHeading){
+ /*
+  Sicherheitsbegrenzung
+ */
 
-        displayHeading =
-            smoothHeading(
-                displayHeading,
-                rawHeading,
-                HEADING_FILTER
-            );
-    }
+ p=Math.max(-60,Math.min(60,p));
+ r=Math.max(-85,Math.min(85,r));
 
 
-    /*
-       PFD Horizon
-    */
+ /*
+  Anzeige glätten
+ */
 
-    const pitchPixels =
-        displayPitch *
-        PX_PER_DEG;
+ displayPitch=
+   smooth(
+     displayPitch,
+     p,
+     DISPLAY_FILTER
+   );
 
-
-    horizon.style.transform =
-
-        "translateY(" +
-        pitchPixels +
-        "px) " +
-
-        "rotate(" +
-        (-displayRoll) +
-        "deg)";
-
-
-    pitchValue.textContent =
-        displayPitch
-        .toFixed(1) +
-        "°";
+ displayRoll=
+   smooth(
+     displayRoll,
+     r,
+     DISPLAY_FILTER
+   );
 
 
-    rollValue.textContent =
-        displayRoll
-        .toFixed(1) +
-        "°";
+ /*
+  Horizont
+ */
+
+ horizon.style.transform=
+   "translateY("+
+   (displayPitch*PX_PER_DEG)+
+   "px) rotate("+
+   (-displayRoll)+
+   "deg)";
 
 
-    /*
-       Heading
-    */
+ pitchValue.textContent=
+   displayPitch.toFixed(1)+"°";
 
-    if(haveHeading){
-
-        let h =
-            Math.round(
-                displayHeading
-            )%360;
+ rollValue.textContent=
+   displayRoll.toFixed(1)+"°";
 
 
-        if(h===0){
-            h=360;
-        }
+ /* ---------------- HEADING ---------------- */
+
+ if(haveHeading){
+
+  displayHeading=
+   smoothAngle(
+     displayHeading,
+     rawHeading,
+     HEADING_FILTER
+   );
 
 
-        const text =
-            String(h)
-            .padStart(
-                3,
-                "0"
-            );
+  let h=
+   Math.round(displayHeading)%360;
+
+  if(h===0) h=360;
+
+  const text=
+   String(h).padStart(3,"0");
+
+  headingValue.textContent=text;
+
+  headingDataValue.textContent=
+   text+"°";
 
 
-        headingValue.textContent =
-            text;
+  const center=
+   headingBox.clientWidth/2;
+
+  headingTape.style.transform=
+   "translateX("+
+   (center-displayHeading*HDG_PX)+
+   "px)";
+ }
 
 
-        compassValue.textContent =
-            text+"°";
-
-
-        const center =
-            headingBox.clientWidth /
-            2;
-
-
-        headingTape.style.transform =
-
-            "translateX(" +
-
-            (
-                center -
-                displayHeading *
-                HEADING_PX_PER_DEG
-            ) +
-
-            "px)";
-    }
-
-
-    requestAnimationFrame(
-        render
-    );
+ requestAnimationFrame(render);
 }
-
 
 render();
 
 
-/* =========================================================
+/* =====================================================
    BUTTONS
-   ========================================================= */
+===================================================== */
 
-startButton.addEventListener(
-    "click",
-    startSensors
-);
+document.getElementById("start")
+.onclick=startSensors;
 
+document.getElementById("zero")
+.onclick=setZero;
 
-zeroButton.addEventListener(
-    "click",
-    setZero
-);
+document.getElementById("debugButton")
+.onclick=()=>{
 
+ debugVisible=!debugVisible;
 
-debugButton.addEventListener(
-    "click",
-    toggleDebug
-);
-
-
-fullscreenButton.addEventListener(
-    "click",
-    fullscreen
-);
+ debug.style.display=
+  debugVisible?"block":"none";
+};
 
 </script>
 

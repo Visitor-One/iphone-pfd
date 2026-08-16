@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
-<title>PFD V6.13</title>
+<title>PFD V6.14</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif}
@@ -53,7 +53,7 @@ button{appearance:none;-webkit-appearance:none;width:66px;min-height:31px;margin
 .dataBox{position:absolute;bottom:calc(9px + env(safe-area-inset-bottom));min-width:94px;padding:5px 7px;background:rgba(0,0,0,.67);border:1px solid rgba(255,255,255,.42);border-radius:3px;color:#fff;font-family:Menlo,"SF Mono",monospace;font-size:10px;z-index:130}.dataBox span{color:#24e95a;font-size:12px}
 #pitchBox{left:calc(9px + env(safe-area-inset-left))}#rollBox{left:calc(116px + env(safe-area-inset-left))}#headingData{right:calc(9px + env(safe-area-inset-right))}
 #status{position:absolute;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:5px 10px;min-width:108px;text-align:center;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.22);border-radius:5px;color:#24e95a;font-size:9px;z-index:125}
-#debug{position:absolute;left:7px;top:calc(105px + env(safe-area-inset-top));padding:7px;max-width:245px;background:rgba(0,0,0,.82);border:1px solid rgba(0,255,100,.35);color:#00ff65;font-family:Menlo,monospace;font-size:9px;line-height:1.4;z-index:180;display:none}
+#debug{position:absolute;left:7px;top:calc(105px + env(safe-area-inset-top));padding:7px;max-width:260px;background:rgba(0,0,0,.82);border:1px solid rgba(0,255,100,.35);color:#00ff65;font-family:Menlo,monospace;font-size:9px;line-height:1.4;z-index:180;display:none}
 @media(max-width:430px){#headingBox{left:4%;right:4%}#aircraft{width:255px}.wing{width:98px}.gpsTape{width:53px}.gpsCurrent{min-width:50px;font-size:12px}}
 </style>
 </head>
@@ -69,7 +69,7 @@ button{appearance:none;-webkit-appearance:none;width:66px;min-height:31px;margin
 <div id="pitchBox" class="dataBox">PITCH&nbsp;<span id="pitchValue">0.0°</span></div>
 <div id="rollBox" class="dataBox">ROLL&nbsp;<span id="rollValue">0.0°</span></div>
 <div id="headingData" class="dataBox">HDG&nbsp;<span id="headingDataValue">---</span></div>
-<div id="status">V6.13</div><div id="debug"></div>
+<div id="status">V6.14</div><div id="debug"></div>
 </div>
 <script>
 const RAD_TO_DEG=180/Math.PI,PX_PER_DEG=7,GRAVITY_FILTER=.08,DISPLAY_FILTER=.14,HEADING_FILTER=.10,DEADBAND=.20,MAX_PITCH=60,MAX_ROLL=60;
@@ -79,8 +79,9 @@ const horizon=$("horizon"),ladder=$("pitchLadder"),pitchValue=$("pitchValue"),ro
 let gravity=null,rawPitch=0,rawRoll=0,zeroPitch=0,zeroRoll=0,targetPitch=0,targetRoll=0,displayPitch=0,displayRoll=0;
 let rawHeading=0,displayHeading=0,haveHeading=false,compassRaw=null,compassAccuracy=null,alphaDebug=null,headingSource="NONE";
 let haveMotion=false,debugVisible=false,swapPitchRoll=true;
-let gpsState="IDLE",gpsError="---",gpsLatitude=null,gpsLongitude=null,gpsHorizontalAccuracy=null,gpsSpeed=null,gpsAltitude=null,gpsAltitudeAccuracy=null,gpsWatchId=null,haveSpeed=false,displaySpeed=0;
+let gpsState="IDLE",gpsError="---",gpsPermission="UNKNOWN",gpsLatitude=null,gpsLongitude=null,gpsHorizontalAccuracy=null,gpsSpeed=null,gpsAltitude=null,gpsAltitudeAccuracy=null,gpsWatchId=null,haveSpeed=false,displaySpeed=0;
 let demAltitude=null,activeAltitude=null,altitudeSource="NONE",haveAltitude=false,displayAltitude=0,lastDemLatitude=null,lastDemLongitude=null,demRequestRunning=false,demState="IDLE",demError="---";
+
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
 function smooth(c,t,f){return c+(t-c)*f}
 function smoothAngle(c,t,f){const d=((t-c+540)%360)-180;return(c+d*f+360)%360}
@@ -92,29 +93,97 @@ function getAttitudeAngles(){if(!gravity)return null;const {x,y,z}=gravity,ax=Ma
 function calculateAttitude(){if(!gravity)return;const {x,y,z}=gravity;if(Math.sqrt(x*x+y*y+z*z)<3)return;const a=getAttitudeAngles();rawPitch=a.pitch;rawRoll=a.roll;let p=normalize180(rawPitch-zeroPitch),r=normalize180(rawRoll-zeroRoll);if(Math.abs(p)<DEADBAND)p=0;if(Math.abs(r)<DEADBAND)r=0;targetPitch=clamp(p,-MAX_PITCH,MAX_PITCH);targetRoll=clamp(r,-MAX_ROLL,MAX_ROLL)}
 function handleMotion(e){const g=e.accelerationIncludingGravity;if(!g||g.x==null||g.y==null||g.z==null)return;filterGravity(g.x,g.y,g.z);haveMotion=true;calculateAttitude()}
 
-/* V6.13: heading ONLY from Apple's magnetic compass value.
-   No event.alpha fallback and no GPS course. */
+/* Kompasskern aus V6.13 unverändert */
 function handleOrientation(e){
-    alphaDebug=(typeof e.alpha==="number"&&Number.isFinite(e.alpha))?e.alpha:null;
-    if(typeof e.webkitCompassAccuracy==="number"&&Number.isFinite(e.webkitCompassAccuracy)) compassAccuracy=e.webkitCompassAccuracy;
-    if(typeof e.webkitCompassHeading!=="number"||!Number.isFinite(e.webkitCompassHeading)) return;
-    compassRaw=(e.webkitCompassHeading+360)%360;
-    rawHeading=compassRaw;
-    headingSource="webkitCompassHeading";
-    if(!haveHeading){displayHeading=rawHeading;haveHeading=true}
+ alphaDebug=(typeof e.alpha==="number"&&Number.isFinite(e.alpha))?e.alpha:null;
+ if(typeof e.webkitCompassAccuracy==="number"&&Number.isFinite(e.webkitCompassAccuracy))compassAccuracy=e.webkitCompassAccuracy;
+ if(typeof e.webkitCompassHeading!=="number"||!Number.isFinite(e.webkitCompassHeading))return;
+ compassRaw=(e.webkitCompassHeading+360)%360;rawHeading=compassRaw;headingSource="webkitCompassHeading";
+ if(!haveHeading){displayHeading=rawHeading;haveHeading=true}
 }
+
 function hasGoodGpsAltitude(){return gpsAltitude!==null&&Number.isFinite(gpsAltitude)&&gpsAltitudeAccuracy!==null&&Number.isFinite(gpsAltitudeAccuracy)&&gpsAltitudeAccuracy<=MAX_GPS_ALTITUDE_ACCURACY}
 function setAltitude(a,s){if(a===null||!Number.isFinite(a))return;activeAltitude=a;altitudeSource=s;if(!haveAltitude){displayAltitude=a;haveAltitude=true}}
 function shouldUpdateDem(a,b){if(lastDemLatitude===null||lastDemLongitude===null)return true;return distanceMeters(lastDemLatitude,lastDemLongitude,a,b)>=DEM_UPDATE_DISTANCE}
 async function requestDemAltitude(a,b){if(demRequestRunning)return;demRequestRunning=true;demState="REQUEST";demError="---";try{const r=await fetch("https://api.open-meteo.com/v1/elevation?latitude="+encodeURIComponent(a)+"&longitude="+encodeURIComponent(b),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();const e=Array.isArray(d.elevation)?Number(d.elevation[0]):Number(d.elevation);if(!Number.isFinite(e))throw new Error("Keine Elevation");demAltitude=e;lastDemLatitude=a;lastDemLongitude=b;demState="OK";if(!hasGoodGpsAltitude())setAltitude(e,"DEM")}catch(e){demState="ERROR";demError=e.message||String(e)}finally{demRequestRunning=false}}
-function processGPSPosition(p){gpsState="ACTIVE";gpsError="---";const c=p.coords;if(Number.isFinite(c.latitude))gpsLatitude=c.latitude;if(Number.isFinite(c.longitude))gpsLongitude=c.longitude;if(Number.isFinite(c.accuracy))gpsHorizontalAccuracy=c.accuracy;if(c.speed!==null&&Number.isFinite(c.speed)){gpsSpeed=Math.max(0,c.speed*3.6);if(!haveSpeed){displaySpeed=gpsSpeed;haveSpeed=true}}else if(!haveSpeed){gpsSpeed=0;displaySpeed=0;haveSpeed=true}gpsAltitude=c.altitude!==null&&Number.isFinite(c.altitude)?c.altitude:null;gpsAltitudeAccuracy=c.altitudeAccuracy!==null&&Number.isFinite(c.altitudeAccuracy)?c.altitudeAccuracy:null;if(hasGoodGpsAltitude())setAltitude(gpsAltitude,"GPS");else{if(Number.isFinite(demAltitude))setAltitude(demAltitude,"DEM");if(gpsLatitude!==null&&gpsLongitude!==null&&shouldUpdateDem(gpsLatitude,gpsLongitude))requestDemAltitude(gpsLatitude,gpsLongitude)}}
-function processGPSError(e){gpsState="ERROR";gpsError=(e.code===1?"PERMISSION_DENIED":e.code===2?"POSITION_UNAVAILABLE":e.code===3?"TIMEOUT":"UNKNOWN")+": "+e.message}
-function startGPSWatch(){if(gpsWatchId!==null)return;gpsWatchId=navigator.geolocation.watchPosition(processGPSPosition,processGPSError,{enableHighAccuracy:true,maximumAge:1000,timeout:20000})}
-function requestInitialGPS(){if(!("geolocation"in navigator)){gpsState="UNAVAILABLE";gpsError="Geolocation API fehlt";return}gpsState="REQUESTING";navigator.geolocation.getCurrentPosition(p=>{processGPSPosition(p);startGPSWatch()},e=>{processGPSError(e);if(e.code!==1)startGPSWatch()},{enableHighAccuracy:true,maximumAge:0,timeout:20000})}
+
+function processGPSPosition(p){
+ gpsState="ACTIVE";gpsError="---";gpsPermission="GRANTED";
+ const c=p.coords;
+ if(Number.isFinite(c.latitude))gpsLatitude=c.latitude;
+ if(Number.isFinite(c.longitude))gpsLongitude=c.longitude;
+ if(Number.isFinite(c.accuracy))gpsHorizontalAccuracy=c.accuracy;
+ if(c.speed!==null&&Number.isFinite(c.speed)){gpsSpeed=Math.max(0,c.speed*3.6);if(!haveSpeed){displaySpeed=gpsSpeed;haveSpeed=true}}
+ else if(!haveSpeed){gpsSpeed=0;displaySpeed=0;haveSpeed=true}
+ gpsAltitude=c.altitude!==null&&Number.isFinite(c.altitude)?c.altitude:null;
+ gpsAltitudeAccuracy=c.altitudeAccuracy!==null&&Number.isFinite(c.altitudeAccuracy)?c.altitudeAccuracy:null;
+ if(hasGoodGpsAltitude())setAltitude(gpsAltitude,"GPS");
+ else{
+   if(Number.isFinite(demAltitude))setAltitude(demAltitude,"DEM");
+   if(gpsLatitude!==null&&gpsLongitude!==null&&shouldUpdateDem(gpsLatitude,gpsLongitude))requestDemAltitude(gpsLatitude,gpsLongitude);
+ }
+ $("gpsButton").textContent="GPS ✓";
+}
+
+function processGPSError(e){
+ const n=e.code===1?"PERMISSION_DENIED":e.code===2?"POSITION_UNAVAILABLE":e.code===3?"TIMEOUT":"UNKNOWN";
+ gpsState="ERROR";gpsError=n+": "+e.message;
+ if(e.code===1){gpsPermission="DENIED";$("gpsButton").textContent="GPS GESPERRT"}
+ else $("gpsButton").textContent="GPS ERNEUT";
+ statusBox.textContent=n;
+}
+
+function startGPSWatch(){
+ if(!("geolocation" in navigator))return;
+ if(gpsWatchId!==null){navigator.geolocation.clearWatch(gpsWatchId);gpsWatchId=null}
+ gpsWatchId=navigator.geolocation.watchPosition(processGPSPosition,processGPSError,{enableHighAccuracy:true,maximumAge:1000,timeout:20000});
+}
+
+/* V6.14: expliziter, direkt durch Benutzeraktion ausgelöster Request */
+function requestGPSPermission(){
+ if(!window.isSecureContext){gpsState="ERROR";gpsError="HTTPS erforderlich";statusBox.textContent="GPS braucht HTTPS";return}
+ if(!("geolocation" in navigator)){gpsState="UNAVAILABLE";gpsError="Geolocation API fehlt";statusBox.textContent="GPS API fehlt";return}
+ gpsState="REQUESTING";gpsError="---";$("gpsButton").textContent="GPS …";statusBox.textContent="Standort wird angefragt…";
+ navigator.geolocation.getCurrentPosition(
+   p=>{processGPSPosition(p);startGPSWatch();statusBox.textContent="GPS aktiv"},
+   e=>processGPSError(e),
+   {enableHighAccuracy:true,maximumAge:0,timeout:20000}
+ );
+}
+
+/* Permission API ist nur Diagnose; die eigentliche Freigabe erfolgt über getCurrentPosition(). */
+async function probeGPSPermission(){
+ if(!navigator.permissions||typeof navigator.permissions.query!=="function"){gpsPermission="API N/A";return}
+ try{
+   const p=await navigator.permissions.query({name:"geolocation"});
+   gpsPermission=(p.state||"unknown").toUpperCase();
+   p.onchange=()=>{gpsPermission=(p.state||"unknown").toUpperCase()}
+ }catch(e){gpsPermission="API N/A"}
+}
+
 function setZero(){if(!haveMotion||!gravity){statusBox.textContent="Keine Sensordaten";return}const a=getAttitudeAngles();zeroPitch=a.pitch;zeroRoll=a.roll;rawPitch=zeroPitch;rawRoll=zeroRoll;targetPitch=targetRoll=displayPitch=displayRoll=0;statusBox.textContent="ZERO gesetzt"}
 function swapAxes(){swapPitchRoll=!swapPitchRoll;if(haveMotion&&gravity)setZero();updateSwapButton()}
 function updateSwapButton(){swapButton.textContent=swapPitchRoll?"P↔R Z/X":"P↔R X/Z"}
-async function startSensors(){try{statusBox.textContent="Freigaben…";requestInitialGPS();if(typeof DeviceMotionEvent!=="undefined"&&typeof DeviceMotionEvent.requestPermission==="function"){if(await DeviceMotionEvent.requestPermission()!=="granted"){statusBox.textContent="Motion verweigert";return}}if(typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function"){let p;try{p=await DeviceOrientationEvent.requestPermission(true)}catch{p=await DeviceOrientationEvent.requestPermission()}if(p!=="granted"){statusBox.textContent="Kompass verweigert";return}}window.addEventListener("devicemotion",handleMotion,true);window.addEventListener("deviceorientation",handleOrientation,true);$("startButton").style.display="none";statusBox.textContent="Sensoren aktiv";setTimeout(()=>{if(haveMotion){setZero();statusBox.textContent="V6.13"}},1500)}catch(e){statusBox.textContent="Fehler: "+e.message}}
+
+async function startSensors(){
+ try{
+   statusBox.textContent="Freigaben…";
+   /* Standort bewusst NICHT automatisch vor Motion-Dialog anfordern.
+      Der GPS-Button bleibt ein eigener echter User-Gesture-Request. */
+   if(typeof DeviceMotionEvent!=="undefined"&&typeof DeviceMotionEvent.requestPermission==="function"){
+     if(await DeviceMotionEvent.requestPermission()!=="granted"){statusBox.textContent="Motion verweigert";return}
+   }
+   if(typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function"){
+     let p;try{p=await DeviceOrientationEvent.requestPermission(true)}catch{p=await DeviceOrientationEvent.requestPermission()}
+     if(p!=="granted"){statusBox.textContent="Kompass verweigert";return}
+   }
+   window.addEventListener("devicemotion",handleMotion,true);
+   window.addEventListener("deviceorientation",handleOrientation,true);
+   $("startButton").style.display="none";statusBox.textContent="Sensoren aktiv";
+   setTimeout(()=>{if(haveMotion){setZero();statusBox.textContent="V6.14"}},1500)
+ }catch(e){statusBox.textContent="Fehler: "+e.message}
+}
+
 const pitchMarks=[-40,-35,-30,-25,-20,-15,-10,-5,5,10,15,20,25,30,35,40];
 for(const deg of pitchMarks){const l=document.createElement("div");l.className="pitchLine "+(Math.abs(deg)%10===0?"ten":"five");const y=550-deg*PX_PER_DEG;l.style.top=y+"px";ladder.appendChild(l);const a=Math.abs(deg);if([5,10,15,20,30,40].includes(a)){for(const side of ["left","right"]){const n=document.createElement("div");n.className="pitchLabel";n.textContent=a;n.style.top=(y-9)+"px";if(side==="left")n.style.left="128px";else n.style.right="128px";if(a===5||a===15){n.style.fontSize="11px";n.style.fontWeight="500"}ladder.appendChild(n)}}}
 const rollScale=$("rollScale"),rollMarks=[-60,-45,-30,-20,-10,0,10,20,30,45,60];
@@ -123,15 +192,32 @@ const HEADING_PX_PER_DEG=3.7;
 for(let deg=-360;deg<=720;deg+=5){const n=((deg%360)+360)%360,m=document.createElement("div");m.className="headingMark "+(n%10===0?"ten":"");m.style.left=deg*HEADING_PX_PER_DEG+"px";headingTape.appendChild(m);if(n%30===0){const l=document.createElement("div");l.className="headingLabel";if(n===0){l.textContent="N";l.classList.add("cardinal")}else if(n===90){l.textContent="E";l.classList.add("cardinal")}else if(n===180){l.textContent="S";l.classList.add("cardinal")}else if(n===270){l.textContent="W";l.classList.add("cardinal")}else l.textContent=String(n).padStart(3,"0");l.style.left=deg*HEADING_PX_PER_DEG+"px";headingTape.appendChild(l)}}
 for(let s=0;s<=300;s+=5){const t=document.createElement("div");t.className="gpsTick "+(s%10===0?"major":"minor");t.style.top=-s*SPEED_PX_PER_KMH+"px";speedTape.appendChild(t);if(s%10===0){const l=document.createElement("div");l.className="gpsLabel";l.textContent=s;l.style.top=-s*SPEED_PX_PER_KMH+"px";speedTape.appendChild(l)}}
 for(let a=-500;a<=5000;a+=10){const t=document.createElement("div");t.className="gpsTick "+(a%20===0?"major":"minor");t.style.top=-a*ALT_PX_PER_METER+"px";altitudeTape.appendChild(t);if(a%20===0){const l=document.createElement("div");l.className="gpsLabel";l.textContent=a;l.style.top=-a*ALT_PX_PER_METER+"px";altitudeTape.appendChild(l)}}
-function updateDebug(){if(!debugVisible)return;debugBox.innerHTML="PFD V6.13<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>RAW HDG: "+fmt(rawHeading,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br>GPS STATE: "+gpsState+"<br>GPS ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>GPS SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"}
-function render(){displayPitch=smooth(displayPitch,targetPitch,DISPLAY_FILTER);displayRoll=smooth(displayRoll,targetRoll,DISPLAY_FILTER);horizon.style.transform="translateY("+(displayPitch*PX_PER_DEG)+"px) rotate("+(-displayRoll)+"deg)";movingBank.style.transform="translate(-50%,-50%) rotate("+(-displayRoll)+"deg)";pitchValue.textContent=displayPitch.toFixed(1)+"°";rollValue.textContent=displayRoll.toFixed(1)+"°";if(haveHeading){displayHeading=smoothAngle(displayHeading,rawHeading,HEADING_FILTER);let h=Math.round(displayHeading)%360;if(h===0)h=360;headingDataValue.textContent=String(h).padStart(3,"0")+"°";headingTape.style.transform="translateX("+(headingBox.clientWidth/2-displayHeading*HEADING_PX_PER_DEG)+"px)"}if(haveSpeed&&gpsSpeed!==null){displaySpeed=smooth(displaySpeed,gpsSpeed,GPS_DISPLAY_FILTER);speedCurrent.textContent=Math.round(displaySpeed);speedTape.style.transform="translateY("+(displaySpeed*SPEED_PX_PER_KMH)+"px)"}if(haveAltitude&&activeAltitude!==null){displayAltitude=smooth(displayAltitude,activeAltitude,GPS_DISPLAY_FILTER);altitudeCurrent.textContent=Math.round(displayAltitude);altitudeTape.style.transform="translateY("+(displayAltitude*ALT_PX_PER_METER)+"px)"}updateDebug();requestAnimationFrame(render)}
+
+function updateDebug(){
+ if(!debugVisible)return;
+ const standalone=window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches;
+ debugBox.innerHTML="PFD V6.14<br><br><b>CONTEXT</b><br>SECURE: "+(window.isSecureContext?"YES":"NO")+"<br>STANDALONE: "+(standalone?"YES":"NO")+"<br>GEO API: "+(("geolocation"in navigator)?"YES":"NO")+"<br>PERMISSION: "+gpsPermission+"<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br><b>GPS</b><br>STATE: "+gpsState+"<br>ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"
+}
+
+function render(){
+ displayPitch=smooth(displayPitch,targetPitch,DISPLAY_FILTER);displayRoll=smooth(displayRoll,targetRoll,DISPLAY_FILTER);
+ horizon.style.transform="translateY("+(displayPitch*PX_PER_DEG)+"px) rotate("+(-displayRoll)+"deg)";
+ movingBank.style.transform="translate(-50%,-50%) rotate("+(-displayRoll)+"deg)";
+ pitchValue.textContent=displayPitch.toFixed(1)+"°";rollValue.textContent=displayRoll.toFixed(1)+"°";
+ if(haveHeading){displayHeading=smoothAngle(displayHeading,rawHeading,HEADING_FILTER);let h=Math.round(displayHeading)%360;if(h===0)h=360;headingDataValue.textContent=String(h).padStart(3,"0")+"°";headingTape.style.transform="translateX("+(headingBox.clientWidth/2-displayHeading*HEADING_PX_PER_DEG)+"px)"}
+ if(haveSpeed&&gpsSpeed!==null){displaySpeed=smooth(displaySpeed,gpsSpeed,GPS_DISPLAY_FILTER);speedCurrent.textContent=Math.round(displaySpeed);speedTape.style.transform="translateY("+(displaySpeed*SPEED_PX_PER_KMH)+"px)"}
+ if(haveAltitude&&activeAltitude!==null){displayAltitude=smooth(displayAltitude,activeAltitude,GPS_DISPLAY_FILTER);altitudeCurrent.textContent=Math.round(displayAltitude);altitudeTape.style.transform="translateY("+(displayAltitude*ALT_PX_PER_METER)+"px)"}
+ updateDebug();requestAnimationFrame(render)
+}
 render();
+
 $("startButton").addEventListener("click",startSensors);
-$("gpsButton").addEventListener("click",requestInitialGPS);
+$("gpsButton").addEventListener("click",requestGPSPermission);
 $("zeroButton").addEventListener("click",setZero);
 $("swapButton").addEventListener("click",swapAxes);
 $("debugButton").addEventListener("click",()=>{debugVisible=!debugVisible;debugBox.style.display=debugVisible?"block":"none";updateDebug()});
 updateSwapButton();
+probeGPSPermission();
 </script>
 </body>
 </html>

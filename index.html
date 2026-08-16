@@ -7,7 +7,7 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,vie
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
 
-<title>PFD V6.7</title>
+<title>PFD V6.8</title>
 
 <style>
 
@@ -39,7 +39,7 @@ html,body{
 }
 
 /* =========================================================
-   ATTITUDE FIELD
+   ATTITUDE
 ========================================================= */
 
 #viewport{
@@ -65,14 +65,11 @@ html,body{
     background:
         linear-gradient(
             to bottom,
-
             #002e58 0%,
             #004f8c 35%,
             #0876b7 48.9%,
-
             #ffffff 49.75%,
             #ffffff 50.25%,
-
             #794010 50.25%,
             #572b0b 65%,
             #281202 100%
@@ -96,34 +93,25 @@ html,body{
 }
 
 /* =========================================================
-   PITCH LADDER
+   PITCH
 ========================================================= */
 
 #pitchLadder{
     position:absolute;
-
     left:50%;
     top:50%;
-
     width:520px;
     height:1100px;
-
     transform:translate(-50%,-50%);
 }
 
 .pitchLine{
     position:absolute;
-
     left:50%;
-
     height:1.5px;
-
     background:#fff;
-
     transform:translateX(-50%);
-
-    box-shadow:
-        0 1px 2px rgba(0,0,0,.95);
+    box-shadow:0 1px 2px rgba(0,0,0,.95);
 }
 
 .pitchLine.five{
@@ -136,16 +124,11 @@ html,body{
 
 .pitchLabel{
     position:absolute;
-
     width:36px;
-
     color:#fff;
-
     text-align:center;
-
     font-size:15px;
     font-weight:600;
-
     line-height:20px;
 
     text-shadow:
@@ -154,37 +137,27 @@ html,body{
 }
 
 /* =========================================================
-   AIRCRAFT REFERENCE
+   AIRCRAFT
 ========================================================= */
 
 #aircraft{
     position:absolute;
-
     left:50%;
     top:50%;
-
     width:270px;
     height:44px;
-
     transform:translate(-50%,-50%);
-
     z-index:70;
 }
 
 .wing{
     position:absolute;
-
     top:20px;
-
     width:105px;
     height:4px;
-
     background:#ffd900;
-
     border:1px solid #111;
-
-    box-shadow:
-        0 1px 2px rgba(0,0,0,.9);
+    box-shadow:0 1px 2px rgba(0,0,0,.9);
 }
 
 .wing.left{
@@ -198,16 +171,11 @@ html,body{
 .wing.left::after,
 .wing.right::after{
     content:"";
-
     position:absolute;
-
     top:-13px;
-
     width:5px;
     height:18px;
-
     background:#ffd900;
-
     border:1px solid #111;
 }
 
@@ -221,39 +189,27 @@ html,body{
 
 #centerCircle{
     position:absolute;
-
     left:50%;
     top:11px;
-
     transform:translateX(-50%);
-
     width:22px;
     height:22px;
-
     border:4px solid #ffd900;
-
     border-radius:50%;
-
     background:transparent;
-
-    box-shadow:
-        0 1px 2px #000;
+    box-shadow:0 1px 2px #000;
 }
 
 /* =========================================================
-   HEADING TAPE
+   HEADING
 ========================================================= */
 
 #headingBox{
     position:absolute;
-
     left:6%;
     right:6%;
-
     top:calc(8px + env(safe-area-inset-top));
-
     height:76px;
-
     overflow:hidden;
 
     background:
@@ -263,9 +219,7 @@ html,body{
             rgba(0,28,47,.92)
         );
 
-    border-bottom:
-        1px solid rgba(255,255,255,.48);
-
+    border-bottom:1px solid rgba(255,255,255,.48);
     z-index:100;
 }
 
@@ -277,12 +231,9 @@ html,body{
 
 .headingMark{
     position:absolute;
-
     bottom:0;
-
     width:1px;
     height:7px;
-
     background:#fff;
 }
 
@@ -293,57 +244,36 @@ html,body{
 
 .headingLabel{
     position:absolute;
-
     top:32px;
-
     transform:translateX(-50%);
-
     color:#fff;
-
     font-size:12px;
     font-weight:500;
-
     white-space:nowrap;
-
     text-shadow:0 1px 2px #000;
 }
 
 .headingLabel.cardinal{
     top:5px;
-
-    color:#fff;
-
     font-size:18px;
     font-weight:700;
 }
 
-.headingLabel.cardinal.currentNorth{
-    color:#ffd900;
-}
-
 #headingIndex{
     position:absolute;
-
     left:50%;
     bottom:0;
-
     width:2px;
     height:26px;
-
     transform:translateX(-50%);
-
     background:#ffd900;
-
     z-index:103;
 }
 
 #headingPointer{
     position:absolute;
-
     left:50%;
-
     top:calc(84px + env(safe-area-inset-top));
-
     transform:translateX(-50%);
 
     width:0;
@@ -357,14 +287,11 @@ html,body{
 }
 
 /* =========================================================
-   ROLL SCALE V6.7
-   Mittelpunkt = Flugzeug-Mittelpunkt
-   Radius = 280 px
+   ROLL SCALE
 ========================================================= */
 
 #rollScale{
     position:absolute;
-
     left:50%;
     top:50%;
 
@@ -374,13 +301,11 @@ html,body{
     transform:translate(-50%,-50%);
 
     pointer-events:none;
-
     z-index:85;
 }
 
 #rollArc{
     position:absolute;
-
     left:50%;
     top:50%;
 
@@ -390,7 +315,6 @@ html,body{
     transform:translate(-50%,-50%);
 
     border:2px solid rgba(255,255,255,.92);
-
     border-radius:50%;
 
     clip-path:
@@ -407,7 +331,6 @@ html,body{
 
 .rollTick{
     position:absolute;
-
     left:50%;
     top:50%;
 
@@ -419,12 +342,9 @@ html,body{
 
     background:#fff;
 
-    transform-origin:
-        50%
-        280px;
+    transform-origin:50% 280px;
 
-    box-shadow:
-        0 1px 2px #000;
+    box-shadow:0 1px 2px #000;
 }
 
 .rollTick.medium{
@@ -434,40 +354,26 @@ html,body{
 .rollTick.major{
     width:2.5px;
     height:21px;
-
     margin-left:-1.25px;
 }
 
 .rollNumber{
     position:absolute;
-
     left:50%;
     top:50%;
 
     width:34px;
 
-    margin-left:-17px;
-    margin-top:-250px;
-
     color:#fff;
-
     text-align:center;
 
     font-size:14px;
     font-weight:600;
 
-    transform-origin:
-        17px
-        250px;
-
     text-shadow:
         0 1px 3px #000,
         0 0 2px #000;
 }
-
-/* =========================================================
-   FIXED BANK POINTER
-========================================================= */
 
 #fixedBankPointer{
     position:absolute;
@@ -486,13 +392,8 @@ html,body{
 
     z-index:91;
 
-    filter:
-        drop-shadow(0 1px 2px #000);
+    filter:drop-shadow(0 1px 2px #000);
 }
-
-/* =========================================================
-   MOVING BANK POINTER
-========================================================= */
 
 #movingBank{
     position:absolute;
@@ -529,25 +430,239 @@ html,body{
     border-right:8px solid transparent;
     border-top:14px solid #fff;
 
-    filter:
-        drop-shadow(0 1px 2px #000);
+    filter:drop-shadow(0 1px 2px #000);
 }
 
 /* =========================================================
-   CONTROL PANEL — RIGHT BOTTOM
+   V6.8 GPS TAPES
+========================================================= */
+
+.gpsTape{
+    position:absolute;
+
+    top:27%;
+    height:46%;
+
+    width:58px;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(0,10,18,.64),
+            rgba(0,18,30,.42)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.32);
+
+    z-index:115;
+
+    pointer-events:none;
+}
+
+#speedTapeBox{
+    left:0;
+    border-left:none;
+}
+
+#altitudeTapeBox{
+    right:0;
+    border-right:none;
+}
+
+.gpsTapeInner{
+    position:absolute;
+    left:0;
+    top:50%;
+
+    width:100%;
+    height:1px;
+}
+
+.gpsTick{
+    position:absolute;
+
+    height:1px;
+
+    background:
+        rgba(255,255,255,.88);
+}
+
+.gpsTick.minor{
+    width:8px;
+}
+
+.gpsTick.major{
+    width:15px;
+}
+
+#speedTapeBox .gpsTick{
+    right:0;
+}
+
+#altitudeTapeBox .gpsTick{
+    left:0;
+}
+
+.gpsLabel{
+    position:absolute;
+
+    transform:translateY(-50%);
+
+    color:#fff;
+
+    font-family:
+        Menlo,
+        "SF Mono",
+        monospace;
+
+    font-size:9px;
+    font-weight:500;
+
+    text-shadow:
+        0 1px 2px #000;
+
+    white-space:nowrap;
+}
+
+#speedTapeBox .gpsLabel{
+    right:19px;
+    text-align:right;
+}
+
+#altitudeTapeBox .gpsLabel{
+    left:19px;
+    text-align:left;
+}
+
+/* fixed current-value windows */
+
+.gpsCurrent{
+    position:absolute;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    min-width:55px;
+
+    height:28px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        rgba(0,8,14,.93);
+
+    border:
+        1.5px solid rgba(255,255,255,.82);
+
+    color:#fff;
+
+    font-family:
+        Menlo,
+        "SF Mono",
+        monospace;
+
+    font-size:13px;
+    font-weight:600;
+
+    z-index:120;
+
+    box-shadow:
+        0 1px 3px rgba(0,0,0,.85);
+}
+
+#speedCurrent{
+    left:0;
+    border-left:none;
+    border-radius:0 4px 4px 0;
+}
+
+#altitudeCurrent{
+    right:0;
+    border-right:none;
+    border-radius:4px 0 0 4px;
+}
+
+/* little pointer toward PFD */
+
+#speedCurrent::after{
+    content:"";
+
+    position:absolute;
+
+    right:-7px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:0;
+    height:0;
+
+    border-top:6px solid transparent;
+    border-bottom:6px solid transparent;
+    border-left:7px solid rgba(255,255,255,.82);
+}
+
+#altitudeCurrent::before{
+    content:"";
+
+    position:absolute;
+
+    left:-7px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:0;
+    height:0;
+
+    border-top:6px solid transparent;
+    border-bottom:6px solid transparent;
+    border-right:7px solid rgba(255,255,255,.82);
+}
+
+.gpsUnit{
+    position:absolute;
+
+    top:4px;
+
+    color:rgba(255,255,255,.65);
+
+    font-size:7px;
+
+    letter-spacing:.4px;
+
+    z-index:122;
+}
+
+#speedUnit{
+    left:5px;
+}
+
+#altitudeUnit{
+    right:5px;
+}
+
+/* =========================================================
+   CONTROLS
 ========================================================= */
 
 #controls{
     position:absolute;
 
-    right:
-        calc(8px + env(safe-area-inset-right));
+    right:calc(8px + env(safe-area-inset-right));
 
-    bottom:
-        calc(62px + env(safe-area-inset-bottom));
+    bottom:calc(62px + env(safe-area-inset-bottom));
 
     display:flex;
-
     flex-direction:column;
 
     align-items:stretch;
@@ -570,16 +685,13 @@ button{
 
     padding:4px 3px;
 
-    border:
-        1px solid rgba(255,255,255,.45);
+    border:1px solid rgba(255,255,255,.45);
 
     border-radius:6px;
 
-    background:
-        rgba(0,18,30,.54);
+    background:rgba(0,18,30,.54);
 
-    color:
-        rgba(255,255,255,.95);
+    color:rgba(255,255,255,.95);
 
     font-family:inherit;
 
@@ -591,48 +703,39 @@ button{
     backdrop-filter:blur(3px);
     -webkit-backdrop-filter:blur(3px);
 
-    box-shadow:
-        0 1px 3px rgba(0,0,0,.35);
+    box-shadow:0 1px 3px rgba(0,0,0,.35);
 }
 
 button:active{
-    background:
-        rgba(255,255,255,.20);
+    background:rgba(255,255,255,.20);
 }
 
 #startButton{
     color:#30e55b;
-
-    border-color:
-        rgba(48,229,91,.60);
+    border-color:rgba(48,229,91,.60);
 }
 
 #swapButton{
     color:#ffe000;
-
-    border-color:
-        rgba(255,224,0,.65);
+    border-color:rgba(255,224,0,.65);
 }
 
 /* =========================================================
-   DATA BOXES
+   DATA
 ========================================================= */
 
 .dataBox{
     position:absolute;
 
-    bottom:
-        calc(9px + env(safe-area-inset-bottom));
+    bottom:calc(9px + env(safe-area-inset-bottom));
 
     min-width:94px;
 
     padding:5px 7px;
 
-    background:
-        rgba(0,0,0,.67);
+    background:rgba(0,0,0,.67);
 
-    border:
-        1px solid rgba(255,255,255,.42);
+    border:1px solid rgba(255,255,255,.42);
 
     border-radius:3px;
 
@@ -654,18 +757,15 @@ button:active{
 }
 
 #pitchBox{
-    left:
-        calc(9px + env(safe-area-inset-left));
+    left:calc(9px + env(safe-area-inset-left));
 }
 
 #rollBox{
-    left:
-        calc(116px + env(safe-area-inset-left));
+    left:calc(116px + env(safe-area-inset-left));
 }
 
 #headingData{
-    right:
-        calc(9px + env(safe-area-inset-right));
+    right:calc(9px + env(safe-area-inset-right));
 }
 
 /* =========================================================
@@ -677,8 +777,7 @@ button:active{
 
     left:50%;
 
-    bottom:
-        calc(10px + env(safe-area-inset-bottom));
+    bottom:calc(10px + env(safe-area-inset-bottom));
 
     transform:translateX(-50%);
 
@@ -688,11 +787,9 @@ button:active{
 
     text-align:center;
 
-    background:
-        rgba(0,0,0,.55);
+    background:rgba(0,0,0,.55);
 
-    border:
-        1px solid rgba(255,255,255,.22);
+    border:1px solid rgba(255,255,255,.22);
 
     border-radius:5px;
 
@@ -712,16 +809,13 @@ button:active{
 
     left:7px;
 
-    top:
-        calc(105px + env(safe-area-inset-top));
+    top:calc(105px + env(safe-area-inset-top));
 
     padding:7px;
 
-    background:
-        rgba(0,0,0,.78);
+    background:rgba(0,0,0,.78);
 
-    border:
-        1px solid rgba(0,255,100,.35);
+    border:1px solid rgba(0,255,100,.35);
 
     color:#00ff65;
 
@@ -735,10 +829,6 @@ button:active{
 
     display:none;
 }
-
-/* =========================================================
-   SMALL DISPLAYS
-========================================================= */
 
 @media(max-width:430px){
 
@@ -754,6 +844,15 @@ button:active{
     .wing{
         width:98px;
     }
+
+    .gpsTape{
+        width:53px;
+    }
+
+    .gpsCurrent{
+        min-width:50px;
+        font-size:12px;
+    }
 }
 
 </style>
@@ -764,64 +863,71 @@ button:active{
 <div id="pfd">
 
     <div id="viewport">
-
         <div id="horizon">
-
             <div id="pitchLadder"></div>
+        </div>
+    </div>
 
+    <!-- GPS SPEED LEFT -->
+
+    <div id="speedTapeBox" class="gpsTape">
+
+        <div id="speedUnit" class="gpsUnit">
+            km/h
+        </div>
+
+        <div id="speedTape" class="gpsTapeInner"></div>
+
+        <div id="speedCurrent" class="gpsCurrent">
+            ---
         </div>
 
     </div>
 
+    <!-- GPS ALTITUDE RIGHT -->
+
+    <div id="altitudeTapeBox" class="gpsTape">
+
+        <div id="altitudeUnit" class="gpsUnit">
+            m
+        </div>
+
+        <div id="altitudeTape" class="gpsTapeInner"></div>
+
+        <div id="altitudeCurrent" class="gpsCurrent">
+            ---
+        </div>
+
+    </div>
 
     <!-- HEADING -->
 
     <div id="headingBox">
-
         <div id="headingTape"></div>
-
         <div id="headingIndex"></div>
-
     </div>
 
     <div id="headingPointer"></div>
 
-
-    <!-- ROLL SCALE -->
+    <!-- ROLL -->
 
     <div id="rollScale">
-
         <div id="rollArc"></div>
-
     </div>
-
-
-    <!-- MOVING ROLL MARKER -->
 
     <div id="movingBank">
-
         <div id="movingBankPointer"></div>
-
     </div>
 
-
-    <!-- FIXED BANK POINTER -->
-
     <div id="fixedBankPointer"></div>
-
 
     <!-- AIRCRAFT -->
 
     <div id="aircraft">
-
         <div class="wing left"></div>
-
         <div id="centerCircle"></div>
-
         <div class="wing right"></div>
-
     </div>
-
 
     <!-- CONTROLS -->
 
@@ -845,41 +951,25 @@ button:active{
 
     </div>
 
-
     <!-- DATA -->
 
     <div id="pitchBox" class="dataBox">
-
         PITCH&nbsp;
-        <span id="pitchValue">
-            0.0°
-        </span>
-
+        <span id="pitchValue">0.0°</span>
     </div>
-
 
     <div id="rollBox" class="dataBox">
-
         ROLL&nbsp;
-        <span id="rollValue">
-            0.0°
-        </span>
-
+        <span id="rollValue">0.0°</span>
     </div>
-
 
     <div id="headingData" class="dataBox">
-
         HDG&nbsp;
-        <span id="headingDataValue">
-            ---
-        </span>
-
+        <span id="headingDataValue">---</span>
     </div>
 
-
     <div id="status">
-        V6.7
+        V6.8
     </div>
 
     <div id="debug"></div>
@@ -890,13 +980,13 @@ button:active{
 <script>
 
 /* ==========================================================
-   PFD V6.7
+   PFD V6.8
 
-   SENSOR-/FILTERBERECHNUNG:
-   1:1 AUS V6.6
+   SENSOR CORE UNVERÄNDERT.
 
-   V6.7:
-   Pitch-Zahlen 5° und 15° kleiner.
+   NEU:
+   GPS Speed Tape links
+   GPS Altitude Tape rechts
 ========================================================== */
 
 const RAD_TO_DEG = 180 / Math.PI;
@@ -904,16 +994,21 @@ const RAD_TO_DEG = 180 / Math.PI;
 const PX_PER_DEG = 7;
 
 const GRAVITY_FILTER = 0.08;
-
 const DISPLAY_FILTER = 0.14;
-
 const HEADING_FILTER = 0.10;
 
 const DEADBAND = 0.20;
 
 const MAX_PITCH = 60;
-
 const MAX_ROLL = 60;
+
+
+/* GPS DISPLAY */
+
+const SPEED_PX_PER_KMH = 4;
+const ALT_PX_PER_METER = 2;
+
+const GPS_DISPLAY_FILTER = 0.16;
 
 
 /* ==========================================================
@@ -953,6 +1048,18 @@ const swapButton =
 const movingBank =
     document.getElementById("movingBank");
 
+const speedTape =
+    document.getElementById("speedTape");
+
+const altitudeTape =
+    document.getElementById("altitudeTape");
+
+const speedCurrent =
+    document.getElementById("speedCurrent");
+
+const altitudeCurrent =
+    document.getElementById("altitudeCurrent");
+
 
 /* ==========================================================
    SENSOR STATE
@@ -984,6 +1091,22 @@ let swapPitchRoll = true;
 
 
 /* ==========================================================
+   GPS STATE
+========================================================== */
+
+let gpsSpeed = null;
+let gpsAltitude = null;
+
+let displaySpeed = 0;
+let displayAltitude = 0;
+
+let haveSpeed = false;
+let haveAltitude = false;
+
+let gpsWatchId = null;
+
+
+/* ==========================================================
    HELPERS
 ========================================================== */
 
@@ -991,10 +1114,7 @@ function clamp(value,minimum,maximum){
 
     return Math.max(
         minimum,
-        Math.min(
-            maximum,
-            value
-        )
+        Math.min(maximum,value)
     );
 }
 
@@ -1091,7 +1211,6 @@ function getAttitudeAngles(){
             -y
         ) * RAD_TO_DEG;
 
-
     if(swapPitchRoll){
 
         return{
@@ -1132,15 +1251,12 @@ function calculateAttitude(){
         return;
     }
 
-
     const angles=
         getAttitudeAngles();
-
 
     if(!angles){
         return;
     }
-
 
     rawPitch=
         angles.pitch;
@@ -1148,34 +1264,23 @@ function calculateAttitude(){
     rawRoll=
         angles.roll;
 
-
     let pitch=
         normalize180(
             rawPitch-zeroPitch
         );
-
 
     let roll=
         normalize180(
             rawRoll-zeroRoll
         );
 
-
-    if(
-        Math.abs(pitch) <
-        DEADBAND
-    ){
+    if(Math.abs(pitch)<DEADBAND){
         pitch=0;
     }
 
-
-    if(
-        Math.abs(roll) <
-        DEADBAND
-    ){
+    if(Math.abs(roll)<DEADBAND){
         roll=0;
     }
-
 
     targetPitch=
         clamp(
@@ -1184,7 +1289,6 @@ function calculateAttitude(){
             MAX_PITCH
         );
 
-
     targetRoll=
         clamp(
             roll,
@@ -1192,13 +1296,12 @@ function calculateAttitude(){
             MAX_ROLL
         );
 
-
     if(debugVisible){
 
         debugBox.innerHTML=
 
-        "PFD V6.7<br>"+
-        "SENSOR CORE V6.6<br><br>"+
+        "PFD V6.8<br>"+
+        "SENSOR CORE V6.x<br><br>"+
 
         "MODE: "+
         (
@@ -1208,17 +1311,9 @@ function calculateAttitude(){
         )+
         "<br><br>"+
 
-        "GX: "+
-        x.toFixed(3)+
-        "<br>"+
-
-        "GY: "+
-        y.toFixed(3)+
-        "<br>"+
-
-        "GZ: "+
-        z.toFixed(3)+
-        "<br><br>"+
+        "GX: "+x.toFixed(3)+"<br>"+
+        "GY: "+y.toFixed(3)+"<br>"+
+        "GZ: "+z.toFixed(3)+"<br><br>"+
 
         "|G|: "+
         magnitude.toFixed(2)+
@@ -1230,14 +1325,6 @@ function calculateAttitude(){
 
         "RAW R: "+
         rawRoll.toFixed(2)+
-        "°<br><br>"+
-
-        "REL P: "+
-        pitch.toFixed(2)+
-        "°<br>"+
-
-        "REL R: "+
-        roll.toFixed(2)+
         "°";
     }
 }
@@ -1264,13 +1351,11 @@ function handleMotion(event){
         return;
     }
 
-
     filterGravity(
         g.x,
         g.y,
         g.z
     );
-
 
     haveMotion=true;
 
@@ -1301,7 +1386,6 @@ function handleOrientation(event){
         return;
     }
 
-
     if(
         typeof event.alpha
         === "number"
@@ -1312,6 +1396,97 @@ function handleOrientation(event){
 
         haveHeading=true;
     }
+}
+
+
+/* ==========================================================
+   GPS V6.8
+========================================================== */
+
+function startGPS(){
+
+    if(
+        !("geolocation" in navigator)
+    ){
+
+        return;
+    }
+
+    if(gpsWatchId!==null){
+        return;
+    }
+
+    gpsWatchId=
+        navigator.geolocation.watchPosition(
+
+            function(position){
+
+                const coords=
+                    position.coords;
+
+                /*
+                   GPS speed is supplied in m/s.
+                   Convert to km/h.
+                */
+
+                if(
+                    coords.speed !== null &&
+                    Number.isFinite(coords.speed)
+                ){
+
+                    gpsSpeed=
+                        Math.max(
+                            0,
+                            coords.speed * 3.6
+                        );
+
+                    if(!haveSpeed){
+
+                        displaySpeed=
+                            gpsSpeed;
+
+                        haveSpeed=true;
+                    }
+                }
+
+
+                /*
+                   GPS altitude is supplied
+                   in metres.
+                */
+
+                if(
+                    coords.altitude !== null &&
+                    Number.isFinite(coords.altitude)
+                ){
+
+                    gpsAltitude=
+                        coords.altitude;
+
+                    if(!haveAltitude){
+
+                        displayAltitude=
+                            gpsAltitude;
+
+                        haveAltitude=true;
+                    }
+                }
+            },
+
+            function(error){
+
+                console.log(
+                    "GPS:",
+                    error.message
+                );
+            },
+
+            {
+                enableHighAccuracy:true,
+                maximumAge:1000,
+                timeout:15000
+            }
+        );
 }
 
 
@@ -1332,15 +1507,12 @@ function setZero(){
         return;
     }
 
-
     const angles=
         getAttitudeAngles();
-
 
     if(!angles){
         return;
     }
-
 
     zeroPitch=
         angles.pitch;
@@ -1348,20 +1520,17 @@ function setZero(){
     zeroRoll=
         angles.roll;
 
-
     rawPitch=
         zeroPitch;
 
     rawRoll=
         zeroRoll;
 
-
     targetPitch=0;
     targetRoll=0;
 
     displayPitch=0;
     displayRoll=0;
-
 
     statusBox.textContent=
         "ZERO gesetzt";
@@ -1384,30 +1553,15 @@ function swapAxes(){
 
         updateSwapButton();
 
-        statusBox.textContent=
-
-            swapPitchRoll
-            ?"Pitch=Z · Roll=X"
-            :"Pitch=X · Roll=Z";
-
         return;
     }
-
 
     swapPitchRoll=
         !swapPitchRoll;
 
-
     setZero();
 
     updateSwapButton();
-
-
-    statusBox.textContent=
-
-        swapPitchRoll
-        ?"Pitch=Z · Roll=X"
-        :"Pitch=X · Roll=Z";
 }
 
 
@@ -1432,7 +1586,6 @@ async function startSensors(){
         statusBox.textContent=
             "Sensorfreigabe…";
 
-
         if(
             typeof DeviceMotionEvent
             !== "undefined" &&
@@ -1446,10 +1599,7 @@ async function startSensors(){
                 await DeviceMotionEvent
                 .requestPermission();
 
-
-            if(
-                permission!=="granted"
-            ){
+            if(permission!=="granted"){
 
                 statusBox.textContent=
                     "Motion verweigert";
@@ -1457,7 +1607,6 @@ async function startSensors(){
                 return;
             }
         }
-
 
         if(
             typeof DeviceOrientationEvent
@@ -1469,7 +1618,6 @@ async function startSensors(){
         ){
 
             let permission;
-
 
             try{
 
@@ -1484,10 +1632,7 @@ async function startSensors(){
                     .requestPermission();
             }
 
-
-            if(
-                permission!=="granted"
-            ){
+            if(permission!=="granted"){
 
                 statusBox.textContent=
                     "Kompass verweigert";
@@ -1496,13 +1641,11 @@ async function startSensors(){
             }
         }
 
-
         window.addEventListener(
             "devicemotion",
             handleMotion,
             true
         );
-
 
         window.addEventListener(
             "deviceorientation",
@@ -1510,19 +1653,22 @@ async function startSensors(){
             true
         );
 
+        /*
+           V6.8:
+           GPS starts independently.
+        */
+
+        startGPS();
 
         document
         .getElementById(
             "startButton"
         )
-        .style
-        .display=
+        .style.display=
             "none";
-
 
         statusBox.textContent=
             "Sensoren aktiv";
-
 
         setTimeout(
             function(){
@@ -1532,10 +1678,7 @@ async function startSensors(){
                     setZero();
 
                     statusBox.textContent=
-
-                        swapPitchRoll
-                        ?"V6.7 · P=Z/R=X"
-                        :"V6.7 · P=X/R=Z";
+                        "V6.8";
                 }
 
             },
@@ -1556,7 +1699,7 @@ async function startSensors(){
 
 
 /* ==========================================================
-   PITCH LADDER V6.7
+   PITCH LADDER
 ========================================================== */
 
 const pitchMarks=[
@@ -1565,15 +1708,12 @@ const pitchMarks=[
 ];
 
 
-for(
-    const deg of pitchMarks
-){
+for(const deg of pitchMarks){
 
     const line=
         document.createElement(
             "div"
         );
-
 
     line.className=
 
@@ -1585,25 +1725,18 @@ for(
             :"five"
         );
 
-
     const y=
         550 -
         deg *
         PX_PER_DEG;
 
-
     line.style.top=
         y+"px";
 
-
-    ladder.appendChild(
-        line
-    );
-
+    ladder.appendChild(line);
 
     const abs=
         Math.abs(deg);
-
 
     if(
         abs===5 ||
@@ -1624,19 +1757,11 @@ for(
                 "div"
             );
 
-
         left.className=
             "pitchLabel";
 
         right.className=
             "pitchLabel";
-
-
-        /*
-           V6.7:
-           5° und 15° kleiner als
-           10° / 20° / 30° / 40°.
-        */
 
         if(
             abs===5 ||
@@ -1656,13 +1781,11 @@ for(
                 "500";
         }
 
-
         left.textContent=
             abs;
 
         right.textContent=
             abs;
-
 
         left.style.top=
             (y-9)+"px";
@@ -1670,21 +1793,14 @@ for(
         right.style.top=
             (y-9)+"px";
 
-
         left.style.left=
             "128px";
 
         right.style.right=
             "128px";
 
-
-        ladder.appendChild(
-            left
-        );
-
-        ladder.appendChild(
-            right
-        );
+        ladder.appendChild(left);
+        ladder.appendChild(right);
     }
 }
 
@@ -1698,27 +1814,21 @@ const rollScale=
         "rollScale"
     );
 
-
 const rollMarks=[
     -60,-45,-30,-20,-10,
     0,
     10,20,30,45,60
 ];
 
-
-for(
-    const angle of rollMarks
-){
+for(const angle of rollMarks){
 
     const tick=
         document.createElement(
             "div"
         );
 
-
     tick.className=
         "rollTick";
-
 
     if(
         angle===0 ||
@@ -1739,18 +1849,10 @@ for(
         );
     }
 
-
     tick.style.transform=
+        "rotate("+angle+"deg)";
 
-        "rotate("+
-        angle+
-        "deg)";
-
-
-    rollScale.appendChild(
-        tick
-    );
-
+    rollScale.appendChild(tick);
 
     if(angle!==0){
 
@@ -1759,14 +1861,11 @@ for(
                 "div"
             );
 
-
         number.className=
             "rollNumber";
 
-
         number.textContent=
             Math.abs(angle);
-
 
         const radius=244;
 
@@ -1775,36 +1874,25 @@ for(
             Math.PI /
             180;
 
-
         const x=
             Math.sin(rad) *
             radius;
-
 
         const y=
             -Math.cos(rad) *
             radius;
 
-
         number.style.left=
-            "calc(50% + "+
-            x+
-            "px)";
+            "calc(50% + "+x+"px)";
 
         number.style.top=
-            "calc(50% + "+
-            y+
-            "px)";
+            "calc(50% + "+y+"px)";
 
         number.style.marginLeft=
             "-17px";
 
         number.style.marginTop=
             "-9px";
-
-        number.style.transform=
-            "none";
-
 
         rollScale.appendChild(
             number
@@ -1819,7 +1907,6 @@ for(
 
 const HEADING_PX_PER_DEG=3.7;
 
-
 for(
     let deg=-360;
     deg<=720;
@@ -1829,12 +1916,10 @@ for(
     const normalized=
         ((deg%360)+360)%360;
 
-
     const mark=
         document.createElement(
             "div"
         );
-
 
     mark.className=
 
@@ -1846,7 +1931,6 @@ for(
             :""
         );
 
-
     mark.style.left=
 
         (
@@ -1855,71 +1939,45 @@ for(
         )+
         "px";
 
+    headingTape.appendChild(mark);
 
-    headingTape.appendChild(
-        mark
-    );
-
-
-    if(
-        normalized%30===0
-    ){
+    if(normalized%30===0){
 
         const label=
             document.createElement(
                 "div"
             );
 
-
         label.className=
             "headingLabel";
-
 
         if(normalized===0){
 
             label.textContent="N";
-
-            label.classList.add(
-                "cardinal"
-            );
+            label.classList.add("cardinal");
 
         }else if(normalized===90){
 
             label.textContent="E";
-
-            label.classList.add(
-                "cardinal"
-            );
+            label.classList.add("cardinal");
 
         }else if(normalized===180){
 
             label.textContent="S";
-
-            label.classList.add(
-                "cardinal"
-            );
+            label.classList.add("cardinal");
 
         }else if(normalized===270){
 
             label.textContent="W";
-
-            label.classList.add(
-                "cardinal"
-            );
+            label.classList.add("cardinal");
 
         }else{
 
             label.textContent=
 
-                String(
-                    normalized
-                )
-                .padStart(
-                    3,
-                    "0"
-                );
+                String(normalized)
+                .padStart(3,"0");
         }
-
 
         label.style.left=
 
@@ -1929,10 +1987,132 @@ for(
             )+
             "px";
 
+        headingTape.appendChild(label);
+    }
+}
 
-        headingTape.appendChild(
-            label
+
+/* ==========================================================
+   GPS SPEED TAPE
+========================================================== */
+
+for(
+    let speed=0;
+    speed<=300;
+    speed+=5
+){
+
+    const tick=
+        document.createElement(
+            "div"
         );
+
+    tick.className=
+
+        "gpsTick " +
+
+        (
+            speed%10===0
+            ?"major"
+            :"minor"
+        );
+
+    tick.style.top=
+
+        (
+            -speed *
+            SPEED_PX_PER_KMH
+        )+
+        "px";
+
+    speedTape.appendChild(tick);
+
+    if(speed%10===0){
+
+        const label=
+            document.createElement(
+                "div"
+            );
+
+        label.className=
+            "gpsLabel";
+
+        label.textContent=
+            speed;
+
+        label.style.top=
+
+            (
+                -speed *
+                SPEED_PX_PER_KMH
+            )+
+            "px";
+
+        speedTape.appendChild(label);
+    }
+}
+
+
+/* ==========================================================
+   GPS ALTITUDE TAPE
+
+   Large range so negative and positive
+   elevations are possible.
+========================================================== */
+
+for(
+    let altitude=-500;
+    altitude<=5000;
+    altitude+=10
+){
+
+    const tick=
+        document.createElement(
+            "div"
+        );
+
+    tick.className=
+
+        "gpsTick " +
+
+        (
+            altitude%20===0
+            ?"major"
+            :"minor"
+        );
+
+    tick.style.top=
+
+        (
+            -altitude *
+            ALT_PX_PER_METER
+        )+
+        "px";
+
+    altitudeTape.appendChild(tick);
+
+    if(altitude%20===0){
+
+        const label=
+            document.createElement(
+                "div"
+            );
+
+        label.className=
+            "gpsLabel";
+
+        label.textContent=
+            altitude;
+
+        label.style.top=
+
+            (
+                -altitude *
+                ALT_PX_PER_METER
+            )+
+            "px";
+
+        altitudeTape.appendChild(label);
     }
 }
 
@@ -1950,7 +2130,6 @@ function render(){
             DISPLAY_FILTER
         );
 
-
     displayRoll=
         smooth(
             displayRoll,
@@ -1958,53 +2137,35 @@ function render(){
             DISPLAY_FILTER
         );
 
-
     horizon.style.transform=
 
         "translateY("+
-
         (
             displayPitch *
             PX_PER_DEG
         )+
-
         "px) rotate("+
-
         (
             -displayRoll
         )+
-
         "deg)";
-
 
     movingBank.style.transform=
 
         "translate(-50%,-50%) rotate("+
-
         (
             -displayRoll
         )+
-
         "deg)";
 
-
     pitchValue.textContent=
-
-        displayPitch
-        .toFixed(1)+
-        "°";
-
+        displayPitch.toFixed(1)+"°";
 
     rollValue.textContent=
-
-        displayRoll
-        .toFixed(1)+
-        "°";
+        displayRoll.toFixed(1)+"°";
 
 
-    /* ======================================================
-       HEADING
-    ====================================================== */
+    /* HEADING */
 
     if(haveHeading){
 
@@ -2016,57 +2177,105 @@ function render(){
                 HEADING_FILTER
             );
 
-
         let heading=
 
             Math.round(
                 displayHeading
             ) % 360;
 
-
         if(heading===0){
             heading=360;
         }
 
-
         const text=
 
-            String(
-                heading
-            )
-            .padStart(
-                3,
-                "0"
-            );
-
+            String(heading)
+            .padStart(3,"0");
 
         headingDataValue.textContent=
             text+"°";
 
-
         const center=
             headingBox.clientWidth/2;
-
 
         headingTape.style.transform=
 
             "translateX("+
-
             (
                 center -
                 displayHeading *
                 HEADING_PX_PER_DEG
+            )+
+            "px)";
+    }
+
+
+    /* ======================================================
+       GPS SPEED
+    ====================================================== */
+
+    if(haveSpeed){
+
+        displaySpeed=
+            smooth(
+                displaySpeed,
+                gpsSpeed,
+                GPS_DISPLAY_FILTER
+            );
+
+        speedCurrent.textContent=
+
+            Math.round(
+                displaySpeed
+            );
+
+        speedTape.style.transform=
+
+            "translateY("+
+
+            (
+                displaySpeed *
+                SPEED_PX_PER_KMH
             )+
 
             "px)";
     }
 
 
-    requestAnimationFrame(
-        render
-    );
-}
+    /* ======================================================
+       GPS ALTITUDE
+    ====================================================== */
 
+    if(haveAltitude){
+
+        displayAltitude=
+            smooth(
+                displayAltitude,
+                gpsAltitude,
+                GPS_DISPLAY_FILTER
+            );
+
+        altitudeCurrent.textContent=
+
+            Math.round(
+                displayAltitude
+            );
+
+        altitudeTape.style.transform=
+
+            "translateY("+
+
+            (
+                displayAltitude *
+                ALT_PX_PER_METER
+            )+
+
+            "px)";
+    }
+
+
+    requestAnimationFrame(render);
+}
 
 render();
 
@@ -2076,46 +2285,34 @@ render();
 ========================================================== */
 
 document
-.getElementById(
-    "startButton"
-)
+.getElementById("startButton")
 .addEventListener(
     "click",
     startSensors
 );
 
-
 document
-.getElementById(
-    "zeroButton"
-)
+.getElementById("zeroButton")
 .addEventListener(
     "click",
     setZero
 );
 
-
 document
-.getElementById(
-    "swapButton"
-)
+.getElementById("swapButton")
 .addEventListener(
     "click",
     swapAxes
 );
 
-
 document
-.getElementById(
-    "debugButton"
-)
+.getElementById("debugButton")
 .addEventListener(
     "click",
     function(){
 
         debugVisible=
             !debugVisible;
-
 
         debugBox.style.display=
 
@@ -2124,7 +2321,6 @@ document
             :"none";
     }
 );
-
 
 updateSwapButton();
 

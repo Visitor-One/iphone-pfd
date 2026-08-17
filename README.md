@@ -1,6 +1,6 @@
 # iphone-pfd
 PFD Instrument 
-Primare flight Display
+Primary flight Display
 Height
 Speed
 Pitch 

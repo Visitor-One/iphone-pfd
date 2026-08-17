@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
-<title>PFD V6.15</title>
+<title>PFD V7.0 Futuristic</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif}
@@ -56,6 +56,58 @@ button{appearance:none;-webkit-appearance:none;width:66px;min-height:31px;margin
 #debug{position:absolute;left:7px;top:calc(105px + env(safe-area-inset-top));padding:7px;max-width:260px;background:rgba(0,0,0,.82);border:1px solid rgba(0,255,100,.35);color:#00ff65;font-family:Menlo,monospace;font-size:9px;line-height:1.4;z-index:180;display:none}
 @media(max-width:430px){#headingBox{left:4%;right:4%}#aircraft{width:255px}.wing{width:98px}.gpsTape{width:53px}.gpsCurrent{min-width:50px;font-size:12px}}
 </style>
+
+<style>
+:root{--neo:#16d9ff;--neo2:#057dab;--yel:#ffe000}
+#pfd{background:radial-gradient(ellipse at center,#06243a 0,#01080e 72%,#000 100%)}
+#pfd:before{content:"";position:absolute;inset:1.2%;z-index:140;pointer-events:none;
+border:1px solid rgba(56,188,245,.34);
+clip-path:polygon(5% 0,95% 0,100% 4%,100% 96%,95% 100%,5% 100%,0 96%,0 4%);
+box-shadow:inset 0 0 30px rgba(0,173,240,.18),0 0 9px rgba(0,177,240,.16)}
+#pfd:after{content:"";position:absolute;inset:2.1%;z-index:141;pointer-events:none;
+border:2px solid rgba(10,209,255,.48);
+clip-path:polygon(5% 0,95% 0,100% 4%,100% 96%,95% 100%,5% 100%,0 96%,0 4%);
+filter:drop-shadow(0 0 5px #008cc5)}
+#viewport{left:7%;right:7%;top:12%;bottom:8%;clip-path:polygon(4% 0,96% 0,100% 4%,100% 96%,96% 100%,4% 100%,0 96%,0 4%)}
+#horizon{background:linear-gradient(to bottom,#001a34 0%,#00467c 36%,#087dbb 48.6%,#43c8ef 49.5%,#fff 49.87%,#fff 50.16%,#925015 50.16%,#5b2c0a 65%,#170901 100%)}
+#horizon::after{background:
+radial-gradient(ellipse at center,rgba(0,200,255,.22),transparent 34%),
+repeating-linear-gradient(0deg,transparent 0 31px,rgba(255,255,255,.024) 32px),
+repeating-linear-gradient(90deg,transparent 0 39px,rgba(255,255,255,.018) 40px),
+radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,.38) 100%)}
+#headingBox{left:5%;right:5%;top:calc(2.5% + env(safe-area-inset-top));height:92px;
+border:1px solid rgba(56,183,235,.62);border-radius:14px;
+background:linear-gradient(180deg,rgba(0,8,16,.98),rgba(0,29,48,.94));
+box-shadow:inset 0 0 18px rgba(0,159,222,.15),0 0 8px rgba(0,166,230,.22)}
+#headingBox:after{content:"";position:absolute;inset:7px;border:1px solid rgba(0,202,255,.23);border-radius:9px;pointer-events:none}
+#headingPointer{top:calc(95px + 2.5% + env(safe-area-inset-top));filter:drop-shadow(0 0 4px rgba(255,224,0,.65))}
+#headingIndex{box-shadow:0 0 5px rgba(255,224,0,.7)}
+.gpsTape{top:25%;height:48%;width:76px;background:linear-gradient(to right,rgba(0,8,15,.96),rgba(0,29,47,.80));
+border-color:rgba(58,183,234,.55);box-shadow:inset 0 0 18px rgba(0,159,222,.15)}
+#speedTapeBox{left:2.5%;border-left:1px solid rgba(58,183,234,.55);border-radius:18px 4px 4px 18px}
+#altitudeTapeBox{right:2.5%;border-right:1px solid rgba(58,183,234,.55);border-radius:4px 18px 18px 4px}
+.gpsCurrent{height:43px;font-size:21px;border-color:rgba(70,204,255,.8);box-shadow:0 0 8px rgba(0,190,255,.28)}
+#speedCurrent{min-width:67px;color:#52e4ff}#altitudeCurrent{min-width:70px}
+.gpsUnit{top:28px;color:#91a7b8;font-size:9px;letter-spacing:1px}
+#controls{right:3%;bottom:10%;gap:6px;opacity:1}
+button{width:73px;min-height:38px;border-color:rgba(57,190,245,.68);border-radius:8px;
+background:linear-gradient(180deg,rgba(2,31,50,.95),rgba(0,8,15,.96));
+box-shadow:inset 0 0 8px rgba(0,159,224,.15),0 0 4px rgba(0,168,236,.23);letter-spacing:.65px}
+.dataBox{bottom:calc(3.3% + env(safe-area-inset-bottom));height:39px;padding:8px 10px;
+background:linear-gradient(180deg,rgba(2,25,40,.97),rgba(0,8,14,.97));
+border-color:rgba(61,181,229,.6);border-radius:7px;box-shadow:inset 0 0 8px rgba(0,160,220,.14)}
+#pitchBox{left:5.2%}#rollBox{left:32.5%}#headingData{right:5.2%}
+#status{bottom:calc(4.2% + env(safe-area-inset-bottom));background:transparent;border:0}
+.wing,#centerCircle{filter:drop-shadow(0 0 3px rgba(255,224,0,.55))}
+@media(max-width:430px){
+#viewport{left:6.5%;right:6.5%;top:11.8%;bottom:8.2%}
+#headingBox{left:4.8%;right:4.8%;height:82px}
+#headingPointer{top:calc(85px + 2.5% + env(safe-area-inset-top))}
+.gpsTape{width:62px}.gpsCurrent{font-size:18px;min-width:57px}
+#controls{right:2.7%;bottom:10.5%}button{width:67px;min-height:35px}
+}
+</style>
+
 </head>
 <body>
 <div id="pfd">
@@ -69,7 +121,7 @@ button{appearance:none;-webkit-appearance:none;width:66px;min-height:31px;margin
 <div id="pitchBox" class="dataBox">PITCH&nbsp;<span id="pitchValue">0.0°</span></div>
 <div id="rollBox" class="dataBox">ROLL&nbsp;<span id="rollValue">0.0°</span></div>
 <div id="headingData" class="dataBox">HDG&nbsp;<span id="headingDataValue">---</span></div>
-<div id="status">V6.15</div><div id="debug"></div>
+<div id="status">V7.0</div><div id="debug"></div>
 </div>
 <script>
 const RAD_TO_DEG=180/Math.PI,PX_PER_DEG=7,GRAVITY_FILTER=.08,DISPLAY_FILTER=.14,HEADING_FILTER=.10,DEADBAND=.20,MAX_PITCH=60,MAX_ROLL=60;
@@ -180,7 +232,7 @@ async function startSensors(){
    window.addEventListener("devicemotion",handleMotion,true);
    window.addEventListener("deviceorientation",handleOrientation,true);
    $("startButton").style.display="none";statusBox.textContent="Sensoren aktiv";
-   setTimeout(()=>{if(haveMotion){setZero();statusBox.textContent="V6.15"}},1500)
+   setTimeout(()=>{if(haveMotion){setZero();statusBox.textContent="V7.0"}},1500)
  }catch(e){statusBox.textContent="Fehler: "+e.message}
 }
 
@@ -196,7 +248,7 @@ for(let a=-500;a<=5000;a+=10){const t=document.createElement("div");t.className=
 function updateDebug(){
  if(!debugVisible)return;
  const standalone=window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches;
- debugBox.innerHTML="PFD V6.15<br><br><b>CONTEXT</b><br>SECURE: "+(window.isSecureContext?"YES":"NO")+"<br>STANDALONE: "+(standalone?"YES":"NO")+"<br>GEO API: "+(("geolocation"in navigator)?"YES":"NO")+"<br>PERMISSION: "+gpsPermission+"<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br><b>GPS</b><br>STATE: "+gpsState+"<br>ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"
+ debugBox.innerHTML="PFD V7.0<br><br><b>CONTEXT</b><br>SECURE: "+(window.isSecureContext?"YES":"NO")+"<br>STANDALONE: "+(standalone?"YES":"NO")+"<br>GEO API: "+(("geolocation"in navigator)?"YES":"NO")+"<br>PERMISSION: "+gpsPermission+"<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br><b>GPS</b><br>STATE: "+gpsState+"<br>ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"
 }
 
 function render(){

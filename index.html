@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
-<title>PFD V7.6 Futuristic</title>
+<title>PFD V7.8 Futuristic</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif}
@@ -108,6 +108,67 @@ border-color:rgba(61,181,229,.6);border-radius:7px;box-shadow:inset 0 0 8px rgba
 }
 </style>
 
+
+
+
+
+<style>
+/* V7.8 – collision-free control layout
+   Controls stay above the bottom data boxes and clear of the side tapes. */
+#leftControls{
+    position:absolute;
+    left:calc(12px + env(safe-area-inset-left));
+    bottom:calc(92px + env(safe-area-inset-bottom));
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    z-index:160;
+    opacity:.94;
+}
+#controls{
+    position:absolute;
+    right:calc(12px + env(safe-area-inset-right));
+    bottom:calc(92px + env(safe-area-inset-bottom));
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+    z-index:160;
+    opacity:.94;
+}
+#leftControls button,
+#controls button{
+    width:72px;
+    min-height:38px;
+    margin:0;
+}
+#startButton{
+    margin-bottom:10px !important;
+}
+#gpsButton,
+#zeroButton{
+    position:static !important;
+    top:auto !important;
+}
+#pitchBox,#rollBox,#headingData{
+    z-index:170;
+}
+@media(max-width:430px){
+    #leftControls{
+        left:calc(10px + env(safe-area-inset-left));
+        bottom:calc(84px + env(safe-area-inset-bottom));
+    }
+    #controls{
+        right:calc(10px + env(safe-area-inset-right));
+        bottom:calc(84px + env(safe-area-inset-bottom));
+    }
+    #leftControls button,#controls button{
+        width:68px;
+        min-height:36px;
+    }
+}
+</style>
+
 </head>
 <body>
 <div id="pfd">
@@ -117,11 +178,11 @@ border-color:rgba(61,181,229,.6);border-radius:7px;box-shadow:inset 0 0 8px rgba
 <div id="headingBox"><div id="headingTape"></div><div id="headingIndex"></div></div><div id="headingPointer"></div>
 <div id="rollScale"><div id="rollArc"></div></div><div id="movingBank"><div id="movingBankPointer"></div></div><div id="fixedBankPointer"></div>
 <div id="aircraft"><div class="wing left"></div><div id="centerCircle"></div><div class="wing right"></div></div>
-<div id="controls"><button id="startButton">▶ START</button><button id="gpsButton">GPS<br>FREIGABE</button><button id="zeroButton">ZERO</button><button id="swapButton">P↔R Z/X</button><button id="debugButton">DEBUG</button></div>
+<div id="leftControls"><button id="swapButton">P↔R Z/X</button><button id="debugButton">DEBUG</button></div><div id="controls"><button id="startButton">▶ START</button><button id="gpsButton">GPS<br>FREIGABE</button><button id="zeroButton">ZERO</button></div>
 <div id="pitchBox" class="dataBox">PITCH&nbsp;<span id="pitchValue">0.0°</span></div>
 <div id="rollBox" class="dataBox">ROLL&nbsp;<span id="rollValue">0.0°</span></div>
 <div id="headingData" class="dataBox">HDG&nbsp;<span id="headingDataValue">---</span></div>
-<div id="status">V7.5</div><div id="debug"></div>
+<div id="status">V7.8</div><div id="debug"></div>
 </div>
 <script>
 const RAD_TO_DEG=180/Math.PI,PX_PER_DEG=7,HORIZON_ZERO_OFFSET_PX=-14,GRAVITY_FILTER=.08,DISPLAY_FILTER=.14,HEADING_FILTER=.10,DEADBAND=.20,MAX_PITCH=60,MAX_ROLL=60;
@@ -248,7 +309,7 @@ for(let a=-500;a<=5000;a+=10){const t=document.createElement("div");t.className=
 function updateDebug(){
  if(!debugVisible)return;
  const standalone=window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches;
- debugBox.innerHTML="PFD V7.6<br><br><b>CONTEXT</b><br>SECURE: "+(window.isSecureContext?"YES":"NO")+"<br>STANDALONE: "+(standalone?"YES":"NO")+"<br>GEO API: "+(("geolocation"in navigator)?"YES":"NO")+"<br>PERMISSION: "+gpsPermission+"<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br><b>GPS</b><br>STATE: "+gpsState+"<br>ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"
+ debugBox.innerHTML="PFD V7.8<br><br><b>CONTEXT</b><br>SECURE: "+(window.isSecureContext?"YES":"NO")+"<br>STANDALONE: "+(standalone?"YES":"NO")+"<br>GEO API: "+(("geolocation"in navigator)?"YES":"NO")+"<br>PERMISSION: "+gpsPermission+"<br><br><b>COMPASS</b><br>SOURCE: "+headingSource+"<br>WEBKIT HDG: "+fmt(compassRaw,1)+"°<br>WEBKIT ACC: "+fmt(compassAccuracy,1)+"°<br>ALPHA (IGNORED): "+fmt(alphaDebug,1)+"°<br>DISPLAY HDG: "+fmt(displayHeading,1)+"°<br><br><b>GPS</b><br>STATE: "+gpsState+"<br>ERROR: "+gpsError+"<br>LAT: "+fmt(gpsLatitude,6)+"<br>LON: "+fmt(gpsLongitude,6)+"<br>GPS ACC: ±"+fmt(gpsHorizontalAccuracy,1)+" m<br>SPEED: "+fmt(gpsSpeed,1)+" km/h<br>GPS ALT: "+fmt(gpsAltitude,1)+" m<br>ALT ACC: ±"+fmt(gpsAltitudeAccuracy,1)+" m<br>DEM: "+fmt(demAltitude,1)+" m<br>ALT SOURCE: "+altitudeSource+"<br><br>MODE: "+(swapPitchRoll?"P=Z / R=X":"P=X / R=Z")+"<br>RAW P: "+rawPitch.toFixed(2)+"°<br>RAW R: "+rawRoll.toFixed(2)+"°"
 }
 
 function render(){
